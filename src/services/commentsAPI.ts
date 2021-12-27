@@ -5,7 +5,7 @@ export const create = async (slug: string, comment: Comment) => {
   return await http.post(`/articles/${slug}/comments`, { comment });
 };
 
-export const del = async (slug: string, commentId: number) => {
+export const remove = async (slug: string, commentId: number) => {
   return await http.delete(`/articles/${slug}/comments/${commentId}`);
 };
 
