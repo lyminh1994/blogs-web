@@ -1,5 +1,5 @@
-import http from "utils/http";
+import http from 'utils/http';
 
 export const getAll = async () => {
-  return await http.get("/tags");
+  return await http.get('/tags');
 };

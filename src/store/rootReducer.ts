@@ -1,6 +1,6 @@
-import { combineReducers, Reducer } from "@reduxjs/toolkit";
+import { combineReducers, Reducer } from '@reduxjs/toolkit';
 
-import counterReducer, { CounterState } from "./counter/counterSlice";
+import counterReducer, { CounterState } from './counter/counterSlice';
 
 interface RootState {
   counter: CounterState;

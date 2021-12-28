@@ -1,24 +1,20 @@
-import http from "utils/http";
-import { Article } from "types/article";
-import { User } from "types/user";
-import { Tag } from "types/tag";
+import http from 'utils/http';
+import { Article } from 'types/article';
+import { User } from 'types/user';
+import { Tag } from 'types/tag';
 
 const encode = encodeURIComponent;
 
-const limit = (count: number, page: number) =>
-  `limit=${count}&offset=${page ? page * count : 0}`;
+const limit = (count: number, page: number) => `limit=${count}&offset=${page ? page * count : 0}`;
 
-const omitSlug = (article: Article) =>
-  Object.assign({}, article, { slug: undefined });
+const omitSlug = (article: Article) => Object.assign({}, article, { slug: undefined });
 
 export const getAll = async (page: number) => {
   return await http.get(`/articles?${limit(10, page)}`);
 };
 
 export const getByAuthor = async (author: User, page: number) => {
-  return await http.get(
-    `/articles?author=${encode(author.id)}&${limit(5, page)}`
-  );
+  return await http.get(`/articles?author=${encode(author.id)}&${limit(5, page)}`);
 };
 
 export const getByTag = async (tag: Tag, page: number) => {
@@ -34,13 +30,11 @@ export const favorite = async (slug: string) => {
 };
 
 export const favoriteBy = async (author: User, page: number) => {
-  return await http.get(
-    `/articles?favorite=${encode(author.id)}&${limit(5, page)}`
-  );
+  return await http.get(`/articles?favorite=${encode(author.id)}&${limit(5, page)}`);
 };
 
 export const feed = async () => {
-  return await http.get("/articles/feed?limit=10&offset=0");
+  return await http.get('/articles/feed?limit=10&offset=0');
 };
 
 export const get = async (slug: string) => {
@@ -58,5 +52,5 @@ export const update = async (article: Article) => {
 };
 
 export const create = async (article: Article) => {
-  return await http.post("/articles", { article });
+  return await http.post('/articles', { article });
 };

@@ -1,5 +1,5 @@
-import http from "utils/http";
-import { Comment } from "types/comment";
+import http from 'utils/http';
+import { Comment } from 'types/comment';
 
 export const create = async (slug: string, comment: Comment) => {
   return await http.post(`/articles/${slug}/comments`, { comment });

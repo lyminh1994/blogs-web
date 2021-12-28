@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import logo from "assets/logo.svg";
-import { Counter } from "pages/counter/Counter";
-import "./App.css";
+import logo from 'assets/logo.svg';
+import { Counter } from 'pages/counter/Counter';
+import './App.css';
 
 const App = () => {
   return (
