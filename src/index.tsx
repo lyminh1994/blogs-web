@@ -1,16 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 import App from 'pages/app/App';
 import { store } from 'store';
 import * as serviceWorker from './serviceWorker';
-import './index.css';
+
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'assets/styles/tailwind.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

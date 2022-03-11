@@ -1,59 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import logo from 'assets/logo.svg';
-import { Counter } from 'pages/counter/Counter';
-import './App.css';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { appLoad, commonSelector } from 'store/common/commonSlice';
+import { authSelector } from 'store/auth/authSlice';
+
+import backgroundImage from 'assets/img/register_bg_2.png';
+
+import Header from 'components/headers/Header';
+import Footer from 'components/footers/FooterSmall';
+
+import Home from 'pages/home/Home';
+import Login from 'pages/auth/Login';
+import Register from 'pages/auth/Register';
 
 const App = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+  const dispatch = useAppDispatch();
+  const { appLoaded, appName } = useAppSelector(commonSelector);
+  const { auth } = useAppSelector(authSelector);
+
+  useEffect(() => {
+    dispatch(appLoad());
+  }, []);
+
+  if (appLoaded) {
+    return (
+      <>
+        <Header appName={appName} user={auth && auth.user} />
+
+        <main>
+          <section className="relative w-full h-full py-40 min-h-screen">
+            <div
+              className="absolute top-0 w-full h-full bg-blueGray-800 bg-no-repeat bg-full"
+              style={{
+                backgroundImage: 'url(' + backgroundImage + ')',
+              }}
+            ></div>
+            <Routes>
+              <Route index element={<Home />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+
+            <Footer absolute />
+          </section>
+        </main>
+      </>
+    );
+  }
+
+  return <div>Loading...</div>;
 };
 
 export default App;

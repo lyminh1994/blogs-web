@@ -3,8 +3,6 @@ import { Article } from 'types/article';
 import { User } from 'types/user';
 import { Tag } from 'types/tag';
 
-const encode = encodeURIComponent;
-
 const limit = (count: number, page: number) => `limit=${count}&offset=${page ? page * count : 0}`;
 
 const omitSlug = (article: Article) => Object.assign({}, article, { slug: undefined });
@@ -14,11 +12,11 @@ export const getAll = async (page: number) => {
 };
 
 export const getByAuthor = async (author: User, page: number) => {
-  return await http.get(`/articles?author=${encode(author.id)}&${limit(5, page)}`);
+  return await http.get(`/articles?author=${author.id}&${limit(5, page)}`);
 };
 
 export const getByTag = async (tag: Tag, page: number) => {
-  return await http.get(`/articles?tag=${encode(tag.id)}&${limit(10, page)}`);
+  return await http.get(`/articles?tag=${tag.id}&${limit(10, page)}`);
 };
 
 export const remove = async (slug: string) => {
@@ -30,7 +28,7 @@ export const favorite = async (slug: string) => {
 };
 
 export const favoriteBy = async (author: User, page: number) => {
-  return await http.get(`/articles?favorite=${encode(author.id)}&${limit(5, page)}`);
+  return await http.get(`/articles?favorite=${author.id}&${limit(5, page)}`);
 };
 
 export const feed = async () => {

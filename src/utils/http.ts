@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { store } from 'store';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -10,11 +11,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
-    const token = 'ac';
-    if (token && config.headers) {
-      console.log(config);
+    const { auth } = store.getState().auth;
 
-      config.headers['Authorization'] = `Bearer ${token}`;
+    if (auth && config.headers) {
+      config.headers['Authorization'] = `Bearer ${auth?.token}`;
     }
 
     return config;
@@ -29,6 +29,8 @@ instance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError): Promise<AxiosError> => {
+    console.log(error);
+
     return Promise.reject(error);
   },
 );
