@@ -1,12 +1,10 @@
 import http from 'utils/http';
 
-import { LoginValues, RegisterValues } from 'types/auth';
-
-export const register = async (registerParams: RegisterValues) => {
+export const register = async (registerParams: any) => {
   return await http.post('/auth/register', registerParams);
 };
 
-export const login = async (loginParams: LoginValues) => {
+export const login = async (loginParams: any) => {
   return await http.post('/auth/login', loginParams);
 };
 

@@ -3,12 +3,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import App from 'pages/app/App';
-import { store } from 'store';
 import * as serviceWorker from './serviceWorker';
+import { store } from 'store';
 
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'assets/styles/tailwind.css';
+import App from 'pages/app/App';
 
 ReactDOM.render(
   <React.StrictMode>

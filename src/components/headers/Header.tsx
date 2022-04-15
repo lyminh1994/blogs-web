@@ -1,51 +1,62 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { User } from 'types/user';
+import { Link as RouterLink } from 'react-router-dom';
+import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
-import LoggedIn from './LoggedIn';
-import LoggedOut from './LoggedOut';
-
-export interface HeaderProps {
-  appName?: string;
-  user: User | null;
+interface HeaderProps {
+  sections: ReadonlyArray<{
+    title: string;
+    url: string;
+  }>;
+  title: string;
 }
 
-const Header = ({ appName, user }: HeaderProps) => {
-  const [navbarOpen, setNavbarOpen] = React.useState<boolean>(false);
-
+const Header = ({ sections, title }: HeaderProps) => {
   return (
-    <>
-      <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg">
-        <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
-          <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
-            <Link
-              className="text-white text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
-              to="/"
-            >
-              {appName}
-            </Link>
-            <button
-              className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
-              type="button"
-              onClick={() => setNavbarOpen(!navbarOpen)}
-            >
-              <i className="text-white fas fa-bars"></i>
-            </button>
-          </div>
-          <div
-            className={
-              'lg:flex flex-grow items-center bg-white lg:bg-opacity-0 lg:shadow-none' +
-              (navbarOpen ? ' block rounded shadow-lg' : ' hidden')
-            }
-            id="example-navbar-warning"
+    <React.Fragment>
+      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Button size="small">Subscribe</Button>
+        <Typography
+          component="h2"
+          variant="h5"
+          color="inherit"
+          align="center"
+          noWrap
+          sx={{ flex: 1 }}
+        >
+          {title}
+        </Typography>
+        <IconButton>
+          <SearchIcon />
+        </IconButton>
+        <Button component={RouterLink} to="/register" variant="outlined" size="small">
+          Sign up
+        </Button>
+      </Toolbar>
+      <Toolbar
+        component="nav"
+        variant="dense"
+        sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
+      >
+        {sections.map((section) => (
+          <Link
+            component={RouterLink}
+            to={section.url}
+            color="inherit"
+            noWrap
+            key={section.title}
+            variant="body2"
+            sx={{ p: 1, flexShrink: 0 }}
           >
-            <LoggedOut user={user} />
-
-            <LoggedIn user={user} />
-          </div>
-        </div>
-      </nav>
-    </>
+            {section.title}
+          </Link>
+        ))}
+      </Toolbar>
+    </React.Fragment>
   );
 };
 

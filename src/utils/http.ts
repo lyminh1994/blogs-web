@@ -11,10 +11,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
-    const { auth } = store.getState().auth;
+    const { value } = store.getState().counter;
 
-    if (auth && config.headers) {
-      config.headers['Authorization'] = `Bearer ${auth?.token}`;
+    if (value && config.headers) {
+      config.headers['Authorization'] = `Bearer ${value}`;
     }
 
     return config;

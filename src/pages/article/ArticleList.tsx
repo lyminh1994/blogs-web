@@ -1,7 +1,16 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import ArticlePreview from './ArticlePreview';
 
 const ArticleList = () => {
-  return <div>ArticleList</div>;
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Container maxWidth="lg">
+        <ArticlePreview />
+      </Container>
+    </Box>
+  );
 };
 
 export default ArticleList;

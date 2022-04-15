@@ -1,7 +1,9 @@
 import React from 'react';
 
+import ArticleList from 'pages/article/ArticleList';
+
 const GlobalFeedTab = () => {
-  return <div>GlobalFeedTab</div>;
+  return <ArticleList />;
 };
 
 export default GlobalFeedTab;

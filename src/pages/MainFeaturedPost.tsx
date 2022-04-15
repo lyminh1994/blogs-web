@@ -5,16 +5,17 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 
-const Banner = () => {
-  const post = {
-    title: 'A place to share your knowledge.',
-    description:
-      "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
-    image: 'https://source.unsplash.com/random',
-    imageText: 'main image description',
-    linkText: 'Continue reading…',
+interface MainFeaturedPostProps {
+  post: {
+    description: string;
+    image: string;
+    imageText: string;
+    linkText: string;
+    title: string;
   };
+}
 
+const MainFeaturedPost = ({ post }: MainFeaturedPostProps) => {
   return (
     <Paper
       sx={{
@@ -65,4 +66,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default MainFeaturedPost;
