@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Link as RouterLink } from 'react-router-dom';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
@@ -15,13 +15,10 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useAppDispatch } from 'store/hooks';
-import { login } from 'store/auth/auth';
 
-type LoginInputs = {
-  username: string;
-  password: string;
-};
+import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
+import { login, selectAuth } from 'store/auth/authSlice';
+import { LoginRequest } from 'types/auth';
 
 const schema = yup
   .object({
@@ -31,22 +28,32 @@ const schema = yup
   .required();
 
 const Login = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector(selectAuth);
+
+  useEffect(() => {
+    if (user) {
+      navigate(-1);
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInputs>({ resolver: yupResolver(schema) });
+  } = useForm<LoginRequest>({ resolver: yupResolver(schema) });
 
-  const onLogin: SubmitHandler<LoginInputs> = ({ username, password }: LoginInputs) => {
+  const handleLogin: SubmitHandler<LoginRequest> = ({ username, password }: LoginRequest) => {
     dispatch(login({ username, password }));
+    navigate(-1);
   };
 
   return (
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
-          marginTop: 8,
+          mt: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -58,7 +65,7 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onLogin)} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit(handleLogin)} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

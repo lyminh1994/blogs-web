@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { store } from 'store';
+import { refreshAccess } from 'store/auth/authSlice';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -11,10 +12,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
-    const { value } = store.getState().counter;
+    const { accessToken } = store.getState().auth;
 
-    if (value && config.headers) {
-      config.headers['Authorization'] = `Bearer ${value}`;
+    if (accessToken && config.headers) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
     return config;
@@ -29,8 +30,18 @@ instance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError): Promise<AxiosError> => {
-    console.log(error);
+    const originalConfig = error.config;
+    if (originalConfig.url !== '/auth/login' && error.response) {
+      // Access Token was expired
+      if (error.response.status === 401) {
+        store.dispatch(refreshAccess);
+        const { status } = store.getState().auth;
 
+        if (status === 'failed') {
+          return Promise.reject(error.response.data);
+        }
+      }
+    }
     return Promise.reject(error);
   },
 );

@@ -1,6 +1,21 @@
 import http from 'utils/http';
 
-export const create = async (slug: string, comment: any) => {
+interface Comment {
+  id: number;
+  body: string;
+  createdAt: number;
+  updatedAt: number;
+  user: User;
+}
+
+interface User {
+  username: string;
+  bio: string;
+  image: string;
+  following: boolean;
+}
+
+export const create = async (slug: string, comment: Comment) => {
   return await http.post(`/articles/${slug}/comments`, { comment });
 };
 

@@ -1,6 +1,6 @@
 import { combineReducers, Reducer } from '@reduxjs/toolkit';
 
-import authReducer, { AuthState } from './auth/auth';
+import authReducer, { AuthState } from './auth/authSlice';
 import counterReducer, { CounterState } from './counter/counterSlice';
 
 interface RootState {

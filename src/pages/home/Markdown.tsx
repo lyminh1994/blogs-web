@@ -3,7 +3,7 @@ import ReactMarkdown from 'markdown-to-jsx';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
-import MarkdownListItem from './MarkdownListItem';
+import MarkdownListItem from 'pages/home/MarkdownListItem';
 
 const options = {
   overrides: {

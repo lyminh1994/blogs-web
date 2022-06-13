@@ -6,9 +6,9 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 
 import Sidebar from 'components/sidebars/Sidebar';
 
-import MainFeaturedPost from 'pages/MainFeaturedPost';
-import FeaturedPost from 'pages/FeaturedPost';
-import Main from 'pages/Main';
+import MainFeaturedPost from 'pages/home/MainFeaturedPost';
+import FeaturedPost from 'pages/home/FeaturedPost';
+import Main from 'pages/home/Main';
 
 const mainFeaturedPost = {
   title: 'Title of a longer featured blog post',
