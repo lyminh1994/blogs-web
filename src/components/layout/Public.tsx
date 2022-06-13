@@ -12,16 +12,13 @@ import Header from 'components/headers/Header';
 import Footer from 'components/footers/Footer';
 
 const sections = [
-  { title: 'Home', url: '/home' },
+  { title: 'Home', url: '/' },
   { title: 'Login', url: '/login' },
   { title: 'Editor', url: '/editor' },
   { title: 'Settings', url: '/settings' },
   { title: 'Profile Favorites', url: '/user1/favorites' },
   { title: 'Account', url: '/user1' },
   { title: 'Counter', url: '/editor/nano' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },
 ];
 
 const Layout = () => {

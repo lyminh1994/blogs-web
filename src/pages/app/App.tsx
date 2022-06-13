@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { useAppDispatch } from 'hooks/useRedux';
-import { appLoad } from 'store/auth/authSlice';
+import { appLoaded } from 'store/auth/authSlice';
 
-import Layout from 'components/layout/Layout';
+import Public from 'components/layout/Public';
 
 import Home from 'pages/home/Home';
 import Login from 'pages/auth/Login';
@@ -20,14 +20,14 @@ import Article from 'pages/article/Article';
 const App = () => {
   const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
-    dispatch(appLoad);
+  useEffect(() => {
+    dispatch(appLoaded());
   }, []);
 
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path="home" element={<Home />} />
+      <Route path="/" element={<Public />}>
+        <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="editor" element={<Editor />} />

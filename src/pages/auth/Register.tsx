@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -16,26 +16,13 @@ import { useAppSelector } from 'hooks/useRedux';
 import { selectAuth } from 'store/auth/authSlice';
 
 const Register = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAppSelector(selectAuth);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    navigate('/login');
-  };
-
-  React.useEffect(() => {
-    if (user) {
-      navigate(-1);
-    }
-  }, []);
-
-  return (
+  return user ? (
+    <Navigate to="/" state={{ from: location }} replace />
+  ) : (
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
@@ -51,7 +38,7 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" noValidate sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField

@@ -1,18 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store';
-
-export interface AuthState {
-  accessToken: string | null;
-  refreshToken: string | null;
-  user: {
-    username: string;
-    email: string;
-    bio: string;
-    image: string;
-    enabled: boolean;
-  } | null;
-  status: 'idle' | 'loading' | 'failed';
-}
+import { AuthState, LoginRequest, RegisterRequest } from 'types/auth';
 
 const initialState: AuthState = {
   accessToken: null,
@@ -25,7 +13,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    appLoad: (state) => {
+    appLoaded: (state) => {
       const storage = localStorage.getItem('app_user');
 
       const authStorage: AuthState = storage
@@ -35,12 +23,12 @@ const authSlice = createSlice({
       state.refreshToken = authStorage.refreshToken;
       state.user = authStorage.user;
     },
-    login: (state, action: PayloadAction<{ username: string; password: string }>) => {
+    login: (state, action: PayloadAction<LoginRequest>) => {
       state.accessToken =
         'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY0MjUwMzMxOH0.qapF9desbyRo5AMCJgGsJMov43ELhH_STKGQCTBx0hLELg4sXHCUn-RfCpoNyDNtcubW1HX95SW-OV39aAa-QA';
       state.refreshToken = '2d3a5b36-0864-4a37-998d-55aa08103880';
       state.user = {
-        username: 'Jo',
+        username: action.payload.username,
         email: 'dworstall0@bloglines.com',
         bio: 'drive cross-media ROI',
         image: 'https://robohash.org/quasiquisquamsed.png?size=50x50&set=set1',
@@ -61,10 +49,16 @@ const authSlice = createSlice({
 
       localStorage.removeItem('app_user');
     },
-    register: (state) => {
+    register: (state, action: PayloadAction<RegisterRequest>) => {
       state.accessToken = '';
       state.refreshToken = '';
-      state.user = null;
+      state.user = {
+        username: action.payload.username,
+        email: '',
+        bio: '',
+        image: '',
+        enabled: true,
+      };
 
       const storage = JSON.stringify({
         accessToken: state.accessToken,
@@ -88,7 +82,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { appLoad, login, logout, register, refreshAccess } = authSlice.actions;
+export const { appLoaded, login, logout, register, refreshAccess } = authSlice.actions;
 
 export const selectAuth = (state: RootState) => state.auth;
 

@@ -14,7 +14,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel({ children, value, index, ...other }: TabPanelProps) {
+const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
   return (
     <div
       role="tabpanel"
@@ -30,14 +30,14 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
       )}
     </div>
   );
-}
+};
 
-function a11yProps(index: number) {
+const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
   };
-}
+};
 
 const ProfileFavorites = () => {
   const [value, setValue] = React.useState(0);

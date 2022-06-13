@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link as RouterLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
 import { login, selectAuth } from 'store/auth/authSlice';
+
 import { LoginRequest } from 'types/auth';
 
 const schema = yup
@@ -28,15 +29,10 @@ const schema = yup
   .required();
 
 const Login = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(selectAuth);
-
-  useEffect(() => {
-    if (user) {
-      navigate(-1);
-    }
-  }, []);
 
   const {
     register,
@@ -49,7 +45,9 @@ const Login = () => {
     navigate(-1);
   };
 
-  return (
+  return user ? (
+    <Navigate to="/" state={{ from: location }} replace />
+  ) : (
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
