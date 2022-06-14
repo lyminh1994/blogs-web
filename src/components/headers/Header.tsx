@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
+import { User } from 'types/auth';
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -15,13 +16,7 @@ interface HeaderProps {
     url: string;
   }>;
   title: string;
-  user: {
-    username: string;
-    email: string;
-    bio: string;
-    image: string;
-    enabled: boolean;
-  } | null;
+  user: User | null;
 }
 
 const Header = ({ sections, title, user }: HeaderProps) => {

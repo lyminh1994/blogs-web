@@ -1,13 +1,15 @@
+export interface User {
+  username: string;
+  email: string;
+  bio: string;
+  image: string;
+  enabled: boolean;
+}
+
 export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
-  user: {
-    username: string;
-    email: string;
-    bio: string;
-    image: string;
-    enabled: boolean;
-  } | null;
+  user: User | null;
   status: 'idle' | 'loading' | 'failed';
 }
 
