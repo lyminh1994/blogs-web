@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
@@ -21,7 +21,7 @@ interface HeaderProps {
 
 const Header = ({ sections, title, user }: HeaderProps) => {
   return (
-    <React.Fragment>
+    <Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Typography
           component={RouterLink}
@@ -69,7 +69,7 @@ const Header = ({ sections, title, user }: HeaderProps) => {
           </Link>
         ))}
       </Toolbar>
-    </React.Fragment>
+    </Fragment>
   );
 };
 

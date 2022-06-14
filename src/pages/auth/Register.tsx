@@ -1,4 +1,3 @@
-import React from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';

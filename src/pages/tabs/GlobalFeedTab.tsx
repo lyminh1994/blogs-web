@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ArticleList from 'pages/article/ArticleList';
 
 const GlobalFeedTab = () => {
