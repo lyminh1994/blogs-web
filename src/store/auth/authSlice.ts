@@ -4,7 +4,6 @@ import { AuthState, LoginRequest, RegisterRequest } from 'types/auth';
 
 const initialState: AuthState = {
   accessToken: null,
-  refreshToken: null,
   user: null,
   status: 'idle',
 };
@@ -18,51 +17,46 @@ const authSlice = createSlice({
 
       const authStorage: AuthState = storage
         ? JSON.parse(storage)
-        : { accessToken: null, refreshToken: null, user: null };
+        : { accessToken: null, user: null };
       state.accessToken = authStorage.accessToken;
-      state.refreshToken = authStorage.refreshToken;
       state.user = authStorage.user;
     },
     login: (state, action: PayloadAction<LoginRequest>) => {
       state.accessToken =
         'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY0MjUwMzMxOH0.qapF9desbyRo5AMCJgGsJMov43ELhH_STKGQCTBx0hLELg4sXHCUn-RfCpoNyDNtcubW1HX95SW-OV39aAa-QA';
-      state.refreshToken = '2d3a5b36-0864-4a37-998d-55aa08103880';
       state.user = {
+        id: 1,
         username: action.payload.username,
         email: 'dworstall0@bloglines.com',
         bio: 'drive cross-media ROI',
         image: 'https://robohash.org/quasiquisquamsed.png?size=50x50&set=set1',
-        enabled: true,
       };
 
       const storage = JSON.stringify({
         accessToken: state.accessToken,
-        refreshToken: state.refreshToken,
         user: state.user,
       });
       localStorage.setItem('app_user', storage);
     },
     logout: (state) => {
       state.accessToken = null;
-      state.refreshToken = null;
       state.user = null;
 
       localStorage.removeItem('app_user');
     },
     register: (state, action: PayloadAction<RegisterRequest>) => {
-      state.accessToken = '';
-      state.refreshToken = '';
+      state.accessToken =
+        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY0MjUwMzMxOH0.qapF9desbyRo5AMCJgGsJMov43ELhH_STKGQCTBx0hLELg4sXHCUn-RfCpoNyDNtcubW1HX95SW-OV39aAa-QA';
       state.user = {
+        id: 1,
         username: action.payload.username,
-        email: '',
-        bio: '',
-        image: '',
-        enabled: true,
+        email: 'dworstall0@bloglines.com',
+        bio: 'drive cross-media ROI',
+        image: 'https://robohash.org/quasiquisquamsed.png?size=50x50&set=set1',
       };
 
       const storage = JSON.stringify({
         accessToken: state.accessToken,
-        refreshToken: state.refreshToken,
         user: state.user,
       });
       localStorage.setItem('app_user', storage);
@@ -70,13 +64,12 @@ const authSlice = createSlice({
     refreshAccess: (state) => {
       state.accessToken =
         'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY0MjUwMzMxOH0.qapF9desbyRo5AMCJgGsJMov43ELhH_STKGQCTBx0hLELg4sXHCUn-RfCpoNyDNtcubW1HX95SW-OV39aAa-QA';
-      state.refreshToken = '2d3a5b36-0864-4a37-998d-55aa08103880';
       state.user = {
+        id: 1,
         username: 'Jo',
         email: 'dworstall0@bloglines.com',
         bio: 'drive cross-media ROI',
         image: 'https://robohash.org/quasiquisquamsed.png?size=50x50&set=set1',
-        enabled: true,
       };
     },
   },

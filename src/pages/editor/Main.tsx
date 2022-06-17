@@ -1,16 +1,13 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
+import { ReactNode, SyntheticEvent, useState } from 'react';
+
+import { Box, Grid, Tab, Tabs, Typography } from '@mui/material';
 
 import GlobalFeedTab from 'pages/tabs/GlobalFeedTab';
 import TagFilterTab from 'pages/tabs/TagFilterTab';
 import YourFeedTab from 'pages/tabs/YourFeedTab';
 
 interface TabPanelProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   index: number;
   value: number;
 }
@@ -41,9 +38,9 @@ const a11yProps = (index: number) => {
 };
 
 const Main = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
     event.preventDefault();
     setValue(newValue);
   };

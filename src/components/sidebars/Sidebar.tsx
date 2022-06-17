@@ -1,9 +1,5 @@
-import * as React from 'react';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import { ElementType } from 'react';
+import { Grid, Link, Paper, Stack, Typography } from '@mui/material';
 
 interface SidebarProps {
   archives: ReadonlyArray<{
@@ -12,7 +8,7 @@ interface SidebarProps {
   }>;
   description: string;
   social: ReadonlyArray<{
-    icon: React.ElementType;
+    icon: ElementType;
     name: string;
   }>;
   title: string;

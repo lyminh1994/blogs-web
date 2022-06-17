@@ -1,14 +1,15 @@
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
+import {
+  Avatar,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { red } from '@mui/material/colors';
 
 const ArticlePreview = () => {
   return (

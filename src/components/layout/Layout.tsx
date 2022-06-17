@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom';
+import { Container, CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
 
 import theme from 'utils/theme';
+
 import { useAppSelector } from 'hooks/useRedux';
 import { selectAuth } from 'store/auth/authSlice';
 
-import Header from 'components/headers/Header';
 import Footer from 'components/footers/Footer';
+import Header from 'components/headers/Header';
 
 const sections = [
   { title: 'Home', url: '/' },
@@ -17,7 +17,6 @@ const sections = [
   { title: 'Settings', url: '/settings' },
   { title: 'Profile Favorites', url: '/user1/favorites' },
   { title: 'Account', url: '/user1' },
-  { title: 'Counter', url: '/editor/nano' },
 ];
 
 const Layout = () => {

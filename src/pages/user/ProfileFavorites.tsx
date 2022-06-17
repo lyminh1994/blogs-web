@@ -1,15 +1,9 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Container from '@mui/material/Container';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
+import { ReactNode, SyntheticEvent, useState } from 'react';
+
+import { Avatar, Box, Card, CardContent, Container, Tab, Tabs, Typography } from '@mui/material';
 
 interface TabPanelProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   index: number;
   value: number;
 }
@@ -40,9 +34,9 @@ const a11yProps = (index: number) => {
 };
 
 const ProfileFavorites = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
     event.preventDefault();
     setValue(newValue);
   };

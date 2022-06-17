@@ -1,14 +1,8 @@
-import { Fragment } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import { Avatar, Button, IconButton, Link, Stack, Toolbar, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import { User } from 'types/auth';
+
+import { UserResponse } from 'types/auth';
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -16,12 +10,12 @@ interface HeaderProps {
     url: string;
   }>;
   title: string;
-  user: User | null;
+  user?: UserResponse | null;
 }
 
 const Header = ({ sections, title, user }: HeaderProps) => {
   return (
-    <Fragment>
+    <>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Typography
           component={RouterLink}
@@ -38,7 +32,7 @@ const Header = ({ sections, title, user }: HeaderProps) => {
           <SearchIcon />
         </IconButton>
         {user ? (
-          <Avatar src={user.image} component={RouterLink} to="/user1" sizes="small" />
+          <Avatar src={user.image || ''} component={RouterLink} to="/user1" sizes="small" />
         ) : (
           <Stack direction="row" spacing={0.5} justifyContent="center">
             <Button component={RouterLink} to="/login" variant="outlined" size="small">
@@ -69,7 +63,7 @@ const Header = ({ sections, title, user }: HeaderProps) => {
           </Link>
         ))}
       </Toolbar>
-    </Fragment>
+    </>
   );
 };
 

@@ -1,6 +1,5 @@
+import { Link, Typography } from '@mui/material';
 import ReactMarkdown from 'markdown-to-jsx';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 
 import MarkdownListItem from 'pages/home/MarkdownListItem';
 

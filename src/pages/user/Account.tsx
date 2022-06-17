@@ -1,6 +1,4 @@
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import { Box, Container, Grid } from '@mui/material';
 
 import AccountProfile from './AccountProfile';
 import AccountProfileDetails from './AccountProfileDetails';

@@ -1,6 +1,4 @@
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import { Divider, Grid, Typography } from '@mui/material';
 import Markdown from 'pages/home/Markdown';
 
 interface MainProps {

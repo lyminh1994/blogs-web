@@ -3,17 +3,19 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
+import {
+  Avatar,
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import Container from '@mui/material/Container';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
 import { login, selectAuth } from 'store/auth/authSlice';
@@ -39,8 +41,8 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginRequest>({ resolver: yupResolver(schema) });
 
-  const handleLogin: SubmitHandler<LoginRequest> = ({ username, password }: LoginRequest) => {
-    dispatch(login({ username, password }));
+  const handleLogin: SubmitHandler<LoginRequest> = (params: LoginRequest) => {
+    dispatch(login(params));
     navigate(-1);
   };
 

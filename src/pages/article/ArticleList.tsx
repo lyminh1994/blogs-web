@@ -1,5 +1,5 @@
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import { Box, Container } from '@mui/material';
+
 import ArticlePreview from './ArticlePreview';
 
 const ArticleList = () => {

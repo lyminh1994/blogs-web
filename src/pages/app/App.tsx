@@ -4,18 +4,18 @@ import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch } from 'hooks/useRedux';
 import { appLoaded } from 'store/auth/authSlice';
 
-import Public from 'components/layout/Public';
+import Layout from 'components/layout/Layout';
+import RequireAuth from 'components/layout/RequireAuth';
 
-import Home from 'pages/home/Home';
+import Article from 'pages/article/Article';
 import Login from 'pages/auth/Login';
 import Register from 'pages/auth/Register';
 import Editor from 'pages/editor/Editor';
-import Settings from 'pages/user/Settings';
-import ProfileFavorites from 'pages/user/ProfileFavorites';
-import Account from 'pages/user/Account';
-import Counter from 'pages/counter/Counter';
 import NotFound from 'pages/error/NotFound';
-import Article from 'pages/article/Article';
+import Home from 'pages/home/Home';
+import Account from 'pages/user/Account';
+import ProfileFavorites from 'pages/user/ProfileFavorites';
+import Settings from 'pages/user/Settings';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -26,16 +26,17 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Public />}>
+      <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="editor" element={<Editor />} />
-        <Route path="editor/:slug" element={<Counter />} />
         <Route path="article/:id" element={<Article />} />
         <Route path="settings" element={<Settings />} />
-        <Route path=":username/favorites" element={<ProfileFavorites />} />
-        <Route path=":username" element={<Account />} />
+        <Route path="favorites/:username" element={<ProfileFavorites />} />
+        <Route path=":username" element={<RequireAuth />}>
+          <Route index element={<Account />} />
+        </Route>
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

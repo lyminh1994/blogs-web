@@ -1,16 +1,11 @@
-export interface User {
-  username: string;
-  email: string;
-  bio: string;
-  image: string;
-  enabled: boolean;
-}
+import { SerializedError } from '@reduxjs/toolkit';
 
 export interface AuthState {
-  accessToken: string | null;
-  refreshToken: string | null;
-  user: User | null;
-  status: 'idle' | 'loading' | 'failed';
+  user?: UserResponse | null;
+  type?: string | null;
+  accessToken?: string | null;
+  status: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error?: SerializedError;
 }
 
 export interface RegisterRequest {
@@ -22,4 +17,24 @@ export interface RegisterRequest {
 export interface LoginRequest {
   username: string;
   password: string;
+}
+
+export interface UpdateUserRequest {
+  email: string;
+  bio: string;
+  image: string;
+}
+
+export interface UserResponse {
+  id: number;
+  username: string;
+  email: string;
+  bio: string | null;
+  image: string | null;
+}
+
+export interface AuthResponse {
+  user: UserResponse | null;
+  type: string | null;
+  accessToken: string | null;
 }

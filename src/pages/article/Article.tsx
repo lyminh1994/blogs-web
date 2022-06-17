@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { nanoid } from '@reduxjs/toolkit';
 import {
   Avatar,
   Box,
@@ -20,20 +20,8 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const Article = () => {
-  const [values, setValues] = useState({
-    password: '',
-    confirm: '',
-  });
-
-  const handleChange = (event: any) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
-  };
-
   const product = {
-    id: 'randomUUID()',
+    id: nanoid(),
     createdAt: '27/03/2019',
     description:
       'Dropbox is a file hosting service that offers cloud storage, file synchronization, a personal cloud.',
@@ -44,31 +32,31 @@ const Article = () => {
 
   const products = [
     {
-      id: 'uuid()',
+      id: nanoid(),
       name: 'Dropbox',
       imageUrl: '/static/images/products/product_1.png',
       updatedAt: Date.now(),
     },
     {
-      id: 'uuid()',
+      id: nanoid(),
       name: 'Medium Corporation',
       imageUrl: '/static/images/products/product_2.png',
       updatedAt: Date.now(),
     },
     {
-      id: 'uuid()',
+      id: nanoid(),
       name: 'Slack',
       imageUrl: '/static/images/products/product_3.png',
       updatedAt: Date.now(),
     },
     {
-      id: 'uuid()',
+      id: nanoid(),
       name: 'Lyft',
       imageUrl: '/static/images/products/product_4.png',
       updatedAt: Date.now(),
     },
     {
-      id: 'uuid()',
+      id: nanoid(),
       name: 'GitHub',
       imageUrl: '/static/images/products/product_5.png',
       updatedAt: Date.now(),
@@ -150,9 +138,7 @@ const Article = () => {
                 label="Password"
                 margin="normal"
                 name="password"
-                onChange={handleChange}
                 type="password"
-                value={values.password}
                 variant="outlined"
               />
               <TextField
@@ -160,9 +146,7 @@ const Article = () => {
                 label="Confirm password"
                 margin="normal"
                 name="confirm"
-                onChange={handleChange}
                 type="password"
-                value={values.confirm}
                 variant="outlined"
               />
             </CardContent>
