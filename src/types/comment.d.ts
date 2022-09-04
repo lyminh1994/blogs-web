@@ -1,5 +1,5 @@
 import { SerializedError } from '@reduxjs/toolkit';
-import { ProfileResponse } from './profile';
+import { ProfileResponse } from './user';
 
 export interface CommentState {
   comments: CommentResponse[] | null;

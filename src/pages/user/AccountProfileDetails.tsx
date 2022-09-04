@@ -12,14 +12,14 @@ import {
 } from '@mui/material';
 
 import { useAppDispatch } from 'hooks/useRedux';
-import { logout } from 'store/auth/authSlice';
+import { authLogout } from 'store/auth/authSlice';
 
 const AccountProfileDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const onLogout = () => {
-    dispatch(logout());
+    dispatch(authLogout());
     navigate('/');
   };
 
@@ -66,7 +66,9 @@ const AccountProfileDetails = () => {
                 select
                 SelectProps={{ native: true }}
                 variant="outlined"
-              />
+              >
+                <option>{''}</option>
+              </TextField>
             </Grid>
           </Grid>
         </CardContent>

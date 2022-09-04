@@ -1,4 +1,5 @@
 import { SerializedError } from '@reduxjs/toolkit';
+import { UserResponse } from './user';
 
 export interface AuthState {
   user?: UserResponse | null;
@@ -17,20 +18,6 @@ export interface RegisterRequest {
 export interface LoginRequest {
   username: string;
   password: string;
-}
-
-export interface UpdateUserRequest {
-  email: string;
-  bio: string;
-  image: string;
-}
-
-export interface UserResponse {
-  id: number;
-  username: string;
-  email: string;
-  bio: string | null;
-  image: string | null;
 }
 
 export interface AuthResponse {

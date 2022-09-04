@@ -1,4 +1,7 @@
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import {
   Avatar,
@@ -14,15 +17,39 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import { useAppSelector } from 'hooks/useRedux';
-import { selectAuth } from 'store/auth/authSlice';
+import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
+import { authRegister, selectAuth } from 'store/auth/authSlice';
+
+import { RegisterRequest } from 'types/auth';
+
+const schema = yup
+  .object({
+    username: yup.string().required(),
+    email: yup.string().required(),
+    password: yup.string().required(),
+  })
+  .required();
 
 const Register = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAppSelector(selectAuth);
+  const dispatch = useAppDispatch();
+  const { accessToken, status } = useAppSelector(selectAuth);
 
-  return user ? (
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterRequest>({ resolver: yupResolver(schema) });
+
+  const handleRegister = (registerParams: RegisterRequest) => {
+    dispatch(authRegister(registerParams));
+    if (status === 'succeeded') {
+      navigate('/');
+    }
+  };
+
+  return accessToken ? (
     <Navigate to="/" state={{ from: location }} replace />
   ) : (
     <Container component="main" maxWidth="sm">
@@ -40,48 +67,37 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit(handleRegister)} noValidate sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
+                label="Username"
+                error={!!errors.username}
+                helperText={errors.username?.message}
+                {...register('username')}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="email"
                 label="Email Address"
-                name="email"
-                autoComplete="email"
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                {...register('email')}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                name="password"
                 label="Password"
                 type="password"
-                id="password"
-                autoComplete="new-password"
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                {...register('password')}
               />
             </Grid>
             <Grid item xs={12}>

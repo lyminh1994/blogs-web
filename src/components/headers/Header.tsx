@@ -2,7 +2,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Avatar, Button, IconButton, Link, Stack, Toolbar, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { UserResponse } from 'types/auth';
+import { UserResponse } from 'types/user';
 
 interface HeaderProps {
   sections: ReadonlyArray<{

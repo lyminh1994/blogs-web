@@ -1,10 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { store } from 'store';
-import { refreshAccess } from 'store/auth/authSlice';
+import store from 'store';
+import { authRefreshToken } from 'store/auth/authSlice';
 
 const instance = axios.create({
+  withCredentials: true,
   baseURL: process.env.REACT_APP_BASE_URL,
-  timeout: 3000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,7 +35,7 @@ instance.interceptors.response.use(
     if (originalConfig.url !== '/auth/login' && error.response) {
       // Access Token was expired
       if (error.response.status === 401) {
-        store.dispatch(refreshAccess);
+        store.dispatch(authRefreshToken);
         const { status } = store.getState().auth;
 
         if (status === 'failed') {

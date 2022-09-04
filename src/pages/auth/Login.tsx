@@ -1,24 +1,13 @@
 import { Link as RouterLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import {
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  FormControlLabel,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import { login, selectAuth } from 'store/auth/authSlice';
+import { authLogin, selectAuth } from 'store/auth/authSlice';
 
 import { LoginRequest } from 'types/auth';
 
@@ -33,7 +22,7 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector(selectAuth);
+  const { accessToken } = useAppSelector(selectAuth);
 
   const {
     register,
@@ -41,12 +30,12 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginRequest>({ resolver: yupResolver(schema) });
 
-  const handleLogin: SubmitHandler<LoginRequest> = (params: LoginRequest) => {
-    dispatch(login(params));
+  const handleLogin = (loginParams: LoginRequest) => {
+    dispatch(authLogin(loginParams));
     navigate(-1);
   };
 
-  return user ? (
+  return accessToken ? (
     <Navigate to="/" state={{ from: location }} replace />
   ) : (
     <Container component="main" maxWidth="sm">
@@ -64,15 +53,13 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(handleLogin)} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit(handleLogin)} noValidate>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            autoComplete="username"
             autoFocus
+            label="Username"
             error={!!errors.username}
             helperText={errors.username?.message}
             {...register('username')}
@@ -83,15 +70,9 @@ const Login = () => {
             fullWidth
             label="Password"
             type="password"
-            id="password"
-            autoComplete="current-password"
             error={!!errors.password}
             helperText={errors.password?.message}
             {...register('password')}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In

@@ -1,5 +1,5 @@
 import { SerializedError } from '@reduxjs/toolkit';
-import { ProfileResponse } from './profile';
+import { ProfileResponse } from './user';
 
 export interface ArticleState {
   articles: ArticleResponse[] | null;
@@ -14,6 +14,7 @@ export interface NewArticleRequest {
 }
 
 export interface UpdateArticleRequest {
+  slug: string;
   title: string;
   body: string;
   description: string;

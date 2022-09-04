@@ -1,56 +1,46 @@
 import http from 'utils/http';
+import { NewArticleRequest, UpdateArticleRequest } from 'types/article';
 
-interface Article {
-  id: number;
-  author: Author;
-  slug: string;
-  title: string;
-  description: string;
-  body: string;
-  createdAt: Date;
-  updatedAt: Date;
-  favorite: boolean;
-  favoritesCount: number;
-  tagNames: string[];
-}
+const DEFAULT_PAGE_SIZE = 10;
 
-interface CreateArticle {
-  title: string;
-  description: string;
-  body: string;
-  tagNames: string[];
-}
+const limit = (pageSize: number, pageNumber: number) =>
+  `page-size=${pageSize}&page-number=${pageNumber ? pageNumber * pageSize : 0}`;
 
-interface Author {
-  username: string;
-  bio: string;
-  image: string;
-  following: boolean;
-}
-
-interface Tag {
-  id: number;
-  name: string;
-}
-
-const limit = (count: number, page: number) =>
-  `page-size=${count}&page-number=${page ? page * count : 0}`;
-
-const omitSlug = (article: Article) => Object.assign({}, article, { slug: undefined });
-
-export const getAll = async (page: number) => {
-  return await http.get(`/articles?${limit(10, page)}`);
+export const getFeeds = async (pageNumber: number) => {
+  return await http.get(`/articles/feeds?${limit(DEFAULT_PAGE_SIZE, pageNumber)}`);
 };
 
-export const getByAuthor = async (author: Author, page: number) => {
-  return await http.get(`/articles?author=${author.username}&${limit(10, page)}`);
+export const getArticles = async (pageNumber: number) => {
+  return await http.get(`/articles?${limit(DEFAULT_PAGE_SIZE, pageNumber)}`);
 };
 
-export const getByTagName = async (tag: Tag, page: number) => {
-  return await http.get(`/articles?tag=${tag.name}&${limit(10, page)}`);
+export const getArticlesByTagName = async (tag: string, pageNumber: number) => {
+  return await http.get(`/articles?tag=${tag}&${limit(DEFAULT_PAGE_SIZE, pageNumber)}`);
 };
 
-export const removeBySlug = async (slug: string) => {
+export const getArticlesByFavorite = async (username: string, pageNumber: number) => {
+  return await http.get(
+    `/articles?favorite-by=${username}&${limit(DEFAULT_PAGE_SIZE, pageNumber)}`,
+  );
+};
+
+export const getArticlesByAuthor = async (author: string, pageNumber: number) => {
+  return await http.get(`/articles?author=${author}&${limit(DEFAULT_PAGE_SIZE, pageNumber)}`);
+};
+
+export const getBySlug = async (slug: string) => {
+  return await http.get(`/articles/${slug}`);
+};
+
+export const createArticle = async (article: NewArticleRequest) => {
+  return await http.post('/articles', article);
+};
+
+export const updateArticleBySlug = async (article: UpdateArticleRequest) => {
+  return await http.put(`/articles/${article.slug}`, article);
+};
+
+export const removeArticleBySlug = async (slug: string) => {
   return await http.delete(`/articles/${slug}`);
 };
 
@@ -58,28 +48,6 @@ export const favoriteBySlug = async (slug: string) => {
   return await http.post(`/articles/favorite/${slug}`);
 };
 
-export const getByFavorite = async (username: string, page: number) => {
-  return await http.get(`/articles?favorite-by=${username}&${limit(10, page)}`);
-};
-
-export const getFeeds = async (page: number) => {
-  return await http.get(`/articles/feeds?${limit(10, page)}`);
-};
-
-export const getBySlug = async (slug: string) => {
-  return await http.get(`/articles/${slug}`);
-};
-
 export const unfavoriteBySlug = async (slug: string) => {
-  return await http.delete(`/articles/favorite/${slug}`);
-};
-
-export const update = async (article: Article) => {
-  return await http.put(`/articles/${article.slug}`, {
-    article: omitSlug(article),
-  });
-};
-
-export const create = async (article: CreateArticle) => {
-  return await http.post('/articles', { article });
+  return await http.delete(`/articles/${slug}/favorite`);
 };

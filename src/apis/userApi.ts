@@ -1,22 +1,14 @@
 import http from 'utils/http';
+import { UpdateUserRequest } from 'types/user';
 
-export const current = async () => {
-  return await http.get('/user');
+export const updateUserInfo = async (user: UpdateUserRequest) => {
+  return await http.put('/user', user);
 };
 
-export const update = async (
-  username: string,
-  email: string,
-  password: string,
-  bio?: string,
-  image?: string,
-) => {
-  return await http.put(`/user/${username}`, { email, password, bio, image });
-};
+export const getProfile = async (username: string) => await http.get(`/user/${username}`);
 
-export const get = async (username: string) => await http.get(`/user/${username}`);
+export const followByUsername = async (username: string) =>
+  await http.post(`/user/${username}/following`);
 
-export const follow = async (username: string) => await http.post(`/user/following/${username}`);
-
-export const unFollow = async (username: string) =>
-  await http.delete(`/user/following/${username}`);
+export const unFollowByUsername = async (username: string) =>
+  await http.delete(`/user/${username}/following`);
