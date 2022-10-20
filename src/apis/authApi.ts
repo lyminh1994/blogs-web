@@ -10,9 +10,9 @@ export const login = async (loginParams: LoginRequest) => {
 };
 
 export const refreshToken = async () => {
-  return await http.get('/auth/refresh-token');
+  return await http.get('/auth/refresh-token', { withCredentials: true });
 };
 
 export const logout = async () => {
-  return await http.delete('/auth/logout');
+  return await http.delete('/auth/logout', { withCredentials: true });
 };

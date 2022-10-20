@@ -3,7 +3,6 @@ import store from 'store';
 import { authRefreshToken } from 'store/auth/authSlice';
 
 const instance = axios.create({
-  withCredentials: true,
   baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 30000,
   headers: {
@@ -43,6 +42,7 @@ instance.interceptors.response.use(
         }
       }
     }
+
     return Promise.reject(error);
   },
 );
