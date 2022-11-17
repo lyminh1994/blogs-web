@@ -1,29 +1,35 @@
-import { SerializedError } from '@reduxjs/toolkit';
+import type { SerializedError } from '@reduxjs/toolkit';
 
-export interface UserState {
+export type UserState = {
   user: UserResponse | null;
   profile: ProfileResponse | null;
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
   error?: SerializedError;
-}
+};
 
-export interface UpdateUserRequest {
+export type UpdateUserRequest = {
   email: string;
   bio: string;
   image: string;
-}
+};
+
+export type Gender = 0 | 1 | 2;
 
 export interface UserResponse {
-  id: number;
-  username: string;
+  publicId: string;
   email: string;
-  bio: string | null;
-  image: string | null;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  birthday: Date;
+  gender: Gender;
+  profileImage: string;
+  authorities: string[];
 }
 
-export interface ProfileResponse {
+export type ProfileResponse = {
   username: string | null;
   bio: string | null;
   image: string | null;
   following: boolean;
-}
+};

@@ -32,13 +32,13 @@ const Header = ({ sections, title, user }: HeaderProps) => {
           <SearchIcon />
         </IconButton>
         {user ? (
-          <Avatar src={user.image || ''} component={RouterLink} to="/user1" sizes="small" />
+          <Avatar src={user.profileImage} component={RouterLink} to="/user1" sizes="small" />
         ) : (
           <Stack direction="row" spacing={0.5} justifyContent="center">
-            <Button component={RouterLink} to="/login" variant="outlined" size="small">
+            <Button component={RouterLink} to="/signIn" variant="outlined" size="small">
               Sign in
             </Button>
-            <Button component={RouterLink} to="/register" variant="outlined" size="small">
+            <Button component={RouterLink} to="/signUp" variant="outlined" size="small">
               Sign up
             </Button>
           </Stack>

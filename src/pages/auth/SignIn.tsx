@@ -7,9 +7,10 @@ import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } fro
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import { authLogin, selectAuth } from 'store/auth/authSlice';
+import { selectAuth } from 'store/auth/authSlice';
+import { signIn } from 'apis/authApi';
 
-import { LoginRequest } from 'types/auth';
+import type { SignInRequest } from 'types/auth';
 
 const schema = yup
   .object({
@@ -18,21 +19,23 @@ const schema = yup
   })
   .required();
 
-const Login = () => {
+const SignIn = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { accessToken } = useAppSelector(selectAuth);
+  const { accessToken, status } = useAppSelector(selectAuth);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginRequest>({ resolver: yupResolver(schema) });
+  } = useForm<SignInRequest>({ resolver: yupResolver(schema) });
 
-  const handleLogin = (loginParams: LoginRequest) => {
-    dispatch(authLogin(loginParams));
-    navigate(-1);
+  const handleSignIn = (signInParams: SignInRequest) => {
+    dispatch(signIn(signInParams));
+    if (status === 'fulfilled') {
+      navigate(-1);
+    }
   };
 
   return accessToken ? (
@@ -53,14 +56,14 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(handleLogin)} noValidate>
+        <Box component="form" onSubmit={handleSubmit(handleSignIn)} noValidate>
           <TextField
             margin="normal"
             required
             fullWidth
             autoFocus
             label="Username"
-            error={!!errors.username}
+            error={status === 'rejected' || !!errors.username}
             helperText={errors.username?.message}
             {...register('username')}
           />
@@ -84,7 +87,7 @@ const Login = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link component={RouterLink} to="/register" variant="body2">
+              <Link component={RouterLink} to="/SignUp" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -95,4 +98,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;

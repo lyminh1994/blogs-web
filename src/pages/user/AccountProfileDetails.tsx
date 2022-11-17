@@ -12,14 +12,14 @@ import {
 } from '@mui/material';
 
 import { useAppDispatch } from 'hooks/useRedux';
-import { authLogout } from 'store/auth/authSlice';
+import { signOut } from 'apis/authApi';
 
 const AccountProfileDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const onLogout = () => {
-    dispatch(authLogout());
+  const onSignOut = () => {
+    dispatch(signOut());
     navigate('/');
   };
 
@@ -80,8 +80,8 @@ const AccountProfileDetails = () => {
             p: 2,
           }}
         >
-          <Button color="error" variant="contained" onClick={onLogout}>
-            Logout
+          <Button color="error" variant="contained" onClick={onSignOut}>
+            Sign out
           </Button>
           <Button color="primary" variant="contained">
             Save details

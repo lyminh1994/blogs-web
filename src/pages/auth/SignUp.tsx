@@ -18,9 +18,10 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import { authRegister, selectAuth } from 'store/auth/authSlice';
+import { selectAuth } from 'store/auth/authSlice';
+import { signUp } from 'apis/authApi';
 
-import { RegisterRequest } from 'types/auth';
+import { SignUpRequest } from 'types/auth';
 
 const schema = yup
   .object({
@@ -30,7 +31,7 @@ const schema = yup
   })
   .required();
 
-const Register = () => {
+const SignUp = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -40,11 +41,11 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterRequest>({ resolver: yupResolver(schema) });
+  } = useForm<SignUpRequest>({ resolver: yupResolver(schema) });
 
-  const handleRegister = (registerParams: RegisterRequest) => {
-    dispatch(authRegister(registerParams));
-    if (status === 'succeeded') {
+  const handleSignUp = (SignUpParams: SignUpRequest) => {
+    dispatch(signUp(SignUpParams));
+    if (status === 'fulfilled') {
       navigate('/');
     }
   };
@@ -67,7 +68,7 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(handleRegister)} noValidate sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit(handleSignUp)} noValidate sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -112,7 +113,7 @@ const Register = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link href="/SignIn" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -123,4 +124,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignUp;

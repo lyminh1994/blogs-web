@@ -4,15 +4,13 @@ import { ThemeProvider } from '@mui/material/styles';
 
 import theme from 'utils/theme';
 
-import { useAppSelector } from 'hooks/useRedux';
-import { selectAuth } from 'store/auth/authSlice';
-
 import Footer from 'components/footers/Footer';
 import Header from 'components/headers/Header';
+import { useAuth } from 'hooks/useAuth';
 
 const sections = [
   { title: 'Home', url: '/' },
-  { title: 'Login', url: '/login' },
+  { title: 'Sign In', url: '/signIn' },
   { title: 'Editor', url: '/editor' },
   { title: 'Settings', url: '/settings' },
   { title: 'Profile Favorites', url: '/user1/favorites' },
@@ -20,7 +18,7 @@ const sections = [
 ];
 
 const Layout = () => {
-  const { user } = useAppSelector(selectAuth);
+  const { user } = useAuth();
 
   return (
     <ThemeProvider theme={theme}>

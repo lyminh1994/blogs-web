@@ -1,18 +1,35 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import http from 'utils/http';
-import { LoginRequest, RegisterRequest } from 'types/auth';
+import type { AuthResponse, SignInRequest, SignUpRequest } from 'types/auth';
 
-export const register = async (registerParams: RegisterRequest) => {
-  return await http.post('/auth/register', registerParams);
-};
+export const signUp = createAsyncThunk<AuthResponse, SignUpRequest>(
+  'auth/signUp',
+  async (signUpParams) => {
+    const response = await http.post('/auth/signUp', signUpParams);
+    return response.data;
+  },
+);
 
-export const login = async (loginParams: LoginRequest) => {
-  return await http.post('/auth/login', loginParams);
-};
+export const signIn = createAsyncThunk<AuthResponse, SignInRequest>(
+  'auth/signIn',
+  async (signInParams, { rejectWithValue }) => {
+    const response = await http.post('/auth/signIn', signInParams, { withCredentials: true });
+    console.log(response);
 
-export const refreshToken = async () => {
-  return await http.get('/auth/refresh-token', { withCredentials: true });
-};
+    if (response.status < 200 || response.status >= 300) {
+      rejectWithValue(response.data);
+    }
 
-export const logout = async () => {
-  return await http.delete('/auth/logout', { withCredentials: true });
-};
+    return response.data;
+  },
+);
+
+export const refreshToken = createAsyncThunk<AuthResponse, void>('auth/refreshToken', async () => {
+  const response = await http.get('/auth/refresh-token', { withCredentials: true });
+  return response.data;
+});
+
+export const signOut = createAsyncThunk<void, void>('auth/signOut', async () => {
+  return await http.delete('/auth/signOut', { withCredentials: true });
+});

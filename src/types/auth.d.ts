@@ -1,27 +1,29 @@
-import { SerializedError } from '@reduxjs/toolkit';
-import { UserResponse } from './user';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { UserResponse } from './user';
+
+export type RequestState = 'pending' | 'fulfilled' | 'rejected';
 
 export interface AuthState {
-  user?: UserResponse | null;
-  type?: string | null;
-  accessToken?: string | null;
-  status: 'idle' | 'pending' | 'succeeded' | 'failed';
+  user: UserResponse | null;
+  type: string | null;
+  accessToken: string | null;
+  status?: RequestState;
   error?: SerializedError;
 }
 
-export interface RegisterRequest {
+export interface SignUpRequest {
   username: string;
   email: string;
   password: string;
 }
 
-export interface LoginRequest {
+export interface SignInRequest {
   username: string;
   password: string;
 }
 
-export interface AuthResponse {
+export type AuthResponse = {
   user: UserResponse | null;
   type: string | null;
   accessToken: string | null;
-}
+};

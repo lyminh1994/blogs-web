@@ -1,41 +1,18 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from 'store';
-import { AuthResponse, AuthState, LoginRequest, RegisterRequest } from 'types/auth';
-import { register, login, refreshToken, logout } from 'apis/authApi';
+import { createSlice } from '@reduxjs/toolkit';
+import { signUp, signIn, refreshToken, signOut } from 'apis/authApi';
 
-const initialState: AuthState = {
-  accessToken: null,
-  user: null,
-  status: 'idle',
-};
-
-export const authRegister = createAsyncThunk(
-  'auth/register',
-  async (registerParams: RegisterRequest) => {
-    const response = await register(registerParams);
-    return response.data;
-  },
-);
-
-export const authLogin = createAsyncThunk('auth/login', async (loginParams: LoginRequest) => {
-  const response = await login(loginParams);
-  return response.data;
-});
-
-export const authRefreshToken = createAsyncThunk('auth/refreshToken', async () => {
-  const response = await refreshToken();
-  return response.data;
-});
-
-export const authLogout = createAsyncThunk('auth/logout', async () => {
-  return await logout();
-});
+import type { RootState } from 'store';
+import type { AuthState } from 'types/auth';
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: {
+    user: null,
+    type: null,
+    accessToken: null,
+  } as AuthState,
   reducers: {
-    appLoaded: (state) => {
+    setCredentials: (state) => {
       const storage = localStorage.getItem('app_user');
 
       const { user, accessToken } = storage
@@ -47,14 +24,15 @@ const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(authRegister.pending, (state) => {
+    builder.addCase(signUp.pending, (state) => {
       state.status = 'pending';
     });
-    builder.addCase(authRegister.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
+
+    builder.addCase(signUp.fulfilled, (state, action) => {
       const { user, accessToken } = action.payload;
       state.user = user;
       state.accessToken = accessToken;
-      state.status = 'succeeded';
+      state.status = 'fulfilled';
 
       const storage = JSON.stringify({
         accessToken: state.accessToken,
@@ -62,15 +40,17 @@ const authSlice = createSlice({
       });
       localStorage.setItem('app_user', storage);
     });
-    builder.addCase(authRegister.rejected, (state, action) => {
+
+    builder.addCase(signIn.pending, (state, action) => {
+      state.status = 'rejected';
       console.log(action);
     });
 
-    builder.addCase(authLogin.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
+    builder.addCase(signIn.fulfilled, (state, action) => {
       const { user, accessToken } = action.payload;
       state.user = user;
       state.accessToken = accessToken;
-      state.status = 'succeeded';
+      state.status = 'fulfilled';
 
       const storage = JSON.stringify({
         user: user,
@@ -79,11 +59,16 @@ const authSlice = createSlice({
       localStorage.setItem('app_user', storage);
     });
 
-    builder.addCase(authRefreshToken.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
+    builder.addCase(signIn.rejected, (state, action) => {
+      state.status = 'rejected';
+      console.log(action);
+    });
+
+    builder.addCase(refreshToken.fulfilled, (state, action) => {
       const { user, accessToken } = action.payload;
       state.user = user;
       state.accessToken = accessToken;
-      state.status = 'succeeded';
+      state.status = 'fulfilled';
 
       const storage = JSON.stringify({
         user: user,
@@ -93,18 +78,19 @@ const authSlice = createSlice({
       localStorage.setItem('app_user', storage);
     });
 
-    builder.addCase(authLogout.fulfilled, (state) => {
+    builder.addCase(signOut.fulfilled, (state) => {
       state.user = null;
       state.accessToken = null;
-      state.status = 'succeeded';
+      state.status = 'fulfilled';
 
       localStorage.removeItem('app_user');
     });
   },
 });
 
-export const { appLoaded } = authSlice.actions;
+export const { setCredentials } = authSlice.actions;
 
 export const selectAuth = (state: RootState) => state.auth;
+export const selectCurrentUser = (state: RootState) => state.auth.user;
 
 export default authSlice.reducer;

@@ -1,6 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios from 'axios';
+import { enqueueSnackbar } from 'notistack';
+
 import store from 'store';
-import { authRefreshToken } from 'store/auth/authSlice';
+import { refreshToken } from 'apis/authApi';
+
+import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -30,15 +34,27 @@ instance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError): Promise<AxiosError> => {
-    const originalConfig = error.config;
-    if (originalConfig.url !== '/auth/login' && error.response) {
-      // Access Token was expired
-      if (error.response.status === 401) {
-        store.dispatch(authRefreshToken);
-        const { status } = store.getState().auth;
+    if (error) {
+      const { code, message, config, response } = error;
+      if (code === 'ERR_NETWORK') {
+        enqueueSnackbar(message, {
+          autoHideDuration: 1000,
+          variant: 'error',
+          anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+        });
 
-        if (status === 'failed') {
-          return Promise.reject(error.response.data);
+        return Promise.reject(error);
+      }
+
+      if (config?.url !== '/auth/signIn' && response) {
+        // Access Token was expired
+        if (response.status === 401) {
+          store.dispatch(refreshToken);
+          const { status } = store.getState().auth;
+
+          if (status === 'rejected') {
+            return Promise.reject(response.data);
+          }
         }
       }
     }
