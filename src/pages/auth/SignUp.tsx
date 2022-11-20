@@ -2,7 +2,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
+import { enqueueSnackbar } from 'notistack';
 import {
   Avatar,
   Box,
@@ -17,11 +17,10 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import { selectAuth } from 'store/auth/authSlice';
-import { signUp } from 'apis/authApi';
+import { useAuth } from 'hooks/useAuth';
+import { useSignUpMutation } from 'redux/services/auth';
 
-import { SignUpRequest } from 'types/auth';
+import type { SignUpRequest } from 'types/auth';
 
 const schema = yup
   .object({
@@ -32,10 +31,10 @@ const schema = yup
   .required();
 
 const SignUp = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { accessToken, status } = useAppSelector(selectAuth);
+  const [signUp, { isLoading }] = useSignUpMutation();
 
   const {
     register,
@@ -43,15 +42,21 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<SignUpRequest>({ resolver: yupResolver(schema) });
 
-  const handleSignUp = (SignUpParams: SignUpRequest) => {
-    dispatch(signUp(SignUpParams));
-    if (status === 'fulfilled') {
-      navigate('/');
+  const handleSignUp = async (params: SignUpRequest) => {
+    try {
+      await signUp(params);
+      navigate('/signin');
+    } catch (err) {
+      enqueueSnackbar('Oh no, there was an error!', {
+        autoHideDuration: 1000,
+        variant: 'error',
+        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+      });
     }
   };
 
-  return accessToken ? (
-    <Navigate to="/" state={{ from: location }} replace />
+  return user ? (
+    <Navigate to="/" state={{ from: location }} />
   ) : (
     <Container component="main" maxWidth="sm">
       <Box
@@ -108,7 +113,13 @@ const SignUp = () => {
               />
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            sx={{ mt: 3, mb: 2 }}
+            fullWidth
+            type="submit"
+            variant="contained"
+            disabled={isLoading}
+          >
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">

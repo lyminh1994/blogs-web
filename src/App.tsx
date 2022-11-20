@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { setCredentials } from 'redux/features/authSlice';
 
 import { useAppDispatch } from 'hooks/useRedux';
-import { setCredentials } from 'store/auth/authSlice';
 
-import Layout from 'components/layout/Layout';
-import PrivateOutlet from 'components/layout/PrivateOutlet';
+import { Layout, PrivateOutlet } from 'components';
 
 import Article from 'pages/article/Article';
 import SignIn from 'pages/auth/SignIn';
@@ -22,14 +21,14 @@ const App = () => {
 
   useEffect(() => {
     dispatch(setCredentials());
-  }, []);
+  }, [setCredentials]);
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="signup" element={<SignUp />} />
         <Route path="editor" element={<Editor />} />
         <Route path="article/:id" element={<Article />} />
         <Route path="settings" element={<Settings />} />

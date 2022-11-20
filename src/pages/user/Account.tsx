@@ -1,7 +1,7 @@
 import { Box, Container, Grid } from '@mui/material';
 
-import AccountProfile from './AccountProfile';
-import AccountProfileDetails from './AccountProfileDetails';
+import ProfileAvatar from './ProfileAvatar';
+import ProfileDetails from './ProfileDetails';
 
 const Account = () => {
   return (
@@ -15,10 +15,10 @@ const Account = () => {
       <Container maxWidth="lg">
         <Grid container spacing={3}>
           <Grid item lg={4} md={6} xs={12}>
-            <AccountProfile />
+            <ProfileAvatar />
           </Grid>
           <Grid item lg={8} md={6} xs={12}>
-            <AccountProfileDetails />
+            <ProfileDetails />
           </Grid>
         </Grid>
       </Container>

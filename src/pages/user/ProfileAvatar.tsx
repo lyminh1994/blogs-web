@@ -9,13 +9,15 @@ import {
   Typography,
 } from '@mui/material';
 
-const AccountProfile = () => {
-  const user = {
-    avatar: '/static/images/avatars/avatar_6.png',
+import { useAuth } from 'hooks/useAuth';
+
+const ProfileAvatar = () => {
+  const { user } = useAuth();
+
+  const additionInfo = {
     city: 'Los Angeles',
     country: 'USA',
     jobTitle: 'Senior Developer',
-    name: 'Katarina Smith',
     timezone: 'GTM-7',
   };
 
@@ -30,32 +32,36 @@ const AccountProfile = () => {
           }}
         >
           <Avatar
-            src={user.avatar}
+            src={user?.profileImage || 'https://i.pravatar.cc/300'}
             sx={{
-              height: 64,
+              height: 164,
               mb: 2,
-              width: 64,
+              width: 164,
             }}
           />
+
           <Typography color="textPrimary" gutterBottom variant="h5">
-            {user.name}
+            {`${user?.firstName} ${user?.lastName}`}
+          </Typography>
+          <Typography color="textSecondary" variant="body1">
+            {additionInfo.jobTitle}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            {`${user.city} ${user.country}`}
+            {`${additionInfo.city}, ${additionInfo.country}`}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            {user.timezone}
+            {additionInfo.timezone}
           </Typography>
         </Box>
       </CardContent>
       <Divider />
       <CardActions>
         <Button color="primary" fullWidth variant="text">
-          Upload picture
+          Update picture
         </Button>
       </CardActions>
     </Card>
   );
 };
 
-export default AccountProfile;
+export default ProfileAvatar;

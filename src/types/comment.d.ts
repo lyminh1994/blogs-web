@@ -1,10 +1,7 @@
-import { SerializedError } from '@reduxjs/toolkit';
 import { ProfileResponse } from './user';
 
 export interface CommentState {
   comments: CommentResponse[] | null;
-  status: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error?: SerializedError;
 }
 
 export interface NewCommentRequest {

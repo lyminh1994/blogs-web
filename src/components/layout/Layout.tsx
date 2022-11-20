@@ -10,7 +10,7 @@ import { useAuth } from 'hooks/useAuth';
 
 const sections = [
   { title: 'Home', url: '/' },
-  { title: 'Sign In', url: '/signIn' },
+  { title: 'Sign In', url: '/signin' },
   { title: 'Editor', url: '/editor' },
   { title: 'Settings', url: '/settings' },
   { title: 'Profile Favorites', url: '/user1/favorites' },

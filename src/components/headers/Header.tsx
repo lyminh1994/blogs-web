@@ -1,6 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { Avatar, Button, IconButton, Link, Stack, Toolbar, Typography } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Avatar, Button, Link, Stack, Toolbar, Typography } from '@mui/material';
 
 import { UserResponse } from 'types/user';
 
@@ -19,7 +18,7 @@ const Header = ({ sections, title, user }: HeaderProps) => {
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Typography
           component={RouterLink}
-          to="/home"
+          to="/"
           variant="h5"
           color="inherit"
           align="left"
@@ -28,17 +27,19 @@ const Header = ({ sections, title, user }: HeaderProps) => {
         >
           {title}
         </Typography>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
         {user ? (
-          <Avatar src={user.profileImage} component={RouterLink} to="/user1" sizes="small" />
+          <Avatar
+            src={user.profileImage || 'https://i.pravatar.cc/100'}
+            component={RouterLink}
+            to={user.publicId}
+            sizes="small"
+          />
         ) : (
           <Stack direction="row" spacing={0.5} justifyContent="center">
-            <Button component={RouterLink} to="/signIn" variant="outlined" size="small">
+            <Button component={RouterLink} to="/signin" variant="outlined" size="small">
               Sign in
             </Button>
-            <Button component={RouterLink} to="/signUp" variant="outlined" size="small">
+            <Button component={RouterLink} to="/signup" variant="outlined" size="small">
               Sign up
             </Button>
           </Stack>

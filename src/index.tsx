@@ -1,22 +1,24 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 
 import * as serviceWorker from './serviceWorker';
-import store from 'store';
+import { store } from 'redux/store';
 
-import App from 'pages/app/App';
+import App from 'App';
 
-const root = createRoot(document.getElementById('root') as HTMLElement);
-root.render(
+const rootElement = document.getElementById('root');
+const rootReact = createRoot(rootElement as HTMLElement);
+
+rootReact.render(
   <StrictMode>
     <Provider store={store}>
       <SnackbarProvider maxSnack={3}>
-        <BrowserRouter>
+        <Router>
           <App />
-        </BrowserRouter>
+        </Router>
       </SnackbarProvider>
     </Provider>
   </StrictMode>,

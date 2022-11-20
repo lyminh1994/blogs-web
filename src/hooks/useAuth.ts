@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from 'store/auth/authSlice';
+import { selectCurrentUser } from 'redux/features/authSlice';
 
 export const useAuth = () => {
   const user = useSelector(selectCurrentUser);

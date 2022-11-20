@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from 'store';
-import { TagState } from 'types/tag';
+
+import type { RootState } from 'redux/store';
+import type { TagState } from 'types/tag';
 
 const initialState: TagState = {
   tags: null,
-  status: 'idle',
 };
 
 const tagSlice = createSlice({ name: 'tag', initialState, reducers: {} });

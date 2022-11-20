@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 
-import store from 'store';
-import { refreshToken } from 'apis/authApi';
+import { store } from 'redux/store';
+// import { refreshToken } from 'redux/features/authSlice';
 
 import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
@@ -49,8 +49,8 @@ instance.interceptors.response.use(
       if (config?.url !== '/auth/signIn' && response) {
         // Access Token was expired
         if (response.status === 401) {
-          store.dispatch(refreshToken);
-          const { status } = store.getState().auth;
+          // store.dispatch(refreshToken);
+          // const { status } = store.getState().auth;
 
           if (status === 'rejected') {
             return Promise.reject(response.data);

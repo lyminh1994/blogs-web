@@ -2,13 +2,12 @@ import { Link as RouterLink, Navigate, useLocation, useNavigate } from 'react-ro
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
+import { enqueueSnackbar } from 'notistack';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import { selectAuth } from 'store/auth/authSlice';
-import { signIn } from 'apis/authApi';
+import { useAuth } from 'hooks/useAuth';
+import { useSignInMutation } from 'redux/services/auth';
 
 import type { SignInRequest } from 'types/auth';
 
@@ -20,10 +19,10 @@ const schema = yup
   .required();
 
 const SignIn = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { accessToken, status } = useAppSelector(selectAuth);
+  const [signIn, { isLoading }] = useSignInMutation();
 
   const {
     register,
@@ -31,15 +30,21 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<SignInRequest>({ resolver: yupResolver(schema) });
 
-  const handleSignIn = (signInParams: SignInRequest) => {
-    dispatch(signIn(signInParams));
-    if (status === 'fulfilled') {
-      navigate(-1);
+  const handleSignIn = async (signInParams: SignInRequest) => {
+    try {
+      await signIn(signInParams).unwrap();
+      navigate('/');
+    } catch (err) {
+      enqueueSnackbar('Oh no, there was an error!', {
+        autoHideDuration: 1000,
+        variant: 'error',
+        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+      });
     }
   };
 
-  return accessToken ? (
-    <Navigate to="/" state={{ from: location }} replace />
+  return user ? (
+    <Navigate to="/" state={{ from: location }} />
   ) : (
     <Container component="main" maxWidth="sm">
       <Box
@@ -63,7 +68,7 @@ const SignIn = () => {
             fullWidth
             autoFocus
             label="Username"
-            error={status === 'rejected' || !!errors.username}
+            error={!!errors.username}
             helperText={errors.username?.message}
             {...register('username')}
           />
@@ -77,7 +82,13 @@ const SignIn = () => {
             helperText={errors.password?.message}
             {...register('password')}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={isLoading}
+          >
             Sign In
           </Button>
           <Grid container>
