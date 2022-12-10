@@ -1,7 +1,7 @@
 import { Link, Typography } from '@mui/material';
 import ReactMarkdown from 'markdown-to-jsx';
 
-import MarkdownListItem from 'pages/home/MarkdownListItem';
+import MarkdownListItem from 'pages/home/markdowns';
 
 const options = {
   overrides: {

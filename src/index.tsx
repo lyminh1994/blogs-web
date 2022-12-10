@@ -2,25 +2,30 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from './service-worker';
 import { store } from 'redux/store';
 
-import App from 'App';
+import App from 'app';
+import { theme } from 'utils/theme';
 
 const rootElement = document.getElementById('root');
 const rootReact = createRoot(rootElement as HTMLElement);
 
 rootReact.render(
   <StrictMode>
-    <Provider store={store}>
-      <SnackbarProvider maxSnack={3}>
-        <Router>
-          <App />
-        </Router>
-      </SnackbarProvider>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Provider store={store}>
+        <SnackbarProvider maxSnack={3}>
+          <Router>
+            <App />
+          </Router>
+        </SnackbarProvider>
+      </Provider>
+    </ThemeProvider>
   </StrictMode>,
 );
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { enqueueSnackbar } from 'notistack';
+// import { enqueueSnackbar } from 'notistack';
 
 import { store } from 'redux/store';
 // import { refreshToken } from 'redux/features/authSlice';
@@ -37,11 +37,11 @@ instance.interceptors.response.use(
     if (error) {
       const { code, message, config, response } = error;
       if (code === 'ERR_NETWORK') {
-        enqueueSnackbar(message, {
-          autoHideDuration: 1000,
-          variant: 'error',
-          anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
-        });
+        // enqueueSnackbar(message, {
+        //   autoHideDuration: 1000,
+        //   variant: 'error',
+        //   anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
+        // });
 
         return Promise.reject(error);
       }

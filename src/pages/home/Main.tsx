@@ -1,5 +1,5 @@
 import { Divider, Grid, Typography } from '@mui/material';
-import Markdown from 'pages/home/Markdown';
+import Markdown from 'pages/home/markdown';
 
 interface MainProps {
   posts: ReadonlyArray<string>;

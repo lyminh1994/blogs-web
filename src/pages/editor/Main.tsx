@@ -2,9 +2,9 @@ import { ReactNode, SyntheticEvent, useState } from 'react';
 
 import { Box, Grid, Tab, Tabs, Typography } from '@mui/material';
 
-import GlobalFeedTab from 'pages/tabs/GlobalFeedTab';
-import TagFilterTab from 'pages/tabs/TagFilterTab';
-import YourFeedTab from 'pages/tabs/YourFeedTab';
+import GlobalFeedTab from 'pages/tabs/global-feed-tab';
+import TagFilterTab from 'pages/tabs/tag-filter-tab';
+import YourFeedTab from 'pages/tabs/your-feed-tab';
 
 interface TabPanelProps {
   children?: ReactNode;

@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { setCredentials } from 'redux/features/authSlice';
+import { setCredentials } from 'redux/features/auth-slice';
 
-import { useAppDispatch } from 'hooks/useRedux';
+import { useAppDispatch } from 'hooks/redux';
 
-import { Layout, PrivateOutlet } from 'components';
+import Layout from 'layouts';
+import PrivateOutlet from 'components/private-outlet';
 
-import Article from 'pages/article/Article';
-import SignIn from 'pages/auth/SignIn';
-import SignUp from 'pages/auth/SignUp';
-import Editor from 'pages/editor/Editor';
-import NotFound from 'pages/error/NotFound';
-import Home from 'pages/home/Home';
-import Account from 'pages/user/Account';
-import ProfileFavorites from 'pages/user/ProfileFavorites';
-import Settings from 'pages/user/Settings';
+import Article from 'pages/article';
+import SignIn from 'pages/auth/sign-in';
+import SignUp from 'pages/auth/sign-up';
+import Editor from 'pages/editor';
+import Error from 'pages/error';
+import Home from 'pages/home';
+import Account from 'pages/account';
+import AccountFavorites from 'components/account/account-favorites';
+import AccountSettings from 'components/account/account-settings';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -27,17 +28,17 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="signin" element={<SignIn />} />
-        <Route path="signup" element={<SignUp />} />
+        <Route path="sign-in" element={<SignIn />} />
+        <Route path="sign-up" element={<SignUp />} />
         <Route path="editor" element={<Editor />} />
         <Route path="article/:id" element={<Article />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="favorites/:username" element={<ProfileFavorites />} />
-        <Route path=":username" element={<PrivateOutlet />}>
+        <Route path="settings" element={<AccountSettings />} />
+        <Route path="favorites/:publicId" element={<AccountFavorites />} />
+        <Route path=":publicId" element={<PrivateOutlet />}>
           <Route index element={<Account />} />
         </Route>
       </Route>
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<Error />} />
     </Routes>
   );
 };

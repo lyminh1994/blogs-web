@@ -1,18 +1,16 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { api } from './services/api';
-import article from './features/articleSlice';
-import auth from './features/authSlice';
-import comment from './features/commentSlice';
-import tag from './features/tagSlice';
-import user from './features/userSlice';
+import article from './features/article-slice';
+import auth from './features/auth-slice';
+import comment from './features/comment-slice';
+import user from './features/account-slice';
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   article,
   auth,
   comment,
-  tag,
   user,
 });
 
