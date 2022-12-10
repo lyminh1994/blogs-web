@@ -5,7 +5,7 @@ import { setCredentials } from 'redux/features/auth-slice';
 import { useAppDispatch } from 'hooks/redux';
 
 import Layout from 'layouts';
-import PrivateOutlet from 'components/private-outlet';
+import PrivateOutlet from 'layouts/private-outlet';
 
 import Article from 'pages/article';
 import SignIn from 'pages/auth/sign-in';
