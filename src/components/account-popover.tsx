@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useSignOutMutation } from 'redux/services/auth';
+import { useSnackbar } from 'notistack';
 import {
   Avatar,
   Box,
@@ -10,10 +10,11 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import { useAuth } from 'hooks/auth';
 import { Logout, Settings } from '@mui/icons-material';
-import UserCircle from 'icons/user-circle';
+
+import { useAccount } from 'hooks/account';
+import { useSignOutMutation } from 'redux/services/api';
+import UserCircle from 'icons/UserCircle';
 
 interface AccountPopoverProps {
   anchorEl?: Element | ((element: Element) => Element) | null | undefined;
@@ -24,7 +25,7 @@ interface AccountPopoverProps {
 }
 
 const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
-  const { user } = useAuth();
+  const { account } = useAccount();
   const navigate = useNavigate();
   const [signOut, { isLoading }] = useSignOutMutation();
   const { enqueueSnackbar } = useSnackbar();
@@ -37,9 +38,7 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
       navigate('/');
     } catch (err) {
       enqueueSnackbar('Oh no, there was an error!', {
-        autoHideDuration: 1000,
         variant: 'error',
-        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
       });
     }
   };
@@ -69,22 +68,22 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
             height: 40,
             width: 40,
           }}
-          src={user?.profileImage || 'https://i.pravatar.cc/100'}
+          src={account?.profileImage || 'https://i.pravatar.cc/100'}
         ></Avatar>
         <Box sx={{ ml: 1 }}>
-          <Typography variant="body1">{`${user?.firstName} ${user?.lastName}`}</Typography>
+          <Typography variant="body1">{`${account?.firstName} ${account?.lastName}`}</Typography>
           <Typography variant="body2">Developer</Typography>
         </Box>
       </Box>
       <Divider />
       <Box sx={{ my: 1 }}>
-        <MenuItem component={Link} to={`${user?.publicId}`} onClick={() => onClose?.()}>
+        <MenuItem component={Link} to={`${account?.publicId}`} onClick={() => onClose?.()}>
           <ListItemIcon>
             <UserCircle fontSize="small" />
           </ListItemIcon>
           <ListItemText>Account</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to={`${user?.publicId}`} onClick={() => onClose?.()}>
+        <MenuItem component={Link} to={`${account?.publicId}/setting`} onClick={() => onClose?.()}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>

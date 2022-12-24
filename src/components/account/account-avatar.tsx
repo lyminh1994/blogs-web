@@ -9,10 +9,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useAuth } from 'hooks/auth';
+import { useAccount } from 'hooks/account';
 
 const ProfileAvatar = () => {
-  const { user } = useAuth();
+  const { account } = useAccount();
 
   const additionInfo = {
     city: 'Los Angeles',
@@ -32,7 +32,7 @@ const ProfileAvatar = () => {
           }}
         >
           <Avatar
-            src={user?.profileImage || 'https://i.pravatar.cc/300'}
+            src={account?.profileImage || 'https://i.pravatar.cc/300'}
             sx={{
               height: 164,
               mb: 2,
@@ -41,7 +41,7 @@ const ProfileAvatar = () => {
           />
 
           <Typography color="textPrimary" gutterBottom variant="h5">
-            {`${user?.firstName} ${user?.lastName}`}
+            {`${account?.firstName} ${account?.lastName}`}
           </Typography>
           <Typography color="textSecondary" variant="body1">
             {additionInfo.jobTitle}

@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -10,14 +11,21 @@ import {
   CardHeader,
   Container,
   Divider,
-  Typography,
   TextField,
 } from '@mui/material';
+import type { NewArticle } from 'types/app';
+
+const top100Films = [
+  { title: 'The Shawshank Redemption', year: 1994 },
+  { title: 'The Godfather', year: 1972 },
+];
 
 const schema = yup
   .object({
-    oldPassword: yup.string().required(),
-    newPassword: yup.string().required(),
+    title: yup.string().required(),
+    description: yup.string().required(),
+    body: yup.string().required(),
+    // tagNames: yup.array().required(),
   })
   .required();
 
@@ -26,9 +34,9 @@ const Editor = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ oldPassword: string; newPassword: string }>({ resolver: yupResolver(schema) });
+  } = useForm<NewArticle>({ resolver: yupResolver(schema) });
 
-  const handleUpdatePassword = (event: { oldPassword: string; newPassword: string }) => {
+  const handleUpdatePassword = (event: NewArticle) => {
     console.log(event);
   };
 
@@ -41,33 +49,53 @@ const Editor = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Typography sx={{ mb: 3 }} variant="h4">
-          Settings
-        </Typography>
         <form onSubmit={handleSubmit(handleUpdatePassword)}>
           <Card>
-            <CardHeader subheader="Update password" title="Password" />
-            <Divider />
+            <CardHeader subheader="Create your own article" title="New Article" />
             <CardContent>
               <TextField
                 fullWidth
-                label="Password"
+                label="Title"
+                placeholder="Article title"
                 margin="normal"
-                type="password"
                 variant="outlined"
-                error={!!errors.oldPassword}
-                helperText={errors.oldPassword?.message}
-                {...register('oldPassword')}
+                error={!!errors.title}
+                helperText={errors.title?.message}
+                {...register('title')}
               />
               <TextField
                 fullWidth
-                label="Confirm password"
+                label="Description"
+                placeholder="What's this article about?"
                 margin="normal"
-                type="password"
                 variant="outlined"
-                error={!!errors.newPassword}
-                helperText={errors.newPassword?.message}
-                {...register('newPassword')}
+                error={!!errors.description}
+                helperText={errors.description?.message}
+                {...register('description')}
+              />
+              <TextField
+                fullWidth
+                label="Body"
+                placeholder="Write your article (in markdown)"
+                margin="normal"
+                variant="outlined"
+                error={!!errors.body}
+                helperText={errors.body?.message}
+                {...register('body')}
+              />
+              <Autocomplete
+                multiple
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    label="Tags"
+                    margin="normal"
+                    variant="outlined"
+                  />
+                )}
               />
             </CardContent>
             <Divider />
@@ -78,8 +106,8 @@ const Editor = () => {
                 p: 2,
               }}
             >
-              <Button color="primary" variant="contained">
-                Update
+              <Button type="submit" color="primary" variant="contained">
+                Create
               </Button>
             </Box>
           </Card>

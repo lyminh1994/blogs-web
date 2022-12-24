@@ -1,7 +1,7 @@
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
 import {
   Avatar,
@@ -17,8 +17,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import { useAuth } from 'hooks/auth';
-import { useSignUpMutation } from 'redux/services/auth';
+import { useSignUpMutation } from 'redux/services/api';
 
 import type { SignUpRequest } from 'types/app';
 
@@ -35,8 +34,6 @@ const schema = yup
   .required();
 
 const SignUp = () => {
-  const { user } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
   const [signUp, { isLoading }] = useSignUpMutation();
   const { enqueueSnackbar } = useSnackbar();
@@ -53,20 +50,16 @@ const SignUp = () => {
       navigate('/sign-in');
     } catch (err) {
       enqueueSnackbar('Oh no, there was an error!', {
-        autoHideDuration: 1000,
         variant: 'error',
-        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
       });
     }
   };
 
-  return user ? (
-    <Navigate to="/" state={{ from: location }} />
-  ) : (
+  return (
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
-          marginTop: 8,
+          mt: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -79,45 +72,36 @@ const SignUp = () => {
           Sign up
         </Typography>
         <Box component="form" onSubmit={handleSubmit(handleSignUp)} noValidate sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Username"
-                error={!!errors.username}
-                helperText={errors.username?.message}
-                {...register('username')}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Email Address"
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                {...register('email')}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Password"
-                type="password"
-                error={!!errors.password}
-                helperText={errors.password?.message}
-                {...register('password')}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-          </Grid>
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Username"
+            error={!!errors.username}
+            helperText={errors.username?.message}
+            {...register('username')}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Email"
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            {...register('email')}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Password"
+            type="password"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            {...register('password')}
+          />
+
+          <FormControlLabel
+            control={<Checkbox value="allowExtraEmails" color="primary" />}
+            label="I want to receive inspiration, marketing promotions and updates via email."
+          />
           <Button
             sx={{ mt: 3, mb: 2 }}
             fullWidth

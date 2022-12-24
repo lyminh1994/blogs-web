@@ -67,8 +67,8 @@ export interface UpdateAccountRequest {
 }
 
 export interface UpdateAccountPassword {
+  currentPassword: string;
   newPassword: string;
-  oldPassword: string;
   confirmPassword?: string;
 }
 

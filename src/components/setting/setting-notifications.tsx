@@ -1,6 +1,15 @@
-import { Box, Card, CardContent, CardHeader, Grid, Switch, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid,
+  Switch,
+  Typography,
+} from '@mui/material';
 
-const AccountNotifications = () => {
+const SettingNotifications = () => {
   return (
     <Card>
       <CardHeader subheader="The information can be edited" title="Email" />
@@ -28,7 +37,8 @@ const AccountNotifications = () => {
           </Grid>
         </Grid>
       </CardContent>
-      <CardHeader subheader="The information can be edited" title="Phone Notifications" />
+      <Divider />
+      <CardHeader subheader="The information can be edited" title="Phone" />
       <CardContent>
         <Grid container>
           <Grid item md={12}>
@@ -48,4 +58,4 @@ const AccountNotifications = () => {
   );
 };
 
-export default AccountNotifications;
+export default SettingNotifications;

@@ -1,20 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getCurrentAccount } from 'redux/services/account';
 
 import type { RootState } from 'redux/store';
 import type { Profile, AccountResponse } from 'types/app';
 
-type UserState = {
-  user: AccountResponse | null;
+type AccountState = {
+  currentAccount: AccountResponse | null;
   profile: Profile | null;
 };
 
-const initialState: UserState = {
-  user: null,
+const initialState: AccountState = {
+  currentAccount: null,
   profile: null,
 };
 
-const profileSlice = createSlice({ name: 'user', initialState, reducers: {} });
+const accountSlice = createSlice({
+  name: 'account',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addMatcher(getCurrentAccount.matchFulfilled, (state, action) => {
+      state.currentAccount = action.payload;
+    });
+  },
+});
 
-export const selectUser = (state: RootState) => state.user;
+export const selectCurrentAccount = (state: RootState) => state.account.currentAccount;
 
-export default profileSlice.reducer;
+export const selectAccount = (state: RootState) => state.account;
+
+export default accountSlice.reducer;

@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 
@@ -19,10 +18,12 @@ rootReact.render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Provider store={store}>
-        <SnackbarProvider maxSnack={3}>
-          <Router>
-            <App />
-          </Router>
+        <SnackbarProvider
+          maxSnack={3}
+          autoHideDuration={1000}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          <App />
         </SnackbarProvider>
       </Provider>
     </ThemeProvider>

@@ -38,9 +38,7 @@ instance.interceptors.response.use(
       const { code, message, config, response } = error;
       if (code === 'ERR_NETWORK') {
         // enqueueSnackbar(message, {
-        //   autoHideDuration: 1000,
         //   variant: 'error',
-        //   anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
         // });
 
         return Promise.reject(error);

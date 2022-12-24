@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from 'redux/features/auth-slice';
+import { selectIsAuthenticated } from 'redux/features/auth-slice';
 
 export const useAuth = () => {
-  const user = useSelector(selectCurrentUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  return useMemo(() => ({ user }), [user]);
+  return useMemo(() => ({ isAuthenticated }), [isAuthenticated]);
 };

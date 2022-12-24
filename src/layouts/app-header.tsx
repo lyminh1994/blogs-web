@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { AppBar, Avatar, Badge, Button, Stack, styled, Toolbar, Typography } from '@mui/material';
+import { AppBar, Avatar, Toolbar, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import UserCircleIcon from 'icons/user-circle';
+import UserCircleIcon from 'icons/UserCircle';
 
 import AccountPopover from 'components/account-popover';
+import { useAccount } from 'hooks/account';
 import { useAuth } from 'hooks/auth';
 
 const AppHeaderRoot = styled(AppBar)(({ theme }) => ({
@@ -21,7 +23,8 @@ interface AppHeaderProps {
 }
 
 const AppHeader = ({ sections, title }: AppHeaderProps) => {
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const { account } = useAccount();
   const settingsRef = useRef(null);
   const [openAccountPopover, setOpenAccountPopover] = useState(false);
 
@@ -56,31 +59,29 @@ const AppHeader = ({ sections, title }: AppHeaderProps) => {
               {section.title}
             </Typography>
           ))}
-          {user ? (
-            <Badge badgeContent={4} color="success" variant="dot">
-              <Avatar
-                onClick={() => setOpenAccountPopover(true)}
-                ref={settingsRef}
-                sx={{
-                  cursor: 'pointer',
-                  height: 40,
-                  width: 40,
-                  ml: 1,
-                }}
-                src={user.profileImage || 'https://i.pravatar.cc/100'}
-              >
-                <UserCircleIcon fontSize="small" />
-              </Avatar>
-            </Badge>
+          {isAuthenticated ? (
+            <Avatar
+              onClick={() => setOpenAccountPopover(true)}
+              ref={settingsRef}
+              sx={{
+                cursor: 'pointer',
+                height: 40,
+                width: 40,
+                ml: 1,
+              }}
+              src={account?.profileImage || 'https://i.pravatar.cc/100'}
+            >
+              <UserCircleIcon fontSize="small" />
+            </Avatar>
           ) : (
-            <Stack direction="row" spacing={0.5} justifyContent="center">
-              <Button component={RouterLink} to="/sign-in" variant="outlined" size="small">
-                Sign in
-              </Button>
-              <Button component={RouterLink} to="/sign-up" variant="outlined" size="small">
-                Sign up
-              </Button>
-            </Stack>
+            <Typography
+              component={RouterLink}
+              to="/sign-in"
+              variant="body2"
+              sx={{ p: 1, textDecoration: 'none' }}
+            >
+              Sign in
+            </Typography>
           )}
         </Toolbar>
       </AppHeaderRoot>

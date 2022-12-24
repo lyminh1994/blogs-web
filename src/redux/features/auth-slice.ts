@@ -1,34 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn, signOut } from 'redux/services/auth';
+import { signIn, signOut } from 'redux/services/api';
 
 import type { RootState } from 'redux/store';
-import type { AccountResponse } from 'types/app';
 
 type AuthState = {
-  user: AccountResponse | null;
   type: string | null;
   accessToken: string | null;
   isAuthenticated: boolean;
 };
 
+const initialState: AuthState = {
+  type: null,
+  accessToken: null,
+  isAuthenticated: false,
+};
+
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    user: null,
-    type: null,
-    accessToken: null,
-    isAuthenticated: false,
-  } as AuthState,
+  initialState,
   reducers: {
     setCredentials: (state) => {
       const storage = localStorage.getItem('app_user');
-      const { user, type, accessToken } = storage
+      const { type, accessToken } = storage
         ? JSON.parse(storage)
-        : { user: null, type: null, accessToken: null };
+        : { type: null, accessToken: null };
 
-      state.user = user;
       state.type = type;
       state.accessToken = accessToken;
+      state.isAuthenticated = accessToken;
     },
   },
   extraReducers: (builder) => {
@@ -36,26 +35,23 @@ const authSlice = createSlice({
       const storage = JSON.stringify(action.payload);
       localStorage.setItem('app_user', storage);
 
-      state.user = action.payload.user;
       state.type = action.payload.type;
       state.accessToken = action.payload.accessToken;
+      state.isAuthenticated = true;
     });
 
-    builder
-      .addMatcher(signOut.matchPending, () => {
-        localStorage.removeItem('app_user');
-      })
-      .addMatcher(signOut.matchFulfilled, (state) => {
-        state.user = null;
-        state.type = null;
-        state.accessToken = null;
-      });
+    builder.addMatcher(signOut.matchFulfilled, (state) => {
+      state.type = null;
+      state.accessToken = null;
+      state.isAuthenticated = false;
+
+      localStorage.removeItem('app_user');
+    });
   },
 });
 
 export const { setCredentials } = authSlice.actions;
 
-export const selectCurrentUser = (state: RootState) => state.auth.user;
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
 
 export default authSlice.reducer;

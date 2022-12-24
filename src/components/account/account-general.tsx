@@ -22,7 +22,7 @@ const AccountGeneral = ({ user }: AccountGeneralProps) => {
   return (
     <form autoComplete="off" noValidate>
       <Paper>
-        <CardHeader subheader="The information can be edited" title="Basic details" />
+        <CardHeader subheader="The information can be edited" title="Profile" />
         <CardContent>
           <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
@@ -102,7 +102,7 @@ const AccountGeneral = ({ user }: AccountGeneralProps) => {
           }}
         >
           <Button color="primary" variant="contained">
-            Save
+            Update profile
           </Button>
         </CardActions>
       </Paper>

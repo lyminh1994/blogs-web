@@ -1,14 +1,14 @@
-import { Link as RouterLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
+
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 
-import { useAuth } from 'hooks/auth';
-import { useSignInMutation } from 'redux/services/auth';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useSignInMutation } from 'redux/services/api';
 import type { SignInRequest } from 'types/app';
 
 const schema = yup
@@ -19,8 +19,6 @@ const schema = yup
   .required();
 
 const SignIn = () => {
-  const { user } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
   const [signIn, { isLoading }] = useSignInMutation();
   const { enqueueSnackbar } = useSnackbar();
@@ -37,16 +35,12 @@ const SignIn = () => {
       navigate('/');
     } catch (err) {
       enqueueSnackbar('Oh no, there was an error!', {
-        autoHideDuration: 1000,
         variant: 'error',
-        anchorOrigin: { horizontal: 'right', vertical: 'bottom' },
       });
     }
   };
 
-  return user ? (
-    <Navigate to="/" state={{ from: location }} />
-  ) : (
+  return (
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
@@ -65,17 +59,15 @@ const SignIn = () => {
         <Box component="form" onSubmit={handleSubmit(handleSignIn)} noValidate>
           <TextField
             margin="normal"
-            required
             fullWidth
-            autoFocus
-            label="Username"
+            label="Username or email"
+            type="text"
             error={!!errors.username}
             helperText={errors.username?.message}
             {...register('username')}
           />
           <TextField
             margin="normal"
-            required
             fullWidth
             label="Password"
             type="password"
@@ -99,8 +91,8 @@ const SignIn = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link component={RouterLink} to="/SignUp" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link component={RouterLink} to="/sign-up" variant="body2">
+                {`Don't have an account? Sign up`}
               </Link>
             </Grid>
           </Grid>
