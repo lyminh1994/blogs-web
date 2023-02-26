@@ -17,7 +17,7 @@ const schema = yup
     confirmPassword: yup
       .string()
       .required('Confirm password is required')
-      .oneOf([yup.ref('newPassword'), null], 'Confirm password must match New password'),
+      .oneOf([yup.ref('newPassword')], 'Confirm password must match New password'),
   })
   .required();
 
