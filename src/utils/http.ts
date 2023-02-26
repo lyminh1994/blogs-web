@@ -14,51 +14,51 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.request.use(
-  (config: AxiosRequestConfig): AxiosRequestConfig => {
-    const { accessToken } = store.getState().auth;
+// instance.interceptors.request.use(
+//   (config: AxiosRequestConfig): AxiosRequestConfig => {
+//     const { accessToken } = store.getState().auth;
 
-    if (accessToken && config.headers) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-    }
+//     if (accessToken && config.headers) {
+//       config.headers['Authorization'] = `Bearer ${accessToken}`;
+//     }
 
-    return config;
-  },
-  (error: AxiosError): Promise<AxiosError> => {
-    return Promise.reject(error);
-  },
-);
+//     return config;
+//   },
+//   (error: AxiosError): Promise<AxiosError> => {
+//     return Promise.reject(error);
+//   },
+// );
 
-instance.interceptors.response.use(
-  (response: AxiosResponse): AxiosResponse => {
-    return response;
-  },
-  async (error: AxiosError): Promise<AxiosError> => {
-    if (error) {
-      const { code, message, config, response } = error;
-      if (code === 'ERR_NETWORK') {
-        // enqueueSnackbar(message, {
-        //   variant: 'error',
-        // });
+// instance.interceptors.response.use(
+//   (response: AxiosResponse): AxiosResponse => {
+//     return response;
+//   },
+//   async (error: AxiosError): Promise<AxiosError> => {
+//     if (error) {
+//       const { code, message, config, response } = error;
+//       if (code === 'ERR_NETWORK') {
+//         // enqueueSnackbar(message, {
+//         //   variant: 'error',
+//         // });
 
-        return Promise.reject(error);
-      }
+//         return Promise.reject(error);
+//       }
 
-      if (config?.url !== '/auth/signIn' && response) {
-        // Access Token was expired
-        if (response.status === 401) {
-          // store.dispatch(refreshToken);
-          // const { status } = store.getState().auth;
+//       if (config?.url !== '/auth/signIn' && response) {
+//         // Access Token was expired
+//         if (response.status === 401) {
+//           // store.dispatch(refreshToken);
+//           // const { status } = store.getState().auth;
 
-          if (status === 'rejected') {
-            return Promise.reject(response.data);
-          }
-        }
-      }
-    }
+//           if (status === 'rejected') {
+//             return Promise.reject(response.data);
+//           }
+//         }
+//       }
+//     }
 
-    return Promise.reject(error);
-  },
-);
+//     return Promise.reject(error);
+//   },
+// );
 
 export default instance;

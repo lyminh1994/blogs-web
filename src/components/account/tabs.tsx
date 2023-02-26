@@ -3,8 +3,8 @@ import { Divider, Tab, Tabs } from '@mui/material';
 
 import { useAccount } from 'hooks/account';
 
-import AccountGeneral from './account-general';
-import AccountSecurity from './account-security';
+import AccountGeneral from './general';
+import AccountSecurity from './security';
 
 const AccountTab = () => {
   const { account } = useAccount();

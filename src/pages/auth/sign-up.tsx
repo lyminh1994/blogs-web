@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'notistack';
 import {
@@ -19,19 +19,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useSignUpMutation } from 'redux/services/api';
 
+import { faker } from '@faker-js/faker';
+
 import type { SignUpRequest } from 'types/app';
 
-const schema = yup
-  .object({
-    username: yup.string().required().min(3).max(50),
-    password: yup
-      .string()
-      .required()
-      .min(4)
-      .matches(/^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/),
-    email: yup.string().required().email(),
-  })
-  .required();
+const schema = Yup.object({
+  username: Yup.string().required().min(3).max(50),
+  password: Yup.string().required().min(8),
+  email: Yup.string().required().email(),
+}).required();
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -42,7 +38,15 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpRequest>({ resolver: yupResolver(schema) });
+  } = useForm<SignUpRequest>({
+    defaultValues: {
+      username: faker.internet.userName().toLowerCase(),
+      email: faker.internet.email().toLowerCase(),
+      password: '12345678',
+      isAllowEmails: false,
+    },
+    resolver: yupResolver(schema),
+  });
 
   const handleSignUp = async (params: SignUpRequest) => {
     try {
@@ -99,7 +103,7 @@ const SignUp = () => {
           />
 
           <FormControlLabel
-            control={<Checkbox value="allowExtraEmails" color="primary" />}
+            control={<Checkbox color="primary" {...register('isAllowEmails')} />}
             label="I want to receive inspiration, marketing promotions and updates via email."
           />
           <Button

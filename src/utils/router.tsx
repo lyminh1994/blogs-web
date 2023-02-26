@@ -4,14 +4,12 @@ import Layout from 'layouts';
 import PrivateOutlet from 'layouts/private-outlet';
 
 import Account from 'pages/account';
-import Article from 'pages/article';
-import Editor from 'pages/editor';
+import Create from 'pages/article/create';
 import Error from 'pages/error';
 import Home from 'pages/home';
-import SignIn from 'pages/sign-in';
-import SignUp from 'pages/sign-up';
-import Profile from 'pages/profile';
-import Setting from 'pages/setting';
+import SignIn from 'pages/auth/sign-in';
+import SignUp from 'pages/auth/sign-up';
+import Setting from 'pages/account/settings';
 
 const router = createBrowserRouter([
   {
@@ -33,19 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'editor',
-        element: <Editor />,
-      },
-      {
-        path: 'editor/:slug',
-        element: <Editor />,
-      },
-      {
-        path: 'article/:id',
-        element: <Article />,
-      },
-      {
-        path: ':publicId/favorites',
-        element: <Profile />,
+        element: <Create />,
       },
       {
         path: ':accountId',
@@ -55,7 +41,7 @@ const router = createBrowserRouter([
             index: true,
             element: <Account />,
           },
-          { path: 'setting', element: <Setting /> },
+          { path: 'settings', element: <Setting /> },
         ],
       },
     ],

@@ -12,6 +12,8 @@ import {
 } from '@mui/material';
 import { Logout, Settings } from '@mui/icons-material';
 
+import { faker } from '@faker-js/faker';
+
 import { useAccount } from 'hooks/account';
 import { useSignOutMutation } from 'redux/services/api';
 import UserCircle from 'icons/UserCircle';
@@ -69,10 +71,11 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
             width: 40,
           }}
           src={account?.profileImage || 'https://i.pravatar.cc/100'}
-        ></Avatar>
+          alt={account?.profileImage}
+        />
         <Box sx={{ ml: 1 }}>
-          <Typography variant="body1">{`${account?.firstName} ${account?.lastName}`}</Typography>
-          <Typography variant="body2">Developer</Typography>
+          <Typography variant="body1">{`${faker.name.firstName()} ${faker.name.lastName()}`}</Typography>
+          <Typography variant="body2">{faker.name.jobType()}</Typography>
         </Box>
       </Box>
       <Divider />
@@ -83,7 +86,7 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
           </ListItemIcon>
           <ListItemText>Account</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to={`${account?.publicId}/setting`} onClick={() => onClose?.()}>
+        <MenuItem component={Link} to={`${account?.publicId}/settings`} onClick={() => onClose?.()}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>

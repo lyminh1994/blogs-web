@@ -5,18 +5,11 @@ import { useSnackbar } from 'notistack';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 
-import * as yup from 'yup';
+import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useSignInMutation } from 'redux/services/api';
 import type { SignInRequest } from 'types/app';
-
-const schema = yup
-  .object({
-    username: yup.string().required(),
-    password: yup.string().required(),
-  })
-  .required();
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -26,10 +19,26 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<SignInRequest>({ resolver: yupResolver(schema) });
+    formState: { touchedFields, errors, isSubmitting },
+  } = useForm<SignInRequest>({
+    defaultValues: { username: 'galezieme', password: '12345678' },
+    resolver: yupResolver(
+      Yup.object({
+        username: Yup.string()
+          .required('Username or email can not empty')
+          .test('is-email', 'Invalid email', (value) => {
+            if (value) {
+              return value.includes('@') ? Yup.string().email().isValidSync(value) : true;
+            }
 
-  const handleSignIn = async (signInParams: SignInRequest) => {
+            return true;
+          }),
+        password: Yup.string().required('Password can not empty'),
+      }).required(),
+    ),
+  });
+
+  const onSignIn = async (signInParams: SignInRequest) => {
     try {
       await signIn(signInParams).unwrap();
       navigate('/');
@@ -56,14 +65,14 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(handleSignIn)} noValidate>
+        <Box component="form" onSubmit={handleSubmit(onSignIn)} noValidate>
           <TextField
             margin="normal"
             fullWidth
             label="Username or email"
             type="text"
-            error={!!errors.username}
-            helperText={errors.username?.message}
+            error={Boolean(touchedFields.username && errors.username)}
+            helperText={touchedFields.username && errors.username?.message}
             {...register('username')}
           />
           <TextField
@@ -71,8 +80,8 @@ const SignIn = () => {
             fullWidth
             label="Password"
             type="password"
-            error={!!errors.password}
-            helperText={errors.password?.message}
+            error={Boolean(touchedFields.password && errors.password)}
+            helperText={touchedFields.password && errors.password?.message}
             {...register('password')}
           />
           <Button
@@ -80,7 +89,7 @@ const SignIn = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={isLoading}
+            disabled={isSubmitting && isLoading}
           >
             Sign In
           </Button>

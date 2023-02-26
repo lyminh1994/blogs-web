@@ -30,6 +30,7 @@ export interface SignUpRequest {
   username: string;
   email: string;
   password: string;
+  isAllowEmails: boolean;
 }
 
 export interface SignInRequest {

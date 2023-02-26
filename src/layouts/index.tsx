@@ -13,14 +13,14 @@ const LayoutRoot = styled('div')(() => ({
 }));
 
 const sections = [
-  { title: 'Home', url: '/' },
-  { title: 'New Article', url: '/editor' },
-  { title: 'Your Feed', url: '/settings' },
+  { title: 'Blog', url: '/' },
+  { title: 'About', url: '/editor' },
+  { title: 'Your Posts', url: '/settings' },
 ];
 
 const Layout = () => (
   <>
-    <AppHeader title="A Little Dev" sections={sections} />
+    <AppHeader title="A Little Code" sections={sections} />
 
     <LayoutRoot>
       <Box

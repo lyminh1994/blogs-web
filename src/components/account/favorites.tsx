@@ -1,5 +1,4 @@
 import { ReactNode, SyntheticEvent, useState } from 'react';
-
 import { Avatar, Box, Card, CardContent, Container, Tab, Tabs, Typography } from '@mui/material';
 
 interface TabPanelProps {
@@ -8,30 +7,26 @@ interface TabPanelProps {
   value: number;
 }
 
-const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-};
+const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => (
+  <div
+    role="tabpanel"
+    hidden={value !== index}
+    id={`simple-tabpanel-${index}`}
+    aria-labelledby={`simple-tab-${index}`}
+    {...other}
+  >
+    {value === index && (
+      <Box sx={{ p: 3 }}>
+        <Typography>{children}</Typography>
+      </Box>
+    )}
+  </div>
+);
 
-const a11yProps = (index: number) => {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-};
+const a11yProps = (index: number) => ({
+  id: `simple-tab-${index}`,
+  'aria-controls': `simple-tabpanel-${index}`,
+});
 
 const ProfileFavorites = () => {
   const [value, setValue] = useState(0);

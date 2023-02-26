@@ -1,6 +1,6 @@
 import { Box, Container } from '@mui/material';
 
-import ArticlePreview from './article-preview';
+import ArticlePreview from './preview';
 
 const ArticleList = () => {
   return (

@@ -5,9 +5,10 @@ import { styled } from '@mui/material/styles';
 
 import UserCircleIcon from 'icons/UserCircle';
 
-import AccountPopover from 'components/account-popover';
+import AccountPopover from 'components/account/popover';
 import { useAccount } from 'hooks/account';
 import { useAuth } from 'hooks/auth';
+import { Container } from '@mui/system';
 
 const AppHeaderRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -31,59 +32,60 @@ const AppHeader = ({ sections, title }: AppHeaderProps) => {
   return (
     <>
       <AppHeaderRoot>
-        <Toolbar
-          disableGutters
-          sx={{
-            minHeight: 64,
-            px: 2,
-          }}
-        >
-          <Typography
-            component={RouterLink}
-            to="/"
-            variant="h5"
-            align="left"
-            noWrap
-            sx={{ flex: 1, textDecoration: 'none' }}
+        <Container maxWidth="lg">
+          <Toolbar
+            disableGutters
+            sx={{
+              minHeight: 64,
+            }}
           >
-            {title}
-          </Typography>
-          {sections.map((section) => (
             <Typography
               component={RouterLink}
-              to={section.url}
-              key={section.title}
-              variant="body2"
-              sx={{ p: 1, textDecoration: 'none' }}
+              to="/"
+              variant="h5"
+              align="left"
+              noWrap
+              sx={{ flex: 1, textDecoration: 'none' }}
             >
-              {section.title}
+              {title}
             </Typography>
-          ))}
-          {isAuthenticated ? (
-            <Avatar
-              onClick={() => setOpenAccountPopover(true)}
-              ref={settingsRef}
-              sx={{
-                cursor: 'pointer',
-                height: 40,
-                width: 40,
-                ml: 1,
-              }}
-              src={account?.profileImage || 'https://i.pravatar.cc/100'}
-            >
-              <UserCircleIcon fontSize="small" />
-            </Avatar>
-          ) : (
-            <Typography
-              component={RouterLink}
-              to="/sign-in"
-              variant="body2"
-              sx={{ p: 1, textDecoration: 'none' }}
-            >
-              Sign in
-            </Typography>
-          )}
-        </Toolbar>
+            {sections.map((section) => (
+              <Typography
+                component={RouterLink}
+                to={section.url}
+                key={section.title}
+                variant="body2"
+                sx={{ p: 1, textDecoration: 'none' }}
+              >
+                {section.title}
+              </Typography>
+            ))}
+            {isAuthenticated ? (
+              <Avatar
+                onClick={() => setOpenAccountPopover(true)}
+                ref={settingsRef}
+                sx={{
+                  cursor: 'pointer',
+                  height: 40,
+                  width: 40,
+                  ml: 1,
+                }}
+                src={account?.profileImage || 'https://i.pravatar.cc/100'}
+              >
+                <UserCircleIcon fontSize="small" />
+              </Avatar>
+            ) : (
+              <Typography
+                component={RouterLink}
+                to="/sign-in"
+                variant="body2"
+                sx={{ p: 1, textDecoration: 'none' }}
+              >
+                Sign in
+              </Typography>
+            )}
+          </Toolbar>
+        </Container>
       </AppHeaderRoot>
       <AccountPopover
         anchorEl={settingsRef.current}

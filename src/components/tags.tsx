@@ -1,4 +1,5 @@
 import { Grid, Link, Typography } from '@mui/material';
+
 import { useGetTagsQuery } from 'redux/services/tag';
 
 const Tags = () => {
@@ -14,7 +15,7 @@ const Tags = () => {
         : !data
         ? 'loading'
         : data?.contents.map(({ id, name }) => (
-            <Link display="block" variant="body1" href="#" key={id}>
+            <Link display="block" variant="body1" href="#" key={id} underline="none">
               {name}
             </Link>
           ))}
