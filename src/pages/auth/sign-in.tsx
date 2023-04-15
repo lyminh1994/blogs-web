@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 
-import { useSignInMutation } from 'redux/services/auth';
+import { useSignInMutation } from 'redux/services/api';
 import type { SignInParams } from 'types/app';
 
 const SignIn = () => {

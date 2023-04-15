@@ -20,7 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useSignUpMutation } from 'redux/services/auth';
+import { useSignUpMutation } from 'redux/services/api';
 import type { SignUpParams } from 'types/app';
 
 const SignUp = () => {

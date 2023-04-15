@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack';
 import { Button, Card, CardActions, CardContent, CardHeader, Grid, TextField } from '@mui/material';
 
 import { useUpdatePasswordMutation } from 'redux/services/user';
-import { useSignOutMutation } from 'redux/services/auth';
+import { useSignOutMutation } from 'redux/services/api';
 import type { UpdatePasswordParams } from 'types/app';
 
 const schema = yup

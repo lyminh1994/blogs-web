@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 
 import { useGetUserQuery } from 'redux/services/user';
-import { useSignOutMutation } from 'redux/services/auth';
+import { useSignOutMutation } from 'redux/services/api';
 
 interface UserPopoverProps {
   anchorEl?: Element | ((element: Element) => Element) | null | undefined;

@@ -1,16 +1,12 @@
-import {
-  BaseQueryFn,
-  createApi,
-  fetchBaseQuery,
-  retry,
-  FetchArgs,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/dist/query/react';
+import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/dist/query/react';
 import type { RootState } from 'redux/store';
+import type { AuthResponse, SignUpParams, SignInParams } from 'types/app';
+
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${process.env.REACT_APP_BASE_URL}`,
+  baseUrl,
   prepareHeaders: (headers, { getState }) => {
     // By default, if we have a token in the store, let's use that for authenticated requests
     const { type, accessToken } = (getState() as RootState).auth;
@@ -23,17 +19,6 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithRetry = retry(baseQuery, { maxRetries: 2 });
-
-const baseQueryWithRefresh: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
-  args,
-  api,
-  extraOptions,
-) => {
-  const result = await baseQueryWithRetry(args, api, extraOptions);
-  console.log(result);
-
-  return result;
-};
 
 /**
  * Create a base API to inject endpoints into elsewhere.
@@ -53,7 +38,7 @@ export const api = createApi({
   /**
    * A bare bones base query would just be `baseQuery: fetchBaseQuery({ baseUrl: '/' })`
    */
-  baseQuery: baseQueryWithRefresh,
+  baseQuery: baseQueryWithRetry,
   /**
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints
@@ -64,11 +49,33 @@ export const api = createApi({
    * which is why no endpoints are shown below.
    * If you want all endpoints defined in the same file, they could be included here instead
    */
-  endpoints: () => ({}),
-});
-
-export const enhancedApi = api.enhanceEndpoints({
-  endpoints: () => ({
-    getPost: () => 'test',
+  endpoints: (builder) => ({
+    signUp: builder.mutation<AuthResponse, Required<SignUpParams>>({
+      query: (body) => ({
+        url: 'sign-up',
+        method: 'POST',
+        body,
+      }),
+    }),
+    signIn: builder.mutation<AuthResponse, Required<SignInParams>>({
+      query: (body) => ({
+        url: 'sign-in',
+        method: 'POST',
+        credentials: 'include',
+        body,
+      }),
+    }),
+    signOut: builder.mutation<void, void>({
+      query: () => ({ url: 'sign-out', method: 'DELETE', credentials: 'include' }),
+    }),
+    refreshToken: builder.mutation<AuthResponse, void>({
+      query: () => ({ url: 'refresh-token', method: 'GET', credentials: 'include' }),
+    }),
   }),
 });
+
+export const { useSignUpMutation, useSignInMutation, useSignOutMutation } = api;
+
+export const {
+  endpoints: { signIn, signOut },
+} = api;
