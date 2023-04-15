@@ -2,16 +2,15 @@ import { Avatar, Button, Card, CardActions, CardContent, Divider, Typography } f
 
 import { faker } from '@faker-js/faker';
 
-import { useAccount } from 'hooks/account';
-
-const AccountAvatar = () => {
-  const { account } = useAccount();
-
-  const additionInfo = {
+const UserAvatar = () => {
+  const data = {
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
     city: faker.address.city(),
     country: faker.address.country(),
     jobTitle: faker.name.jobTitle(),
     timezone: faker.address.timeZone(),
+    profileImage: 'https://i.pravatar.cc/300',
   };
 
   return (
@@ -24,8 +23,8 @@ const AccountAvatar = () => {
         }}
       >
         <Avatar
-          src={account?.profileImage || 'https://i.pravatar.cc/300'}
-          alt={account?.profileImage}
+          src={data.profileImage}
+          alt={data.profileImage}
           sx={{
             height: 164,
             width: 164,
@@ -33,16 +32,16 @@ const AccountAvatar = () => {
           }}
         />
         <Typography variant="h5" color="textPrimary" gutterBottom>
-          {`${faker.name.firstName()} ${faker.name.lastName()}`}
+          {`${data.firstName} ${data.lastName}`}
         </Typography>
         <Typography variant="body1" color="textSecondary">
-          {additionInfo.jobTitle}
+          {data.jobTitle}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {`${additionInfo.city}, ${additionInfo.country}`}
+          {`${data.city}, ${data.country}`}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {additionInfo.timezone}
+          {data.timezone}
         </Typography>
       </CardContent>
 
@@ -57,4 +56,4 @@ const AccountAvatar = () => {
   );
 };
 
-export default AccountAvatar;
+export default UserAvatar;

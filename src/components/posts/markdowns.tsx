@@ -40,12 +40,8 @@ const options = {
   },
 };
 
-interface MarkdownProps {
-  children: string;
-  options?: MarkdownToJSX.Options;
-}
 
-const Markdown = (props: MarkdownProps) => {
+const Markdown = (props: { children: string; options?: MarkdownToJSX.Options }) => {
   return <ReactMarkdown options={options} {...props} />;
 };
 

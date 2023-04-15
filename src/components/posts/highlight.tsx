@@ -1,11 +1,7 @@
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import type { Post } from 'pages/home';
 
-interface HighlightPostProps {
-  post: Post;
-}
-
-const HighlightPost = ({ post }: HighlightPostProps) => (
+const HighlightPost = ({ post }: { post: Post }) => (
   <Paper
     sx={{
       position: 'relative',

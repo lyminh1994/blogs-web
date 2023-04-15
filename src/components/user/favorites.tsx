@@ -1,13 +1,16 @@
 import { ReactNode, SyntheticEvent, useState } from 'react';
 import { Avatar, Box, Card, CardContent, Container, Tab, Tabs, Typography } from '@mui/material';
 
-interface TabPanelProps {
+const TabPanel = ({
+  children,
+  value,
+  index,
+  ...other
+}: {
   children?: ReactNode;
   index: number;
   value: number;
-}
-
-const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => (
+}) => (
   <div
     role="tabpanel"
     hidden={value !== index}

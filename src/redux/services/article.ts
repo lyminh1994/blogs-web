@@ -1,7 +1,7 @@
 import { api } from './api';
 import { DEFAULT_PAGE_SIZE, limit } from './tag';
 
-import type { NewArticle, UpdateArticle } from 'types/app';
+import type { CreateArticleParams, UpdateArticleParams } from 'types/app';
 
 export const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -38,10 +38,10 @@ export const articleApi = api.injectEndpoints({
     getBySlug: builder.query<void, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'GET' }),
     }),
-    createArticle: builder.query<void, NewArticle>({
+    createArticle: builder.query<void, CreateArticleParams>({
       query: (body) => ({ url: '/articles', method: 'POST', body }),
     }),
-    updateArticleBySlug: builder.query<void, { slug: string; body: UpdateArticle }>({
+    updateArticleBySlug: builder.query<void, { slug: string; body: UpdateArticleParams }>({
       query: ({ slug, body }) => ({ url: `/articles/${slug}`, method: 'PUT', body }),
     }),
     removeArticleBySlug: builder.query<void, string>({

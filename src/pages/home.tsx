@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { TablePagination } from '@mui/material';
+import { Grid, Pagination, PaginationItem } from '@mui/material';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 import HighlightPost from 'components/posts/highlight';
 import FeaturedPosts from 'components/posts/featured';
@@ -104,35 +107,30 @@ const posts: Post[] = [
   },
 ];
 
-const Home = () => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+const Home = () => (
+  <>
+    <HighlightPost post={highlightPost} />
 
-  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    setPage(newPage);
-  };
+    <FeaturedPosts posts={posts} />
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  return (
-    <>
-      <HighlightPost post={highlightPost} />
-      <FeaturedPosts posts={posts} />
-      <TablePagination
-        component="div"
-        count={100}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+    <Grid container justifyContent="flex-end">
+      <Pagination
+        count={10}
+        showFirstButton
+        showLastButton
+        renderItem={(item) => (
+          <PaginationItem
+            slots={{
+              first: KeyboardDoubleArrowLeftIcon,
+              previous: KeyboardArrowLeftIcon,
+              next: KeyboardArrowRightIcon,
+              last: KeyboardDoubleArrowRightIcon,
+            }}
+            {...item}
+          />
+        )}
       />
-    </>
-  );
-};
-
+    </Grid>
+  </>
+);
 export default Home;

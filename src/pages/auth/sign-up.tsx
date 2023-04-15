@@ -1,8 +1,12 @@
 import { useNavigate } from 'react-router-dom';
+
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import { useSnackbar } from 'notistack';
+
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
   Avatar,
   Box,
@@ -15,40 +19,36 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import { useSignUpMutation } from 'redux/services/api';
-
-import { faker } from '@faker-js/faker';
-
-import type { SignUpRequest } from 'types/app';
-
-const schema = Yup.object({
-  username: Yup.string().required().min(3).max(50),
-  password: Yup.string().required().min(8),
-  email: Yup.string().required().email(),
-}).required();
+import { useSignUpMutation } from 'redux/services/auth';
+import type { SignUpParams } from 'types/app';
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [signUp, { isLoading }] = useSignUpMutation();
   const { enqueueSnackbar } = useSnackbar();
 
+  const schema = Yup.object({
+    username: Yup.string().required().min(3).max(50),
+    password: Yup.string().required().min(8),
+    email: Yup.string().required().email(),
+  }).required();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpRequest>({
+  } = useForm<SignUpParams>({
     defaultValues: {
-      username: faker.internet.userName().toLowerCase(),
-      email: faker.internet.email().toLowerCase(),
-      password: '12345678',
+      username: '',
+      email: '',
+      password: '',
       isAllowEmails: false,
     },
     resolver: yupResolver(schema),
   });
 
-  const handleSignUp = async (params: SignUpRequest) => {
+  const handleSignUp = async (params: SignUpParams) => {
     try {
       await signUp(params);
       navigate('/sign-in');

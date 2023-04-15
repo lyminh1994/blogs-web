@@ -1,13 +1,10 @@
 import { SyntheticEvent, useState } from 'react';
 import { Divider, Tab, Tabs } from '@mui/material';
 
-import { useAccount } from 'hooks/account';
-
-import AccountGeneral from './general';
-import AccountSecurity from './security';
+import UserGeneral from './general';
+import UserSecurity from './security';
 
 const AccountTab = () => {
-  const { account } = useAccount();
   const [tab, setTab] = useState('general');
 
   const handleTabChange = (_event: SyntheticEvent<Element, Event>, value: string) => {
@@ -21,8 +18,8 @@ const AccountTab = () => {
         <Tab label="Security" value="security" />
       </Tabs>
       <Divider sx={{ mb: 3 }} />
-      {tab === 'general' && <AccountGeneral user={account} />}
-      {tab === 'security' && <AccountSecurity />}
+      {tab === 'general' && <UserGeneral />}
+      {tab === 'security' && <UserSecurity />}
     </>
   );
 };

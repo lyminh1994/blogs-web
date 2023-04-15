@@ -1,38 +1,36 @@
 import { api } from './api';
 
-import type { AuthResponse, SignUpRequest, SignInRequest } from 'types/app';
+import type { AuthResponse, SignUpParams, SignInParams } from 'types/app';
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    signUp: builder.mutation<AuthResponse, Required<SignUpRequest>>({
+    signUp: builder.mutation<AuthResponse, Required<SignUpParams>>({
       query: (body) => ({
-        url: 'auth/sign-up',
+        url: 'sign-up',
         method: 'POST',
         body,
       }),
     }),
-    signIn: builder.mutation<AuthResponse, Required<SignInRequest>>({
+    signIn: builder.mutation<AuthResponse, Required<SignInParams>>({
       query: (body) => ({
-        url: 'auth/sign-in',
+        url: 'sign-in',
         method: 'POST',
         credentials: 'include',
         body,
       }),
     }),
     signOut: builder.mutation<void, void>({
-      query: () => ({ url: 'auth/sign-out', method: 'DELETE', credentials: 'include' }),
-      // extraOptions: {
-      //   backoff: () => {
-      //     // We intentionally error once on sign-in, and this breaks out of retrying. The next sign-in attempt will succeed.
-      //     retry.fail({ fake: 'error' });
-      //   },
-      // },
+      query: () => ({ url: 'sign-out', method: 'DELETE', credentials: 'include' }),
+    }),
+    refreshToken: builder.mutation<AuthResponse, void>({
+      query: () => ({ url: 'refresh-token', method: 'GET', credentials: 'include' }),
     }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useSignOutMutation } = authApi;
+export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useRefreshTokenMutation } =
+  authApi;
 
 export const {
-  endpoints: { signUp, signIn, signOut },
+  endpoints: { signUp, signIn, signOut, refreshToken },
 } = authApi;

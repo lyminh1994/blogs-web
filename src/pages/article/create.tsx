@@ -14,7 +14,7 @@ import {
   Divider,
   TextField,
 } from '@mui/material';
-import type { NewArticle } from 'types/app';
+import type { CreateArticleParams } from 'types/app';
 
 const schema = yup
   .object({
@@ -30,8 +30,11 @@ const Editor = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<NewArticle>({ resolver: yupResolver(schema), defaultValues: { tagNames: [] } });
-  const handleCreateArticle = (event: NewArticle) => {
+  } = useForm<CreateArticleParams>({
+    resolver: yupResolver(schema),
+    defaultValues: { tagNames: [] },
+  });
+  const handleCreateArticle = (event: CreateArticleParams) => {
     console.log(event);
   };
   return (

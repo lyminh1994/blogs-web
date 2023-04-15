@@ -1,7 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
+
 import { useSnackbar } from 'notistack';
+
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+import UserCircleIcon from 'icons/UserCircle';
 import {
-  Avatar,
   Box,
   Divider,
   ListItemIcon,
@@ -10,15 +14,11 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
-import { Logout, Settings } from '@mui/icons-material';
 
-import { faker } from '@faker-js/faker';
+import { useGetUserQuery } from 'redux/services/user';
+import { useSignOutMutation } from 'redux/services/auth';
 
-import { useAccount } from 'hooks/account';
-import { useSignOutMutation } from 'redux/services/api';
-import UserCircle from 'icons/UserCircle';
-
-interface AccountPopoverProps {
+interface UserPopoverProps {
   anchorEl?: Element | ((element: Element) => Element) | null | undefined;
   open: boolean;
   onClose?:
@@ -26,8 +26,8 @@ interface AccountPopoverProps {
     | undefined;
 }
 
-const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
-  const { account } = useAccount();
+const UserPopover = ({ anchorEl, open, onClose }: UserPopoverProps) => {
+  const { data } = useGetUserQuery();
   const navigate = useNavigate();
   const [signOut, { isLoading }] = useSignOutMutation();
   const { enqueueSnackbar } = useSnackbar();
@@ -65,37 +65,31 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
           display: 'flex',
         }}
       >
-        <Avatar
-          sx={{
-            height: 40,
-            width: 40,
-          }}
-          src={account?.profileImage || 'https://i.pravatar.cc/100'}
-          alt={account?.profileImage}
-        />
-        <Box sx={{ ml: 1 }}>
-          <Typography variant="body1">{`${faker.name.firstName()} ${faker.name.lastName()}`}</Typography>
-          <Typography variant="body2">{faker.name.jobType()}</Typography>
+        <Box>
+          <Typography variant="body1">{`${data?.firstName || 'unknown'} ${
+            data?.lastName || ''
+          }`}</Typography>
+          <Typography variant="body2">{data?.email}</Typography>
         </Box>
       </Box>
       <Divider />
       <Box sx={{ my: 1 }}>
-        <MenuItem component={Link} to={`${account?.publicId}`} onClick={() => onClose?.()}>
+        <MenuItem component={Link} to={`${data?.publicId}`} onClick={() => onClose?.()}>
           <ListItemIcon>
-            <UserCircle fontSize="small" />
+            <UserCircleIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Account</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to={`${account?.publicId}/settings`} onClick={() => onClose?.()}>
+        <MenuItem component={Link} to={`${data?.publicId}/settings`} onClick={() => onClose?.()}>
           <ListItemIcon>
-            <Settings fontSize="small" />
+            <SettingsIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Settings</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleSignOut} disabled={isLoading}>
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <LogoutIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Sign Out</ListItemText>
         </MenuItem>
@@ -104,4 +98,4 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
   );
 };
 
-export default AccountPopover;
+export default UserPopover;

@@ -1,49 +1,50 @@
-import { useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import { useSnackbar } from 'notistack';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import { useSignInMutation } from 'redux/services/api';
-import type { SignInRequest } from 'types/app';
+import { useSignInMutation } from 'redux/services/auth';
+import type { SignInParams } from 'types/app';
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const [signIn, { isLoading }] = useSignInMutation();
   const { enqueueSnackbar } = useSnackbar();
+  const [signIn, { isLoading }] = useSignInMutation();
+
+  const schema = Yup.object({
+    username: Yup.string()
+      .required('Username or email can not empty')
+      .test('is-email', 'Invalid email', (value) => {
+        if (value) {
+          return value.includes('@') ? Yup.string().email().isValidSync(value) : true;
+        }
+
+        return true;
+      }),
+    password: Yup.string().required('Password can not empty'),
+  }).required();
 
   const {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
-  } = useForm<SignInRequest>({
-    defaultValues: { username: 'galezieme', password: '12345678' },
-    resolver: yupResolver(
-      Yup.object({
-        username: Yup.string()
-          .required('Username or email can not empty')
-          .test('is-email', 'Invalid email', (value) => {
-            if (value) {
-              return value.includes('@') ? Yup.string().email().isValidSync(value) : true;
-            }
-
-            return true;
-          }),
-        password: Yup.string().required('Password can not empty'),
-      }).required(),
-    ),
+  } = useForm<SignInParams>({
+    defaultValues: { username: '', password: '12345678' },
+    resolver: yupResolver(schema),
   });
 
-  const onSignIn = async (signInParams: SignInRequest) => {
+  const onSignIn = async (params: SignInParams) => {
     try {
-      await signIn(signInParams).unwrap();
+      await signIn(params).unwrap();
       navigate('/');
     } catch (err) {
-      enqueueSnackbar('Oh no, there was an error!', {
+      enqueueSnackbar('Invalid username or password!', {
         variant: 'error',
       });
     }
@@ -100,9 +101,12 @@ const SignIn = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link component={RouterLink} to="/sign-up" variant="body2">
-                {`Don't have an account? Sign up`}
-              </Link>
+              <Typography variant="body2">
+                {`Don't have an account? `}
+                <Link component={RouterLink} to="/sign-up">
+                  Sign up
+                </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Box>

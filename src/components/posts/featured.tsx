@@ -15,11 +15,7 @@ import { faker } from '@faker-js/faker';
 
 import type { Post } from 'pages/home';
 
-interface FeaturedPostsProps {
-  posts?: Post[];
-}
-
-const FeaturedPosts = ({ posts }: FeaturedPostsProps) => (
+const FeaturedPosts = ({ posts }: { posts?: Post[] }) => (
   <Grid item>
     <Typography variant="h6" gutterBottom>
       Featured Posts
@@ -28,8 +24,8 @@ const FeaturedPosts = ({ posts }: FeaturedPostsProps) => (
     <Divider />
 
     <Grid container spacing={4} sx={{ py: 4 }}>
-      {posts?.map((post) => (
-        <Grid item md={6}>
+      {posts?.map((post, index) => (
+        <Grid item md={6} key={index}>
           <Card>
             <CardMedia
               component="a"

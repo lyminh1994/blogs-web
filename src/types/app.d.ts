@@ -1,11 +1,11 @@
-export interface NewArticle {
+export interface CreateArticleParams {
   title: string;
   description: string;
   body: string;
   tagNames: string[];
 }
 
-export interface UpdateArticle {
+export interface UpdateArticleParams {
   slug: string;
   title: string;
   body: string;
@@ -26,25 +26,25 @@ export interface ArticleResponse {
   tagNames: Array<string>;
 }
 
-export interface SignUpRequest {
+export interface SignUpParams {
   username: string;
   email: string;
   password: string;
   isAllowEmails: boolean;
 }
 
-export interface SignInRequest {
+export interface SignInParams {
   username: string;
   password: string;
 }
 
 export interface AuthResponse {
-  user: UserResponse | null;
-  type: string | null;
-  accessToken: string | null;
+  user: AccountResponse;
+  type: string;
+  accessToken: string;
 }
 
-export interface NewCommentRequest {
+export interface CreateCommentParams {
   body: string;
 }
 
@@ -56,18 +56,22 @@ export interface CommentResponse {
   user: Profile;
 }
 
-export interface Tag {
+export interface TagResponse {
   id: number;
   name: string;
 }
 
-export interface UpdateAccountRequest {
+export interface UpdateUserParams {
   email: string;
-  bio: string;
-  image: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  birthday: Date;
+  gender: Gender;
+  profileImage: string;
 }
 
-export interface UpdateAccountPassword {
+export interface UpdatePasswordParams {
   currentPassword: string;
   newPassword: string;
   confirmPassword?: string;
@@ -75,7 +79,7 @@ export interface UpdateAccountPassword {
 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 
-export interface AccountResponse {
+export interface UserResponse {
   publicId: string;
   email: string;
   firstName: string;
@@ -87,9 +91,9 @@ export interface AccountResponse {
   authorities: string[];
 }
 
-export interface Profile {
-  username: string | null;
-  bio: string | null;
-  image: string | null;
+export interface UserProfileResponse {
+  username: string;
+  bio: string;
+  image: string;
   following: boolean;
 }

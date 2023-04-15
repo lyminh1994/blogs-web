@@ -1,14 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+
 import { useForm } from 'react-hook-form';
-import { useSnackbar } from 'notistack';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useSnackbar } from 'notistack';
+
 import { Button, Card, CardActions, CardContent, CardHeader, Grid, TextField } from '@mui/material';
 
-import { useUpdatePasswordMutation } from 'redux/services/account';
-import { useSignOutMutation } from 'redux/services/api';
-import type { UpdateAccountPassword } from 'types/app';
+import { useUpdatePasswordMutation } from 'redux/services/user';
+import { useSignOutMutation } from 'redux/services/auth';
+import type { UpdatePasswordParams } from 'types/app';
 
 const schema = yup
   .object({
@@ -21,7 +23,7 @@ const schema = yup
   })
   .required();
 
-const AccountSecurity = () => {
+const UserSecurity = () => {
   const navigate = useNavigate();
   const [updatePassword, { isLoading: isUpdatePasswordLoading }] = useUpdatePasswordMutation();
   const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
@@ -31,11 +33,11 @@ const AccountSecurity = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UpdateAccountPassword>({
+  } = useForm<UpdatePasswordParams>({
     resolver: yupResolver(schema),
   });
 
-  const handleUpdatePassword = async (params: UpdateAccountPassword) => {
+  const handleUpdatePassword = async (params: UpdatePasswordParams) => {
     try {
       await updatePassword(params).unwrap();
       await signOut().unwrap();
@@ -116,4 +118,4 @@ const AccountSecurity = () => {
   );
 };
 
-export default AccountSecurity;
+export default UserSecurity;
