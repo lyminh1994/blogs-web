@@ -6,8 +6,8 @@ import PrivateOutlet from 'components/layouts/private-outlet';
 import User from 'pages/user';
 import Error from 'pages/error';
 import Home from 'pages/home';
-import SignIn from 'pages/auth/sign-in';
-import SignUp from 'pages/auth/sign-up';
+import Login from 'pages/auth/login';
+import Register from 'pages/auth/register';
 import Setting from 'pages/user/settings';
 import ForgotPassword from 'pages/auth/forgot-password';
 import ArticleList from 'pages/article/articles';
@@ -20,8 +20,8 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'sign-in', element: <SignIn /> },
-      { path: 'sign-up', element: <SignUp /> },
+      { path: 'login', element: <Login /> },
+      { path: 'register', element: <Register /> },
       { path: 'forgot-password', element: <ForgotPassword /> },
       { path: 'article', element: <Article /> },
       { path: 'articles', element: <ArticleList /> },

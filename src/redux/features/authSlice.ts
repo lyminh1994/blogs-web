@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn, signOut } from 'redux/services/api';
+import { login, logout } from 'redux/services/api';
 import { RootState } from 'redux/store';
 
 const initialState: {
@@ -15,11 +15,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addMatcher(signIn.matchFulfilled, (state, { payload }) => {
+    builder.addMatcher(login.matchFulfilled, (state, { payload }) => {
       state.accessToken = payload.accessToken;
       state.isAuthenticator = true;
     }),
-      builder.addMatcher(signOut.matchFulfilled, (state) => {
+      builder.addMatcher(logout.matchFulfilled, (state) => {
         state.accessToken = null;
         state.isAuthenticator = false;
       });

@@ -8,13 +8,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 
-import { useSignInMutation } from 'redux/services/api';
-import type { SignInParams } from 'types/app';
+import { useLoginMutation } from 'redux/services/api';
+import type { LoginParams } from 'types/app';
 
-const SignIn = () => {
+const Login = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [signIn, { isLoading }] = useSignInMutation();
+  const [loginMutation, { isLoading }] = useLoginMutation();
 
   const schema = Yup.object({
     username: Yup.string()
@@ -33,14 +33,14 @@ const SignIn = () => {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
-  } = useForm<SignInParams>({
+  } = useForm<LoginParams>({
     defaultValues: { username: '', password: 'd!Y!MrYmVAama26' },
     resolver: yupResolver(schema),
   });
 
-  const onSignIn = async (params: SignInParams) => {
+  const onLogin = async (params: LoginParams) => {
     try {
-      await signIn(params).unwrap();
+      await loginMutation(params).unwrap();
       navigate('/');
     } catch (error) {
       enqueueSnackbar(JSON.stringify(error, null, 2), {
@@ -63,9 +63,9 @@ const SignIn = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Login
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSignIn)} noValidate>
+        <Box component="form" onSubmit={handleSubmit(onLogin)} noValidate>
           <TextField
             margin="normal"
             fullWidth
@@ -91,7 +91,7 @@ const SignIn = () => {
             variant="contained"
             disabled={isSubmitting && isLoading}
           >
-            Sign In
+            Login
           </Button>
           <Grid container>
             <Grid item xs>
@@ -102,8 +102,8 @@ const SignIn = () => {
             <Grid item>
               <Typography variant="body2">
                 {`Don't have an account? `}
-                <Link component={RouterLink} to="/sign-up">
-                  Sign up
+                <Link component={RouterLink} to="/register">
+                  Register
                 </Link>
               </Typography>
             </Grid>
@@ -114,4 +114,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Login;

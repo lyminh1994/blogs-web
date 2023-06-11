@@ -56,8 +56,8 @@ const ForgotPassword = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link component={RouterLink} to="/sign-in" variant="body2">
-                Sign in
+              <Link component={RouterLink} to="/login" variant="body2">
+                Login
               </Link>
             </Grid>
           </Grid>

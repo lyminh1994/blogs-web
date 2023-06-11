@@ -43,7 +43,7 @@ const UserSecurity = () => {
       await signOut().unwrap();
 
       if (!isSignOutLoading) {
-        navigate('/sign-in');
+        navigate('/login');
         enqueueSnackbar('Update password success!', { variant: 'success' });
       }
     } catch (err) {
@@ -57,7 +57,7 @@ const UserSecurity = () => {
     <form autoComplete="off" onSubmit={handleSubmit(handleUpdatePassword)} noValidate>
       <Card>
         <CardHeader
-          subheader="Changing your password will invalidate all of your browser sessions and require you to sign in again."
+          subheader="Changing your password will invalidate all of your browser sessions and require you to Login again."
           title="Password"
         />
         <CardContent>

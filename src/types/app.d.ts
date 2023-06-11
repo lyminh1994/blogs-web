@@ -26,14 +26,14 @@ export interface ArticleResponse {
   tagNames: Array<string>;
 }
 
-export interface SignUpParams {
+export interface RegisterParams {
   username: string;
   email: string;
   password: string;
   isAllowEmails: boolean;
 }
 
-export interface SignInParams {
+export interface LoginParams {
   username: string;
   password: string;
 }

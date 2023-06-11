@@ -91,7 +91,7 @@ const UserPopover = ({ anchorEl, open, onClose }: UserPopoverProps) => {
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Sign Out</ListItemText>
+          <ListItemText>Logout</ListItemText>
         </MenuItem>
       </Box>
     </Popover>

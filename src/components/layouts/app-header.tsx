@@ -56,19 +56,19 @@ const AppHeader = ({
           <>
             <Typography
               component={RouterLink}
-              to="/sign-in"
+              to="/login"
               variant="body2"
               sx={{ p: 1, textDecoration: 'none' }}
             >
-              Sign in
+              Login
             </Typography>
             <Typography
               component={RouterLink}
-              to="/sign-up"
+              to="/register"
               variant="body2"
               sx={{ p: 1, textDecoration: 'none' }}
             >
-              Sign up
+              Register
             </Typography>
           </>
         )}

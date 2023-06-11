@@ -20,11 +20,7 @@ const PrivateOutlet = () => {
     );
   }
 
-  return isAuthenticator ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/sign-in" state={{ from: location }} replace />
-  );
+  return isAuthenticator ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
 };
 
 export default PrivateOutlet;

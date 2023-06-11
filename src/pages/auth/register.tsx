@@ -19,13 +19,13 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useSignUpMutation } from 'redux/services/api';
-import type { SignUpParams } from 'types/app';
+import { useRegisterMutation } from 'redux/services/api';
+import type { RegisterParams } from 'types/app';
 
-const SignUp = () => {
+const Register = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [signUp, { isLoading }] = useSignUpMutation();
+  const [registerMutation, { isLoading }] = useRegisterMutation();
 
   const schema = Yup.object({
     username: Yup.string().required().min(3).max(50),
@@ -37,7 +37,7 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
-  } = useForm<SignUpParams>({
+  } = useForm<RegisterParams>({
     defaultValues: {
       username: '',
       email: '',
@@ -47,10 +47,10 @@ const SignUp = () => {
     resolver: yupResolver(schema),
   });
 
-  const handleSignUp = async (params: SignUpParams) => {
+  const handleRegister = async (params: RegisterParams) => {
     try {
-      await signUp(params);
-      navigate('/sign-in');
+      await registerMutation(params);
+      navigate('/login');
     } catch (err) {
       enqueueSnackbar('Oh no, there was an error!', {
         variant: 'error',
@@ -72,9 +72,9 @@ const SignUp = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Register
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(handleSignUp)}>
+        <Box component="form" onSubmit={handleSubmit(handleRegister)}>
           <TextField
             margin="normal"
             fullWidth
@@ -112,14 +112,14 @@ const SignUp = () => {
             variant="contained"
             disabled={isLoading && isSubmitting}
           >
-            Sign Up
+            Register
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Typography variant="body2">
                 {`Already have an account? `}
-                <Link component={RouterLink} to="/sign-in" variant="body2">
-                  Sign in
+                <Link component={RouterLink} to="/login" variant="body2">
+                  Login
                 </Link>
               </Typography>
             </Grid>
@@ -130,4 +130,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Register;
