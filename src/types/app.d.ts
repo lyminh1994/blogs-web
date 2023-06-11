@@ -66,7 +66,7 @@ export interface UpdateUserParams {
   firstName: string;
   lastName: string;
   phone: string;
-  birthday: Date;
+  birthday: string;
   gender: Gender;
   profileImage: string;
 }
@@ -85,7 +85,7 @@ export interface UserResponse {
   firstName: string;
   lastName: string;
   phone: string;
-  birthday: Date;
+  birthday: string;
   gender: Gender;
   profileImage: string;
   authorities: string[];

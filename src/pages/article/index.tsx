@@ -4,64 +4,26 @@ import {
   Box,
   Card,
   CardContent,
-  Divider,
   Grid,
   Typography,
   Container,
   CardHeader,
-  TextField,
-  Button,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   IconButton,
+  CardActions,
+  Button,
 } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { red } from '@mui/material/colors';
 
 const Article = () => {
   const product = {
     id: nanoid(),
-    createdAt: '27/03/2019',
     description:
       'Dropbox is a file hosting service that offers cloud storage, file synchronization, a personal cloud.',
     media: '/static/images/products/product_1.png',
     title: 'Dropbox',
     totalDownloads: '594',
   };
-
-  const products = [
-    {
-      id: nanoid(),
-      name: 'Dropbox',
-      imageUrl: '/static/images/products/product_1.png',
-      updatedAt: Date.now(),
-    },
-    {
-      id: nanoid(),
-      name: 'Medium Corporation',
-      imageUrl: '/static/images/products/product_2.png',
-      updatedAt: Date.now(),
-    },
-    {
-      id: nanoid(),
-      name: 'Slack',
-      imageUrl: '/static/images/products/product_3.png',
-      updatedAt: Date.now(),
-    },
-    {
-      id: nanoid(),
-      name: 'Lyft',
-      imageUrl: '/static/images/products/product_4.png',
-      updatedAt: Date.now(),
-    },
-    {
-      id: nanoid(),
-      name: 'GitHub',
-      imageUrl: '/static/images/products/product_5.png',
-      updatedAt: Date.now(),
-    },
-  ];
 
   return (
     <Box
@@ -72,9 +34,6 @@ const Article = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Typography sx={{ mb: 3 }} variant="h4">
-          Settings
-        </Typography>
         <Card
           sx={{
             display: 'flex',
@@ -82,25 +41,32 @@ const Article = () => {
             height: '100%',
           }}
         >
-          <CardContent>
+          <CardContent
+            sx={{
+              position: 'relative',
+              color: '#fff',
+              backgroundColor: 'grey.800',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              backgroundImage: `url(https://loremflickr.com/640/480/paris)`,
+            }}
+          >
             <Box
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                pb: 3,
               }}
             >
-              <Avatar alt="Product" src={product.media} variant="square" />
+              <Avatar sx={{ width: 80, height: 80 }} alt="Product" src={product.media} />
             </Box>
-            <Typography align="center" color="textPrimary" gutterBottom variant="h5">
+            <Typography align="center" variant="h5" color="inherit" gutterBottom>
               {product.title}
             </Typography>
-            <Typography align="center" color="textPrimary" variant="body1">
+            <Typography align="center" color="inherit" paragraph variant="body1">
               {product.description}
             </Typography>
           </CardContent>
-          <Box sx={{ flexGrow: 1 }} />
-          <Divider />
           <Box sx={{ p: 2 }}>
             <Grid container spacing={2} sx={{ justifyContent: 'space-between' }}>
               <Grid
@@ -110,9 +76,7 @@ const Article = () => {
                   display: 'flex',
                 }}
               >
-                <Typography color="textSecondary" display="inline" sx={{ pl: 1 }} variant="body2">
-                  Updated 2hr ago
-                </Typography>
+                <Button color="inherit">+ Follow</Button>
               </Grid>
               <Grid
                 item
@@ -122,75 +86,92 @@ const Article = () => {
                 }}
               >
                 <Typography color="textSecondary" display="inline" sx={{ pl: 1 }} variant="body2">
-                  {product.totalDownloads} Downloads
+                  {product.totalDownloads} Following
                 </Typography>
               </Grid>
             </Grid>
           </Box>
         </Card>
+
         <Box sx={{ pt: 3 }}>
           <Card>
-            <CardHeader subheader="Update password" title="Password" />
-            <Divider />
-            <CardContent>
-              <TextField
-                fullWidth
-                label="Password"
-                margin="normal"
-                name="password"
-                type="password"
-                variant="outlined"
-              />
-              <TextField
-                fullWidth
-                label="Confirm password"
-                margin="normal"
-                name="confirm"
-                type="password"
-                variant="outlined"
-              />
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  R
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon />
+                </IconButton>
+              }
+              title="Shrimp and Chorizo Paella"
+              subheader="September 14, 2016"
+            />
+            <CardContent sx={{ pt: 0 }}>
+              <Typography gutterBottom variant="h5" component="div">
+                Lizard
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                This impressive paella is a perfect party dish and a fun meal to cook together with
+                your guests. Add 1 cup of frozen peas along with the mussels, if you like. if you
+                like.
+              </Typography>
             </CardContent>
-            <Divider />
-            <Box
+            <CardActions
               sx={{
+                alignSelf: 'stretch',
                 display: 'flex',
                 justifyContent: 'flex-end',
+                alignItems: 'flex-start',
+                // 👇 Edit padding to further adjust position
                 p: 2,
               }}
+              disableSpacing
             >
-              <Button color="primary" variant="contained">
-                Update
-              </Button>
-            </Box>
+              <Button size="small">READ MORE</Button>
+            </CardActions>
           </Card>
-        </Box>
-        <Box sx={{ pt: 3 }}>
+          <Box sx={{ pt: 1 }} />
           <Card>
-            <CardContent>
-              <List>
-                {products.map((product, i) => (
-                  <ListItem divider={i < products.length - 1} key={product.id}>
-                    <ListItemAvatar>
-                      <img
-                        alt={product.name}
-                        src={product.imageUrl}
-                        style={{
-                          height: 48,
-                          width: 48,
-                        }}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={product.name}
-                      secondary={`Updated ${product.updatedAt}`}
-                    />
-                    <IconButton edge="end" size="small">
-                      <MoreVertIcon />
-                    </IconButton>
-                  </ListItem>
-                ))}
-              </List>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  R
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon />
+                </IconButton>
+              }
+              title="Shrimp and Chorizo Paella"
+              subheader="September 14, 2016"
+            />
+            <CardContent sx={{ pt: 0 }}>
+              <Typography gutterBottom variant="h5" component="div">
+                Lizard
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                This impressive paella is a perfect party dish and a fun meal to cook together with
+                your guests. Add 1 cup of frozen peas along with the mussels, if you like. if you
+                like.
+              </Typography>
             </CardContent>
+            <CardActions
+              sx={{
+                alignSelf: 'stretch',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-start',
+                // 👇 Edit padding to further adjust position
+                p: 2,
+              }}
+              disableSpacing
+            >
+              <Button size="small">READ MORE</Button>
+            </CardActions>
           </Card>
         </Box>
       </Container>

@@ -9,16 +9,19 @@ const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
     // By default, if we have a token in the store, let's use that for authenticated requests
-    const { type, accessToken } = (getState() as RootState).auth;
+    const { accessToken } = (getState() as RootState).auth;
     if (accessToken) {
-      headers.set('Authorization', `${type} ${accessToken}`);
+      headers.set(
+        'Authorization',
+        `Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2ODY0MTEwNjMsImlhdCI6MTY4NjQxMTA2MH0.YlMUCgtRg5vDSCxCylFLYSVyObNCdi-PejqKJOLjyxnLyY155fbZOWA3X7zokemyKNrZ_nX0tBXxDPBT4WAl50_YzHJ7MEgJPLib0Xw-5_B_zPXkvLg4GQ0VcZIpK7dQhCSRNgHiiKWZ8ODcKxYP9pfdlkdAwqnokiEvg3t1bUaqFODkc3xt3hAqrhRI_0MQ0TR9olXeKvocaDuEuA9D91c7w1NTvMeAPTWPdA2tbusri7AIMou0cGqDUDeB7CCeI-mDQM4bkmzk8SB2iVjLVr2Y398CjxIxZnrDczs0sPxUjIi6ZioyUls19bvKDWaDgLGurzD7W7A_TTuZgF64zQ`,
+      );
     }
 
     return headers;
   },
 });
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 2 });
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 0 });
 
 /**
  * Create a base API to inject endpoints into elsewhere.

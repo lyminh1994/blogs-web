@@ -4,12 +4,12 @@ import { faker } from '@faker-js/faker';
 
 const UserAvatar = () => {
   const data = {
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    city: faker.address.city(),
-    country: faker.address.country(),
-    jobTitle: faker.name.jobTitle(),
-    timezone: faker.address.timeZone(),
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    city: faker.location.city(),
+    country: faker.location.country(),
+    jobTitle: faker.person.jobTitle(),
+    timezone: faker.location.timeZone(),
     profileImage: 'https://i.pravatar.cc/300',
   };
 

@@ -1,5 +1,4 @@
 import { api } from './api';
-
 import type { CommentResponse, CreateCommentParams } from 'types/app';
 
 export const commentApi = api.injectEndpoints({

@@ -1,10 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-import { useSnackbar } from 'notistack';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
@@ -25,8 +24,8 @@ import type { SignUpParams } from 'types/app';
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [signUp, { isLoading }] = useSignUpMutation();
   const { enqueueSnackbar } = useSnackbar();
+  const [signUp, { isLoading }] = useSignUpMutation();
 
   const schema = Yup.object({
     username: Yup.string().required().min(3).max(50),
@@ -37,12 +36,12 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { touchedFields, errors, isSubmitting },
   } = useForm<SignUpParams>({
     defaultValues: {
       username: '',
       email: '',
-      password: '',
+      password: 'd!Y!MrYmVAama26',
       isAllowEmails: false,
     },
     resolver: yupResolver(schema),
@@ -75,21 +74,21 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(handleSignUp)} noValidate sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit(handleSignUp)}>
           <TextField
             margin="normal"
             fullWidth
             label="Username"
-            error={!!errors.username}
-            helperText={errors.username?.message}
+            error={touchedFields.username && !!errors.username}
+            helperText={touchedFields.username && errors.username?.message}
             {...register('username')}
           />
           <TextField
             margin="normal"
             fullWidth
             label="Email"
-            error={!!errors.email}
-            helperText={errors.email?.message}
+            error={touchedFields.email && !!errors.email}
+            helperText={touchedFields.email && errors.email?.message}
             {...register('email')}
           />
           <TextField
@@ -97,8 +96,8 @@ const SignUp = () => {
             fullWidth
             label="Password"
             type="password"
-            error={!!errors.password}
-            helperText={errors.password?.message}
+            error={touchedFields.password && !!errors.password}
+            helperText={touchedFields.password && errors.password?.message}
             {...register('password')}
           />
 
@@ -111,15 +110,18 @@ const SignUp = () => {
             fullWidth
             type="submit"
             variant="contained"
-            disabled={isLoading}
+            disabled={isLoading && isSubmitting}
           >
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/SignIn" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              <Typography variant="body2">
+                {`Already have an account? `}
+                <Link component={RouterLink} to="/sign-in" variant="body2">
+                  Sign in
+                </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Box>

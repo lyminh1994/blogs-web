@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -18,33 +18,36 @@ import {
   Button,
 } from '@mui/material';
 
+import { faker } from '@faker-js/faker';
+
 import { useGetUserQuery, useUpdateUserInfoMutation } from 'redux/services/user';
 import type { UpdateUserParams } from 'types/app';
+
+const schema = Yup.object({
+  firstName: Yup.string().required(),
+  lastName: Yup.string().required(),
+  email: Yup.string().required(),
+  phone: Yup.string().required(),
+  birthday: Yup.string().required(),
+  gender: Yup.string().required(),
+}).required();
 
 const UserGeneral = () => {
   const { data } = useGetUserQuery();
   const [updateInfo, { isLoading: isUpdating }] = useUpdateUserInfoMutation();
   const { enqueueSnackbar } = useSnackbar();
 
-  const schema = Yup.object({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    email: Yup.string().required(),
-    phone: Yup.string().required(),
-    birthday: Yup.string().required(),
-    gender: Yup.string().required(),
-  }).required();
-
   const {
+    control,
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<UpdateUserParams>({
     defaultValues: {
-      firstName: data?.firstName,
-      lastName: data?.lastName,
+      firstName: data?.firstName || faker.person.firstName(),
+      lastName: data?.lastName || faker.person.lastName(),
       email: data?.email,
-      phone: data?.phone,
+      phone: data?.phone || faker.phone.number('###########'),
       birthday: data?.birthday,
       gender: data?.gender,
     },
@@ -128,17 +131,24 @@ const UserGeneral = () => {
             <Grid item md={6} xs={12}>
               <FormControl fullWidth>
                 <InputLabel id="gender-label">Gender</InputLabel>
-                <Select
-                  labelId="gender-label"
-                  label="Gender"
-                  required
-                  variant="outlined"
-                  {...register('gender')}
-                >
-                  <MenuItem value="MALE">Male</MenuItem>
-                  <MenuItem value="FEMALE">Female</MenuItem>
-                  <MenuItem value="OTHER">Other</MenuItem>
-                </Select>
+                <Controller
+                  render={({ field }) => (
+                    <Select
+                      labelId="gender-label"
+                      label="Gender"
+                      required
+                      variant="outlined"
+                      {...field}
+                    >
+                      <MenuItem value={undefined}></MenuItem>
+                      <MenuItem value="MALE">Male</MenuItem>
+                      <MenuItem value="FEMALE">Female</MenuItem>
+                      <MenuItem value="OTHER">Other</MenuItem>
+                    </Select>
+                  )}
+                  name="gender"
+                  control={control}
+                />
               </FormControl>
             </Grid>
           </Grid>
@@ -151,9 +161,9 @@ const UserGeneral = () => {
           }}
         >
           <Button
+            type="submit"
             variant="contained"
             color="primary"
-            type="submit"
             disabled={isSubmitting && isUpdating}
           >
             Update profile

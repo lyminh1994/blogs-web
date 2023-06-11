@@ -1,22 +1,11 @@
 import { Grid, Pagination, PaginationItem } from '@mui/material';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-import HighlightPost from 'components/posts/highlight';
-import FeaturedPosts from 'components/posts/featured';
+import BannerAds from 'components/articles/banner-ads';
+import RecentArticles from 'components/articles/recent';
 
-const highlightPost = {
-  title: 'Title of a longer featured blog post',
-  description:
-    "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
-  image: 'https://source.unsplash.com/random',
-  imageLabel: 'main image description',
-  date: '',
-};
-
-export interface Post {
+export interface Article {
   title: string;
   date: string;
   description: string;
@@ -24,7 +13,7 @@ export interface Post {
   imageLabel: string;
 }
 
-const posts: Post[] = [
+const articles: Article[] = [
   {
     title: 'Wagon',
     date: 'Fri Oct 07 2022',
@@ -109,22 +98,18 @@ const posts: Post[] = [
 
 const Home = () => (
   <>
-    <HighlightPost post={highlightPost} />
+    <BannerAds />
 
-    <FeaturedPosts posts={posts} />
+    <RecentArticles articles={articles} />
 
     <Grid container justifyContent="flex-end">
       <Pagination
         count={10}
-        showFirstButton
-        showLastButton
         renderItem={(item) => (
           <PaginationItem
             slots={{
-              first: KeyboardDoubleArrowLeftIcon,
               previous: KeyboardArrowLeftIcon,
               next: KeyboardArrowRightIcon,
-              last: KeyboardDoubleArrowRightIcon,
             }}
             {...item}
           />

@@ -20,7 +20,7 @@ rootReact.render(
       <Provider store={store}>
         <SnackbarProvider
           maxSnack={3}
-          autoHideDuration={1000}
+          autoHideDuration={3000}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           <App />

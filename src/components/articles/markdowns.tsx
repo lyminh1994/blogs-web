@@ -1,7 +1,7 @@
 import { Link, Typography } from '@mui/material';
 import ReactMarkdown, { MarkdownToJSX } from 'markdown-to-jsx';
 
-import MarkdownItem from 'components/posts/markdown-item';
+import MarkdownItem from 'components/articles/markdown-item';
 
 const options = {
   overrides: {
@@ -39,7 +39,6 @@ const options = {
     },
   },
 };
-
 
 const Markdown = (props: { children: string; options?: MarkdownToJSX.Options }) => {
   return <ReactMarkdown options={options} {...props} />;

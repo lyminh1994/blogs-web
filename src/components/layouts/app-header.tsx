@@ -2,8 +2,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import { useAuth } from 'hooks/useAuth';
-
 import AuthHeader from 'components/layouts/auth-header';
 
 const Header = styled(AppBar)(({ theme }) => ({
@@ -14,48 +12,48 @@ const Header = styled(AppBar)(({ theme }) => ({
 const AppHeader = ({
   sections,
   title,
+  isAuthenticator,
 }: {
   sections: ReadonlyArray<{
     title: string;
     url: string;
   }>;
   title: string;
-}) => {
-  const { isAuthenticator } = useAuth();
-
-  return (
-    <Header>
-      <Container maxWidth="lg">
-        <Toolbar
-          disableGutters
-          sx={{
-            minHeight: 64,
-          }}
+  isAuthenticator: boolean;
+}) => (
+  <Header>
+    <Container maxWidth="lg">
+      <Toolbar
+        disableGutters
+        sx={{
+          minHeight: 64,
+        }}
+      >
+        <Typography
+          component={RouterLink}
+          to="/"
+          variant="h5"
+          align="left"
+          noWrap
+          sx={{ flex: 1, textDecoration: 'none' }}
         >
+          {title}
+        </Typography>
+        {sections.map((section) => (
           <Typography
             component={RouterLink}
-            to="/"
-            variant="h5"
-            align="left"
-            noWrap
-            sx={{ flex: 1, textDecoration: 'none' }}
+            to={section.url}
+            key={section.title}
+            variant="body2"
+            sx={{ p: 1, textDecoration: 'none' }}
           >
-            {title}
+            {section.title}
           </Typography>
-          {sections.map((section) => (
-            <Typography
-              component={RouterLink}
-              to={section.url}
-              key={section.title}
-              variant="body2"
-              sx={{ p: 1, textDecoration: 'none' }}
-            >
-              {section.title}
-            </Typography>
-          ))}
-          {isAuthenticator ? (
-            <AuthHeader />
-          ) : (
+        ))}
+        {isAuthenticator ? (
+          <AuthHeader />
+        ) : (
+          <>
             <Typography
               component={RouterLink}
               to="/sign-in"
@@ -64,11 +62,20 @@ const AppHeader = ({
             >
               Sign in
             </Typography>
-          )}
-        </Toolbar>
-      </Container>
-    </Header>
-  );
-};
+            <Typography
+              component={RouterLink}
+              to="/sign-up"
+              variant="body2"
+              sx={{ p: 1, textDecoration: 'none' }}
+            >
+              Sign up
+            </Typography>
+          </>
+        )}
+      </Toolbar>
+    </Container>
+  </Header>
+);
+
 
 export default AppHeader;

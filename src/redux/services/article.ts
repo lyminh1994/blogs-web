@@ -1,37 +1,17 @@
 import { api } from './api';
-import { DEFAULT_PAGE_SIZE, limit } from './tag';
-
 import type { CreateArticleParams, UpdateArticleParams } from 'types/app';
 
 export const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getFeeds: builder.query<void, number>({
-      query: (pageNumber) => ({
-        url: `/articles/feeds?${limit(DEFAULT_PAGE_SIZE, pageNumber)}`,
+    getFeeds: builder.query<void, void>({
+      query: () => ({
+        url: `/articles/feeds`,
         method: 'GET',
       }),
     }),
-    getArticles: builder.query<void, number>({
-      query: (pageNumber) => ({
-        url: `/articles?${limit(DEFAULT_PAGE_SIZE, pageNumber)}`,
-        method: 'GET',
-      }),
-    }),
-    getArticlesByTagName: builder.query<void, { tag: string; pageNumber: number }>({
-      query: ({ tag, pageNumber }) => ({
-        url: `/articles?tag=${tag}&${limit(DEFAULT_PAGE_SIZE, pageNumber)}`,
-        method: 'GET',
-      }),
-    }),
-    getArticlesByFavorite: builder.query<void, { username: string; pageNumber: number }>({
-      query: ({ username, pageNumber }) => ({
-        url: `/articles?favorite-by=${username}&${limit(DEFAULT_PAGE_SIZE, pageNumber)}`,
-        method: 'GET',
-      }),
-    }),
-    getArticlesByAuthor: builder.query<void, { author: string; pageNumber: number }>({
-      query: ({ author, pageNumber }) => ({
-        url: `/articles?author=${author}&${limit(DEFAULT_PAGE_SIZE, pageNumber)}`,
+    getArticles: builder.query<void, void>({
+      query: () => ({
+        url: `/articles`,
         method: 'GET',
       }),
     }),
@@ -59,9 +39,6 @@ export const articleApi = api.injectEndpoints({
 export const {
   useGetFeedsQuery,
   useGetArticlesQuery,
-  useGetArticlesByTagNameQuery,
-  useGetArticlesByFavoriteQuery,
-  useGetArticlesByAuthorQuery,
   useGetBySlugQuery,
   useCreateArticleQuery,
   useUpdateArticleBySlugQuery,

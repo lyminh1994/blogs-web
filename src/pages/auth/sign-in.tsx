@@ -1,10 +1,9 @@
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-import { useSnackbar } from 'notistack';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
@@ -35,7 +34,7 @@ const SignIn = () => {
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<SignInParams>({
-    defaultValues: { username: '', password: '12345678' },
+    defaultValues: { username: '', password: 'd!Y!MrYmVAama26' },
     resolver: yupResolver(schema),
   });
 
@@ -43,8 +42,8 @@ const SignIn = () => {
     try {
       await signIn(params).unwrap();
       navigate('/');
-    } catch (err) {
-      enqueueSnackbar('Invalid username or password!', {
+    } catch (error) {
+      enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
       });
     }
@@ -86,17 +85,17 @@ const SignIn = () => {
             {...register('password')}
           />
           <Button
+            sx={{ mt: 3, mb: 2 }}
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
             disabled={isSubmitting && isLoading}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link component={RouterLink} to="/" variant="body2">
+              <Link component={RouterLink} to="/forgot-password" variant="body2">
                 Forgot password?
               </Link>
             </Grid>

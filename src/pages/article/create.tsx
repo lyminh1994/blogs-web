@@ -16,15 +16,15 @@ import {
 } from '@mui/material';
 import type { CreateArticleParams } from 'types/app';
 
-const schema = yup
-  .object({
-    title: yup.string().required(),
-    description: yup.string().required(),
-    body: yup.string().required(),
-  })
-  .required();
+const CreateArticle = () => {
+  const schema = yup
+    .object({
+      title: yup.string().required(),
+      description: yup.string().required(),
+      body: yup.string().required(),
+    })
+    .required();
 
-const Editor = () => {
   const {
     control,
     register,
@@ -37,18 +37,14 @@ const Editor = () => {
   const handleCreateArticle = (event: CreateArticleParams) => {
     console.log(event);
   };
+
   return (
     <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
-      {' '}
       <Container maxWidth="lg">
-        {' '}
         <form onSubmit={handleSubmit(handleCreateArticle)}>
-          {' '}
           <Card>
-            {' '}
-            <CardHeader subheader="Create your own article" title="New Article" />{' '}
+            <CardHeader subheader="Create your own article" title="New Article" />
             <CardContent>
-              {' '}
               <TextField
                 fullWidth
                 label="Title"
@@ -58,7 +54,7 @@ const Editor = () => {
                 error={!!errors.title}
                 helperText={errors.title?.message}
                 {...register('title')}
-              />{' '}
+              />
               <TextField
                 fullWidth
                 label="Description"
@@ -68,7 +64,7 @@ const Editor = () => {
                 error={!!errors.description}
                 helperText={errors.description?.message}
                 {...register('description')}
-              />{' '}
+              />
               <TextField
                 multiline
                 rows={4}
@@ -80,7 +76,7 @@ const Editor = () => {
                 error={!!errors.body}
                 helperText={errors.body?.message}
                 {...register('body')}
-              />{' '}
+              />
               <Controller
                 name="tagNames"
                 control={control}
@@ -108,20 +104,18 @@ const Editor = () => {
                     )}
                   />
                 )}
-              />{' '}
-            </CardContent>{' '}
-            <Divider />{' '}
+              />
+            </CardContent>
+            <Divider />
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-              {' '}
               <Button type="submit" color="primary" variant="contained">
-                {' '}
-                Create{' '}
-              </Button>{' '}
-            </Box>{' '}
-          </Card>{' '}
-        </form>{' '}
-      </Container>{' '}
+                Create
+              </Button>
+            </Box>
+          </Card>
+        </form>
+      </Container>
     </Box>
   );
 };
-export default Editor;
+export default CreateArticle;

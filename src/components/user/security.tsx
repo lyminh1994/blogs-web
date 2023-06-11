@@ -54,7 +54,7 @@ const UserSecurity = () => {
   };
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(handleUpdatePassword)}>
+    <form autoComplete="off" onSubmit={handleSubmit(handleUpdatePassword)} noValidate>
       <Card>
         <CardHeader
           subheader="Changing your password will invalidate all of your browser sessions and require you to sign in again."

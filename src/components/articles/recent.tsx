@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -13,18 +14,18 @@ import {
 
 import { faker } from '@faker-js/faker';
 
-import type { Post } from 'pages/home';
+import type { Article } from 'pages/home';
 
-const FeaturedPosts = ({ posts }: { posts?: Post[] }) => (
+const RecentArticles = ({ articles }: { articles?: Article[] }) => (
   <Grid item>
     <Typography variant="h6" gutterBottom>
-      Featured Posts
+      Recent Articles
     </Typography>
 
     <Divider />
 
-    <Grid container spacing={4} sx={{ py: 4 }}>
-      {posts?.map((post, index) => (
+    <Grid container sx={{ py: 4 }} spacing={4}>
+      {articles?.map((article, index) => (
         <Grid item md={6} key={index}>
           <Card>
             <CardMedia
@@ -37,21 +38,15 @@ const FeaturedPosts = ({ posts }: { posts?: Post[] }) => (
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
-                backgroundImage: `url(${post.image})`,
+                backgroundImage: `url(${article.image})`,
               }}
               role="img"
               href="#"
             />
-            {<img style={{ display: 'none' }} src={post.image} alt={post.imageLabel} />}
+            {<img style={{ display: 'none' }} src={article.image} alt={article.imageLabel} />}
             <CardContent>
-              <Stack direction="row" spacing={1} paddingBottom={2}>
-                <Chip label={faker.music.songName()} variant="outlined" />
-              </Stack>
               <Typography variant="h5" color="textPrimary" gutterBottom>
                 {faker.company.name()}
-              </Typography>
-              <Typography variant="body1" paragraph color="textSecondary">
-                {post.description}
               </Typography>
               <Box
                 sx={{
@@ -68,6 +63,15 @@ const FeaturedPosts = ({ posts }: { posts?: Post[] }) => (
                   </Typography>
                 </Box>
               </Box>
+              <Typography variant="body1" paragraph color="textSecondary">
+                {article.description}
+              </Typography>
+              <Stack direction="row" spacing={1} paddingBottom={2}>
+                <Chip label={faker.music.songName()} variant="outlined" />
+              </Stack>
+              <Box sx={{ display: 'flex', alignItems: 'end' }}>
+                <Button>Read more</Button>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -76,4 +80,4 @@ const FeaturedPosts = ({ posts }: { posts?: Post[] }) => (
   </Grid>
 );
 
-export default FeaturedPosts;
+export default RecentArticles;
