@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack';
 import { Button, Card, CardActions, CardContent, CardHeader, Grid, TextField } from '@mui/material';
 
 import { useUpdatePasswordMutation } from 'redux/services/user';
-import { useSignOutMutation } from 'redux/services/api';
+import { useLogoutMutation } from 'redux/services/api';
 import type { UpdatePasswordParams } from 'types/app';
 
 const schema = yup
@@ -26,7 +26,7 @@ const schema = yup
 const UserSecurity = () => {
   const navigate = useNavigate();
   const [updatePassword, { isLoading: isUpdatePasswordLoading }] = useUpdatePasswordMutation();
-  const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
+  const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
   const { enqueueSnackbar } = useSnackbar();
 
   const {
@@ -40,9 +40,9 @@ const UserSecurity = () => {
   const handleUpdatePassword = async (params: UpdatePasswordParams) => {
     try {
       await updatePassword(params).unwrap();
-      await signOut().unwrap();
+      await logout().unwrap();
 
-      if (!isSignOutLoading) {
+      if (!isLogoutLoading) {
         navigate('/login');
         enqueueSnackbar('Update password success!', { variant: 'success' });
       }

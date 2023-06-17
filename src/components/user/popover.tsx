@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 
 import { useGetUserQuery } from 'redux/services/user';
-import { useSignOutMutation } from 'redux/services/api';
+import { useLogoutMutation } from 'redux/services/api';
 
 interface UserPopoverProps {
   anchorEl?: Element | ((element: Element) => Element) | null | undefined;
@@ -29,14 +29,14 @@ interface UserPopoverProps {
 const UserPopover = ({ anchorEl, open, onClose }: UserPopoverProps) => {
   const { data } = useGetUserQuery();
   const navigate = useNavigate();
-  const [signOut, { isLoading }] = useSignOutMutation();
+  const [logout, { isLoading }] = useLogoutMutation();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
     onClose?.();
 
     try {
-      await signOut().unwrap();
+      await logout().unwrap();
       navigate('/');
     } catch (err) {
       enqueueSnackbar('Oh no, there was an error!', {
@@ -87,7 +87,7 @@ const UserPopover = ({ anchorEl, open, onClose }: UserPopoverProps) => {
           <ListItemText>Settings</ListItemText>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleSignOut} disabled={isLoading}>
+        <MenuItem onClick={handleLogout} disabled={isLoading}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
           </ListItemIcon>

@@ -52,24 +52,24 @@ export const api = createApi({
   endpoints: (builder) => ({
     register: builder.mutation<AuthResponse, Required<RegisterParams>>({
       query: (body) => ({
-        url: 'register',
+        url: '/auth/register',
         method: 'POST',
         body,
       }),
     }),
     login: builder.mutation<AuthResponse, Required<LoginParams>>({
       query: (body) => ({
-        url: 'login',
+        url: '/auth/login',
         method: 'POST',
         credentials: 'include',
         body,
       }),
     }),
     logout: builder.mutation<void, void>({
-      query: () => ({ url: 'logout', method: 'DELETE', credentials: 'include' }),
+      query: () => ({ url: '/auth/logout', method: 'DELETE', credentials: 'include' }),
     }),
     refreshToken: builder.mutation<AuthResponse, void>({
-      query: () => ({ url: 'refresh-token', method: 'GET', credentials: 'include' }),
+      query: () => ({ url: '/auth/refresh-token', method: 'GET', credentials: 'include' }),
     }),
   }),
 });
