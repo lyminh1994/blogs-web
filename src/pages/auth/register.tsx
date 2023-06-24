@@ -2,8 +2,10 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import { faker } from '@faker-js/faker';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
@@ -20,39 +22,41 @@ import {
 } from '@mui/material';
 
 import { useRegisterMutation } from 'redux/services/api';
-import type { RegisterParams } from 'types/app';
+import type { RegisterRequest } from 'types/app';
 
 const Register = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [registerMutation, { isLoading }] = useRegisterMutation();
 
-  const schema = Yup.object({
-    username: Yup.string().required().min(3).max(50),
-    password: Yup.string().required().min(8),
-    email: Yup.string().required().email(),
-  }).required();
+  const schema = yup
+    .object({
+      username: yup.string().required().min(3).max(50),
+      password: yup.string().required().min(8),
+      email: yup.string().required().email(),
+    })
+    .required();
 
   const {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
-  } = useForm<RegisterParams>({
+  } = useForm<RegisterRequest>({
     defaultValues: {
       username: '',
-      email: '',
+      email: faker.internet.email().toLowerCase(),
       password: 'd!Y!MrYmVAama26',
       isAllowEmails: false,
     },
     resolver: yupResolver(schema),
   });
 
-  const handleRegister = async (params: RegisterParams) => {
+  const handleRegister = async (data: RegisterRequest) => {
     try {
-      await registerMutation(params);
+      await registerMutation(data);
       navigate('/login');
-    } catch (err) {
-      enqueueSnackbar('Oh no, there was an error!', {
+    } catch (error) {
+      enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
       });
     }

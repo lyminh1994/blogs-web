@@ -1,11 +1,11 @@
-export interface CreateArticleParams {
+export interface CreateArticleRequest {
   title: string;
   description: string;
   body: string;
-  tagNames: string[];
+  tagNames?: string[];
 }
 
-export interface UpdateArticleParams {
+export interface UpdateArticleRequest {
   slug: string;
   title: string;
   body: string;
@@ -26,14 +26,14 @@ export interface ArticleResponse {
   tagNames: Array<string>;
 }
 
-export interface RegisterParams {
+export interface RegisterRequest {
   username: string;
   email: string;
   password: string;
-  isAllowEmails: boolean;
+  isAllowEmails?: boolean;
 }
 
-export interface LoginParams {
+export interface LoginRequest {
   username: string;
   password: string;
 }
@@ -44,7 +44,7 @@ export interface AuthResponse {
   accessToken: string;
 }
 
-export interface CreateCommentParams {
+export interface CreateCommentRequest {
   body: string;
 }
 
@@ -61,20 +61,20 @@ export interface TagResponse {
   name: string;
 }
 
-export interface UpdateUserParams {
-  email: string;
+export interface UpdateUserRequest {
   firstName: string;
   lastName: string;
+  email: string;
   phone: string;
   birthday: string;
-  gender: Gender;
-  profileImage: string;
+  gender?: Gender;
+  profileImage?: string;
 }
 
-export interface UpdatePasswordParams {
+export interface UpdatePasswordRequest {
   currentPassword: string;
   newPassword: string;
-  confirmPassword?: string;
+  confirmPassword: string;
 }
 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';

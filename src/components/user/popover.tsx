@@ -14,12 +14,19 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
+import type { PopoverVirtualElement } from '@mui/material';
 
 import { useGetUserQuery } from 'redux/services/user';
 import { useLogoutMutation } from 'redux/services/api';
 
 interface UserPopoverProps {
-  anchorEl?: Element | ((element: Element) => Element) | null | undefined;
+  anchorEl?:
+    | Element
+    | (() => Element)
+    | PopoverVirtualElement
+    | (() => PopoverVirtualElement)
+    | null
+    | undefined;
   open: boolean;
   onClose?:
     | ((event?: Record<string, never>, reason?: 'backdropClick' | 'escapeKeyDown') => void)
@@ -54,9 +61,7 @@ const UserPopover = ({ anchorEl, open, onClose }: UserPopoverProps) => {
       }}
       onClose={onClose}
       open={open}
-      PaperProps={{
-        sx: { width: '300px' },
-      }}
+      slotProps={{ paper: { sx: { width: '300px' } } }}
     >
       <Box
         sx={{

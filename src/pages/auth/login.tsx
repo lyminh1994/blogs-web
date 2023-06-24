@@ -2,45 +2,48 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 
 import { useLoginMutation } from 'redux/services/api';
-import type { LoginParams } from 'types/app';
+import type { LoginRequest } from 'types/app';
+
+const schema = yup
+  .object({
+    username: yup
+      .string()
+      .required('Username or email can not empty')
+      .test('is-email', 'Invalid email', (value) => {
+        if (value) {
+          return value.includes('@') ? yup.string().email().isValidSync(value) : true;
+        }
+
+        return true;
+      }),
+    password: yup.string().required('Password can not empty'),
+  })
+  .required();
 
 const Login = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [loginMutation, { isLoading }] = useLoginMutation();
 
-  const schema = Yup.object({
-    username: Yup.string()
-      .required('Username or email can not empty')
-      .test('is-email', 'Invalid email', (value) => {
-        if (value) {
-          return value.includes('@') ? Yup.string().email().isValidSync(value) : true;
-        }
-
-        return true;
-      }),
-    password: Yup.string().required('Password can not empty'),
-  }).required();
-
   const {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
-  } = useForm<LoginParams>({
+  } = useForm<LoginRequest>({
     defaultValues: { username: '', password: 'd!Y!MrYmVAama26' },
     resolver: yupResolver(schema),
   });
 
-  const onLogin = async (params: LoginParams) => {
+  const onSubmit = async (data: LoginRequest) => {
     try {
-      await loginMutation(params).unwrap();
+      await loginMutation(data).unwrap();
       navigate('/');
     } catch (error) {
       enqueueSnackbar(JSON.stringify(error, null, 2), {
@@ -65,7 +68,7 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onLogin)} noValidate>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
           <TextField
             margin="normal"
             fullWidth

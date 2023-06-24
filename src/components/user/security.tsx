@@ -1,16 +1,24 @@
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useSnackbar } from 'notistack';
-
-import { Button, Card, CardActions, CardContent, CardHeader, Grid, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  TextField,
+} from '@mui/material';
 
 import { useUpdatePasswordMutation } from 'redux/services/user';
 import { useLogoutMutation } from 'redux/services/api';
-import type { UpdatePasswordParams } from 'types/app';
+import type { UpdatePasswordRequest } from 'types/app';
 
 const schema = yup
   .object({
@@ -25,36 +33,37 @@ const schema = yup
 
 const UserSecurity = () => {
   const navigate = useNavigate();
-  const [updatePassword, { isLoading: isUpdatePasswordLoading }] = useUpdatePasswordMutation();
-  const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
   const { enqueueSnackbar } = useSnackbar();
+  const [updatePasswordMutation, { isLoading: isUpdateLoading }] = useUpdatePasswordMutation();
+  const [logoutMutation, { isLoading: isLogoutLoading }] = useLogoutMutation();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<UpdatePasswordParams>({
+    formState: { touchedFields, errors, isSubmitting },
+  } = useForm<UpdatePasswordRequest>({
+    defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
     resolver: yupResolver(schema),
   });
 
-  const handleUpdatePassword = async (params: UpdatePasswordParams) => {
+  const handleUpdatePassword = async (params: UpdatePasswordRequest) => {
     try {
-      await updatePassword(params).unwrap();
-      await logout().unwrap();
+      await updatePasswordMutation(params).unwrap();
+      await logoutMutation().unwrap();
 
       if (!isLogoutLoading) {
         navigate('/login');
         enqueueSnackbar('Update password success!', { variant: 'success' });
       }
-    } catch (err) {
-      enqueueSnackbar('Oh no, there was an error!', {
+    } catch (error) {
+      enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
       });
     }
   };
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(handleUpdatePassword)} noValidate>
+    <Box component="form" onSubmit={handleSubmit(handleUpdatePassword)} noValidate>
       <Card>
         <CardHeader
           subheader="Changing your password will invalidate all of your browser sessions and require you to Login again."
@@ -68,8 +77,8 @@ const UserSecurity = () => {
                 type="password"
                 fullWidth
                 variant="outlined"
-                error={!!errors.currentPassword}
-                helperText={errors.currentPassword?.message}
+                error={Boolean(touchedFields.currentPassword && errors.currentPassword)}
+                helperText={touchedFields.currentPassword && errors.currentPassword?.message}
                 {...register('currentPassword')}
               />
             </Grid>
@@ -79,8 +88,8 @@ const UserSecurity = () => {
                 type="password"
                 fullWidth
                 variant="outlined"
-                error={!!errors.newPassword}
-                helperText={errors.newPassword?.message}
+                error={Boolean(touchedFields.newPassword && errors.newPassword)}
+                helperText={touchedFields.newPassword && errors.newPassword?.message}
                 {...register('newPassword')}
               />
             </Grid>
@@ -90,8 +99,8 @@ const UserSecurity = () => {
                 type="password"
                 fullWidth
                 variant="outlined"
-                error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword?.message}
+                error={Boolean(touchedFields.confirmPassword && errors.confirmPassword)}
+                helperText={touchedFields.confirmPassword && errors.confirmPassword?.message}
                 {...register('confirmPassword')}
               />
             </Grid>
@@ -108,13 +117,13 @@ const UserSecurity = () => {
             type="submit"
             color="primary"
             variant="contained"
-            disabled={isUpdatePasswordLoading}
+            disabled={isSubmitting && isUpdateLoading}
           >
             Change password
           </Button>
         </CardActions>
       </Card>
-    </form>
+    </Box>
   );
 };
 

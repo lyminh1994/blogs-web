@@ -1,16 +1,18 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Grid, TextField, Typography, Link, Container } from '@mui/material';
 
-const ForgotPassword = () => {
-  const schema = Yup.object({
-    email: Yup.string().required().email(),
-  }).required();
+const schema = yup
+  .object({
+    email: yup.string().required().email(),
+  })
+  .required();
 
+const ForgotPassword = () => {
   const {
     register,
     handleSubmit,

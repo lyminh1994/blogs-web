@@ -1,5 +1,3 @@
-const ArticlePreview = () => {
-  return <div></div>;
-};
+const ArticlePreview = () => <div></div>;
 
 export default ArticlePreview;

@@ -1,8 +1,8 @@
-import { Controller, useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+
+import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-import { useSnackbar } from 'notistack';
 
 import {
   Card,
@@ -21,7 +21,7 @@ import {
 import { faker } from '@faker-js/faker';
 
 import { useGetUserQuery, useUpdateUserInfoMutation } from 'redux/services/user';
-import type { UpdateUserParams } from 'types/app';
+import type { UpdateUserRequest } from 'types/app';
 
 const schema = Yup.object({
   firstName: Yup.string().required(),
@@ -29,7 +29,6 @@ const schema = Yup.object({
   email: Yup.string().required(),
   phone: Yup.string().required(),
   birthday: Yup.string().required(),
-  gender: Yup.string().required(),
 }).required();
 
 const UserGeneral = () => {
@@ -38,24 +37,23 @@ const UserGeneral = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const {
-    control,
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
-  } = useForm<UpdateUserParams>({
+  } = useForm<UpdateUserRequest>({
     defaultValues: {
       firstName: data?.firstName || faker.person.firstName(),
       lastName: data?.lastName || faker.person.lastName(),
       email: data?.email,
       phone: data?.phone || faker.phone.number('###########'),
       birthday: data?.birthday,
-      gender: data?.gender,
     },
     resolver: yupResolver(schema),
   });
 
-  const onUpdate = async (params: UpdateUserParams) =>
-    updateInfo(params)
+  const onSubmit = async (data: UpdateUserRequest) => {
+    console.log(data);
+    updateInfo(data)
       .then((result) => {
         enqueueSnackbar(JSON.stringify(result, null, 2), {
           variant: 'success',
@@ -66,9 +64,10 @@ const UserGeneral = () => {
           variant: 'error',
         });
       });
+  };
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(onUpdate)} noValidate>
+    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} noValidate>
       <Card>
         <CardHeader subheader="The information can be edited" title="Profile" />
         <CardContent>
@@ -130,25 +129,20 @@ const UserGeneral = () => {
             </Grid>
             <Grid item md={6} xs={12}>
               <FormControl fullWidth>
-                <InputLabel id="gender-label">Gender</InputLabel>
-                <Controller
-                  render={({ field }) => (
-                    <Select
-                      labelId="gender-label"
-                      label="Gender"
-                      required
-                      variant="outlined"
-                      {...field}
-                    >
-                      <MenuItem value={undefined}></MenuItem>
-                      <MenuItem value="MALE">Male</MenuItem>
-                      <MenuItem value="FEMALE">Female</MenuItem>
-                      <MenuItem value="OTHER">Other</MenuItem>
-                    </Select>
-                  )}
-                  name="gender"
-                  control={control}
-                />
+                <InputLabel id="gender-label" required>
+                  Gender
+                </InputLabel>
+                <Select
+                  labelId="gender-label"
+                  label="Gender"
+                  variant="outlined"
+                  error={Boolean(touchedFields.gender && errors.gender)}
+                  {...register('gender')}
+                >
+                  <MenuItem value="MALE">Male</MenuItem>
+                  <MenuItem value="FEMALE">Female</MenuItem>
+                  <MenuItem value="OTHER">Other</MenuItem>
+                </Select>
               </FormControl>
             </Grid>
           </Grid>

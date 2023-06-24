@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { CreateArticleParams, UpdateArticleParams } from 'types/app';
+import type { CreateArticleRequest, UpdateArticleRequest } from 'types/app';
 
 export const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,10 +18,10 @@ export const articleApi = api.injectEndpoints({
     getBySlug: builder.query<void, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'GET' }),
     }),
-    createArticle: builder.query<void, CreateArticleParams>({
+    createArticle: builder.query<void, CreateArticleRequest>({
       query: (body) => ({ url: '/articles', method: 'POST', body }),
     }),
-    updateArticleBySlug: builder.query<void, { slug: string; body: UpdateArticleParams }>({
+    updateArticleBySlug: builder.query<void, { slug: string; body: UpdateArticleRequest }>({
       query: ({ slug, body }) => ({ url: `/articles/${slug}`, method: 'PUT', body }),
     }),
     removeArticleBySlug: builder.query<void, string>({

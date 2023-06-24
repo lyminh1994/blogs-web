@@ -14,34 +14,35 @@ import {
   Divider,
   TextField,
 } from '@mui/material';
-import type { CreateArticleParams } from 'types/app';
+import type { CreateArticleRequest } from 'types/app';
+
+const schema = yup
+  .object({
+    title: yup.string().required(),
+    description: yup.string().required(),
+    body: yup.string().required(),
+  })
+  .required();
 
 const CreateArticle = () => {
-  const schema = yup
-    .object({
-      title: yup.string().required(),
-      description: yup.string().required(),
-      body: yup.string().required(),
-    })
-    .required();
-
   const {
     control,
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<CreateArticleParams>({
-    resolver: yupResolver(schema),
+    formState: { touchedFields, errors, isSubmitting },
+  } = useForm<CreateArticleRequest>({
     defaultValues: { tagNames: [] },
+    resolver: yupResolver(schema),
   });
-  const handleCreateArticle = (event: CreateArticleParams) => {
-    console.log(event);
+
+  const handleCreateArticle = async (data: CreateArticleRequest) => {
+    console.log(data);
   };
 
   return (
     <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
       <Container maxWidth="lg">
-        <form onSubmit={handleSubmit(handleCreateArticle)}>
+        <form onSubmit={handleSubmit(handleCreateArticle)} noValidate>
           <Card>
             <CardHeader subheader="Create your own article" title="New Article" />
             <CardContent>
@@ -51,8 +52,8 @@ const CreateArticle = () => {
                 placeholder="Article title"
                 margin="normal"
                 variant="outlined"
-                error={!!errors.title}
-                helperText={errors.title?.message}
+                error={Boolean(touchedFields.title && errors.title)}
+                helperText={touchedFields.title && errors.title?.message}
                 {...register('title')}
               />
               <TextField
@@ -61,8 +62,8 @@ const CreateArticle = () => {
                 placeholder="What's this article about?"
                 margin="normal"
                 variant="outlined"
-                error={!!errors.description}
-                helperText={errors.description?.message}
+                error={Boolean(touchedFields.description && errors.description)}
+                helperText={touchedFields.description && errors.description?.message}
                 {...register('description')}
               />
               <TextField
@@ -73,8 +74,8 @@ const CreateArticle = () => {
                 placeholder="Write your article (in markdown)"
                 margin="normal"
                 variant="outlined"
-                error={!!errors.body}
-                helperText={errors.body?.message}
+                error={Boolean(touchedFields.body && errors.body)}
+                helperText={touchedFields.body && errors.body?.message}
                 {...register('body')}
               />
               <Controller
@@ -108,7 +109,7 @@ const CreateArticle = () => {
             </CardContent>
             <Divider />
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-              <Button type="submit" color="primary" variant="contained">
+              <Button type="submit" color="primary" variant="contained" disabled={isSubmitting}>
                 Create
               </Button>
             </Box>

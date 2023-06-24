@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { CommentResponse, CreateCommentParams } from 'types/app';
+import type { CommentResponse, CreateCommentRequest } from 'types/app';
 
 export const commentApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,7 +10,7 @@ export const commentApi = api.injectEndpoints({
         { type: 'Comments' as const, id: 'LIST' },
       ],
     }),
-    createComment: builder.mutation<CommentResponse, { slug: string; body: CreateCommentParams }>({
+    createComment: builder.mutation<CommentResponse, { slug: string; body: CreateCommentRequest }>({
       query: ({ slug, body }) => ({ url: `/articles/${slug}/comments`, method: 'POST', body }),
       invalidatesTags: [{ type: 'Comments', id: 'LIST' }],
     }),

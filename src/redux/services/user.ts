@@ -1,6 +1,6 @@
 import { api } from './api';
 
-import type { UserResponse, UpdatePasswordParams, UpdateUserParams } from 'types/app';
+import type { UserResponse, UpdatePasswordRequest, UpdateUserRequest } from 'types/app';
 
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,11 +8,11 @@ export const userApi = api.injectEndpoints({
       query: () => ({ url: 'user', method: 'GET' }),
       providesTags: (_result, _err, user) => [{ type: 'User', user }],
     }),
-    updateUserInfo: builder.mutation<UserResponse, Partial<UpdateUserParams>>({
+    updateUserInfo: builder.mutation<UserResponse, Partial<UpdateUserRequest>>({
       query: (body) => ({ url: 'user', method: 'PUT', body }),
       invalidatesTags: (user) => [{ type: 'User', user }],
     }),
-    updatePassword: builder.mutation<void, Partial<UpdatePasswordParams>>({
+    updatePassword: builder.mutation<void, Partial<UpdatePasswordRequest>>({
       query: (body) => ({ url: 'user/password', method: 'PUT', body }),
     }),
     getProfile: builder.query<void, string>({

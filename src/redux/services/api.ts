@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/dist/query/react';
 import type { RootState } from 'redux/store';
-import type { AuthResponse, RegisterParams, LoginParams } from 'types/app';
+import type { AuthResponse, RegisterRequest, LoginRequest } from 'types/app';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -50,14 +50,14 @@ export const api = createApi({
    * If you want all endpoints defined in the same file, they could be included here instead
    */
   endpoints: (builder) => ({
-    register: builder.mutation<AuthResponse, Required<RegisterParams>>({
+    register: builder.mutation<AuthResponse, RegisterRequest>({
       query: (body) => ({
         url: '/auth/register',
         method: 'POST',
         body,
       }),
     }),
-    login: builder.mutation<AuthResponse, Required<LoginParams>>({
+    login: builder.mutation<AuthResponse, Required<LoginRequest>>({
       query: (body) => ({
         url: '/auth/login',
         method: 'POST',
