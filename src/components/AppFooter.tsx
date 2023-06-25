@@ -5,7 +5,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import StackOverflow from 'icons/StackOverflow';
 
-import Copyright from 'components/copyright';
+import Copyright from 'components/Copyright';
 
 const AppFooter = () => (
   <Container component="footer">

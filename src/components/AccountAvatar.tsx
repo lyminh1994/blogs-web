@@ -2,7 +2,7 @@ import { Avatar, Button, Card, CardActions, CardContent, Divider, Typography } f
 
 import { faker } from '@faker-js/faker';
 
-const UserAvatar = () => {
+const AccountAvatar = () => {
   const data = {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
@@ -56,4 +56,4 @@ const UserAvatar = () => {
   );
 };
 
-export default UserAvatar;
+export default AccountAvatar;

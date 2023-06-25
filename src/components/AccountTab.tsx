@@ -1,8 +1,8 @@
 import { SyntheticEvent, useState } from 'react';
 import { Divider, Tab, Tabs } from '@mui/material';
 
-import AccountGeneral from './general';
-import AccountSecurity from './security';
+import AccountGeneral from './AccountGeneral';
+import AccountSecurity from './AccountSecurity';
 
 const AccountTab = () => {
   const [tab, setTab] = useState('general');

@@ -2,7 +2,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import AuthHeader from 'components/layouts/auth-header';
+import AuthHeader from 'components/AuthHeader';
 
 const Header = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -76,6 +76,5 @@ const AppHeader = ({
     </Container>
   </Header>
 );
-
 
 export default AppHeader;

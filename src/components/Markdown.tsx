@@ -1,7 +1,7 @@
 import { Link, Typography } from '@mui/material';
 import ReactMarkdown, { MarkdownToJSX } from 'markdown-to-jsx';
 
-import MarkdownItem from 'components/articles/markdown-item';
+import MarkdownItem from 'components/MarkdownItem';
 
 const options = {
   overrides: {

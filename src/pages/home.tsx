@@ -2,8 +2,8 @@ import { Grid, Pagination, PaginationItem } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-import BannerAds from 'components/articles/banner-ads';
-import RecentArticles from 'components/articles/recent';
+import BannerAds from 'components/BannerAds';
+import RecentArticles from 'components/RecentArticles';
 
 export interface Article {
   title: string;

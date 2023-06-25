@@ -4,7 +4,7 @@ import UserCircleIcon from 'icons/UserCircle';
 
 import { useGetUserQuery } from 'redux/services/user';
 
-import UserPopover from 'components/account/popover';
+import UserPopover from 'components/AccountPopover';
 
 const AuthHeader = () => {
   const { data } = useGetUserQuery();

@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import AppLayout from 'components/layouts';
-import PrivateOutlet from 'components/layouts/private-outlet';
+import AppLayout from 'components/AppLayout';
+import PrivateOutlet from 'components/PrivateOutlet';
 
 import Account from 'pages/account';
 import Error from 'pages/error';

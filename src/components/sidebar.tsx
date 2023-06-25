@@ -1,5 +1,5 @@
 import { Grid, Link, Paper, Typography } from '@mui/material';
-import Tags from 'components/tags';
+import Tags from 'components/Tags';
 
 interface SidebarProps {
   archives: ReadonlyArray<{
