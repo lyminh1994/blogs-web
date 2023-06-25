@@ -3,7 +3,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 import BannerAds from 'components/BannerAds';
-import RecentArticles from 'components/RecentArticles';
+import RecentArticles from 'components/articles/RecentArticles';
 
 export interface Article {
   title: string;

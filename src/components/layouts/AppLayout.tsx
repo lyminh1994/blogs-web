@@ -3,8 +3,8 @@ import { Outlet } from 'react-router-dom';
 import { Box, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import AppFooter from 'components/AppFooter';
-import AppHeader from 'components/AppHeader';
+import AppFooter from 'components/layouts/AppFooter';
+import AppHeader from 'components/layouts/AppHeader';
 import { useAuth } from 'hooks/useAuth';
 
 const Layout = styled('div')(() => ({

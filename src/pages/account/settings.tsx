@@ -1,8 +1,8 @@
 import { Box, Container, Stack, Typography } from '@mui/material';
 
-import SettingsEmail from 'components/SettingsEmail';
-import SettingsNotifications from 'components/SettingsNotifications';
-import SettingsPhone from 'components/SettingsPhone';
+import SettingsEmail from 'components/settings/SettingsEmail';
+import SettingsNotifications from 'components/settings/SettingsNotifications';
+import SettingsPhone from 'components/settings/SettingsPhone';
 
 const AccountSettings = () => (
   <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
