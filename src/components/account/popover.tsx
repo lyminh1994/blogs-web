@@ -19,7 +19,7 @@ import type { PopoverVirtualElement } from '@mui/material';
 import { useGetUserQuery } from 'redux/services/user';
 import { useLogoutMutation } from 'redux/services/api';
 
-interface UserPopoverProps {
+interface AccountPopoverProps {
   anchorEl?:
     | Element
     | (() => Element)
@@ -33,7 +33,7 @@ interface UserPopoverProps {
     | undefined;
 }
 
-const UserPopover = ({ anchorEl, open, onClose }: UserPopoverProps) => {
+const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
   const { data } = useGetUserQuery();
   const navigate = useNavigate();
   const [logout, { isLoading }] = useLogoutMutation();
@@ -103,4 +103,4 @@ const UserPopover = ({ anchorEl, open, onClose }: UserPopoverProps) => {
   );
 };
 
-export default UserPopover;
+export default AccountPopover;

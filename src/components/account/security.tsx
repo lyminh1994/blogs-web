@@ -31,7 +31,7 @@ const schema = yup
   })
   .required();
 
-const UserSecurity = () => {
+const AccountSecurity = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [updatePasswordMutation, { isLoading: isUpdateLoading }] = useUpdatePasswordMutation();
@@ -127,4 +127,4 @@ const UserSecurity = () => {
   );
 };
 
-export default UserSecurity;
+export default AccountSecurity;

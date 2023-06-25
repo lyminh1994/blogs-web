@@ -1,7 +1,7 @@
 import { Box, Container, Grid } from '@mui/material';
 
-import UserAvatar from 'components/user/avatar';
-import UserTabs from 'components/user/tabs';
+import UserAvatar from 'components/account/avatar';
+import UserTabs from 'components/account/tabs';
 
 const User = () => (
   <Box component="main" sx={{ flexGrow: 1, py: 8 }}>

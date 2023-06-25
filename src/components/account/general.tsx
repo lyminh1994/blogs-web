@@ -16,6 +16,7 @@ import {
   MenuItem,
   CardActions,
   Button,
+  Box,
 } from '@mui/material';
 
 import { faker } from '@faker-js/faker';
@@ -31,7 +32,7 @@ const schema = Yup.object({
   birthday: Yup.string().required(),
 }).required();
 
-const UserGeneral = () => {
+const AccountGeneral = () => {
   const { data } = useGetUserQuery();
   const [updateInfo, { isLoading: isUpdating }] = useUpdateUserInfoMutation();
   const { enqueueSnackbar } = useSnackbar();
@@ -67,7 +68,7 @@ const UserGeneral = () => {
   };
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
       <Card>
         <CardHeader subheader="The information can be edited" title="Profile" />
         <CardContent>
@@ -164,8 +165,8 @@ const UserGeneral = () => {
           </Button>
         </CardActions>
       </Card>
-    </form>
+    </Box>
   );
 };
 
-export default UserGeneral;
+export default AccountGeneral;

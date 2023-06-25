@@ -3,12 +3,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import AppLayout from 'components/layouts';
 import PrivateOutlet from 'components/layouts/private-outlet';
 
-import User from 'pages/user';
+import Account from 'pages/account';
 import Error from 'pages/error';
 import Home from 'pages/home';
 import Login from 'pages/auth/login';
 import Register from 'pages/auth/register';
-import Setting from 'pages/user/settings';
+import Setting from 'pages/account/settings';
 import ForgotPassword from 'pages/auth/forgot-password';
 import ArticleList from 'pages/article/articles';
 import Article from 'pages/article';
@@ -26,10 +26,10 @@ const router = createBrowserRouter([
       { path: 'article', element: <Article /> },
       { path: 'articles', element: <ArticleList /> },
       {
-        path: ':userId',
+        path: ':accountId',
         element: <PrivateOutlet />,
         children: [
-          { index: true, element: <User /> },
+          { index: true, element: <Account /> },
           { path: 'settings', element: <Setting /> },
         ],
       },
