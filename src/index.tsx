@@ -7,7 +7,7 @@ import { SnackbarProvider } from 'notistack';
 import * as serviceWorker from './service-worker';
 import { store } from 'redux/store';
 
-import App from 'apps';
+import App from 'app';
 import { theme } from 'utils/theme';
 
 const rootElement = document.getElementById('root');
