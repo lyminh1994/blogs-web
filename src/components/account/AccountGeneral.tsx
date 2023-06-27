@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack';
 
-import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
@@ -17,37 +17,41 @@ import {
   CardActions,
   Button,
   Box,
+  FormHelperText,
 } from '@mui/material';
-
-import { faker } from '@faker-js/faker';
 
 import { useGetUserQuery, useUpdateUserInfoMutation } from 'redux/services/user';
 import type { UpdateUserRequest } from 'types/app';
 
-const schema = Yup.object({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  email: Yup.string().required(),
-  phone: Yup.string().required(),
-  birthday: Yup.string().required(),
-}).required();
+const schema = yup
+  .object({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    email: yup.string().required(),
+    phone: yup.string().required(),
+    birthday: yup.string().required(),
+    gender: yup.string().required(),
+  })
+  .required();
 
 const AccountGeneral = () => {
-  const { data } = useGetUserQuery();
+  const { data: user } = useGetUserQuery();
   const [updateInfo, { isLoading: isUpdating }] = useUpdateUserInfoMutation();
   const { enqueueSnackbar } = useSnackbar();
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<UpdateUserRequest>({
     defaultValues: {
-      firstName: data?.firstName || faker.person.firstName(),
-      lastName: data?.lastName || faker.person.lastName(),
-      email: data?.email,
-      phone: data?.phone || faker.phone.number('###########'),
-      birthday: data?.birthday,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      phone: user?.phone,
+      birthday: user?.birthday,
+      gender: user?.gender,
     },
     resolver: yupResolver(schema),
   });
@@ -133,17 +137,25 @@ const AccountGeneral = () => {
                 <InputLabel id="gender-label" required>
                   Gender
                 </InputLabel>
-                <Select
-                  labelId="gender-label"
-                  label="Gender"
-                  variant="outlined"
-                  error={Boolean(touchedFields.gender && errors.gender)}
-                  {...register('gender')}
-                >
-                  <MenuItem value="MALE">Male</MenuItem>
-                  <MenuItem value="FEMALE">Female</MenuItem>
-                  <MenuItem value="OTHER">Other</MenuItem>
-                </Select>
+                <Controller
+                  name="gender"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      labelId="gender-label"
+                      label="Gender"
+                      variant="outlined"
+                      {...field}
+                      onChange={(event) => field.onChange(event.target.value)}
+                      value={field.value || ''}
+                    >
+                      <MenuItem value="MALE">Male</MenuItem>
+                      <MenuItem value="FEMALE">Female</MenuItem>
+                      <MenuItem value="OTHER">Other</MenuItem>
+                    </Select>
+                  )}
+                />
+                {errors.gender && <FormHelperText error>{errors.gender?.message}</FormHelperText>}
               </FormControl>
             </Grid>
           </Grid>

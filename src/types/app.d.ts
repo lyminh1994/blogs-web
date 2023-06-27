@@ -67,7 +67,7 @@ export interface UpdateUserRequest {
   email: string;
   phone: string;
   birthday: string;
-  gender?: Gender;
+  gender: string;
   profileImage?: string;
 }
 
@@ -76,8 +76,6 @@ export interface UpdatePasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
-
-export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 
 export interface UserResponse {
   publicId: string;
