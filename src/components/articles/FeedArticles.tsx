@@ -2,26 +2,24 @@ import { ChangeEvent, useState } from 'react';
 
 import { Divider, Typography } from '@mui/material';
 
-import { useGetArticlesQuery } from 'redux/services/article';
+import { useGetFeedQuery } from 'redux/services/article';
 
 import Articles from './Articles';
 
-const RecentArticles = () => {
+const FeedArticles = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleChangePage = (_: ChangeEvent<unknown>, page: number) => {
+  const handleChangePage = (e: ChangeEvent<unknown>, page: number) => {
+    e.preventDefault();
     setCurrentPage(page);
   };
 
-  const { data, isLoading } = useGetArticlesQuery({
-    limit: 10,
-    offset: currentPage - 1,
-  });
+  const { data, isLoading } = useGetFeedQuery(currentPage - 1);
 
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Recent Articles
+        Feed Articles
       </Typography>
 
       <Divider />
@@ -40,4 +38,4 @@ const RecentArticles = () => {
   );
 };
 
-export default RecentArticles;
+export default FeedArticles;

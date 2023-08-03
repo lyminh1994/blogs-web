@@ -13,9 +13,9 @@ import type { LoginRequest } from 'types/app';
 
 const schema = yup
   .object({
-    username: yup
+    email: yup
       .string()
-      .required('Username or email can not empty')
+      .required('Email can not empty')
       .test('is-email', 'Invalid email', (value) => {
         if (value) {
           return value.includes('@') ? yup.string().email().isValidSync(value) : true;
@@ -37,14 +37,14 @@ const Login = () => {
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<LoginRequest>({
-    defaultValues: { username: '', password: 'd!Y!MrYmVAama26' },
+    defaultValues: { email: 'wilhelm.hirthe@hotmail.com', password: 'd!Y!MrYmVAama26' },
     resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data: LoginRequest) => {
     try {
       await loginMutation(data).unwrap();
-      navigate('/');
+      navigate(-1);
     } catch (error) {
       enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
@@ -72,11 +72,11 @@ const Login = () => {
           <TextField
             margin="normal"
             fullWidth
-            label="Username or email"
+            label="Email"
             type="text"
-            error={Boolean(touchedFields.username && errors.username)}
-            helperText={touchedFields.username && errors.username?.message}
-            {...register('username')}
+            error={Boolean(touchedFields.email && errors.email)}
+            helperText={touchedFields.email && errors.email?.message}
+            {...register('email')}
           />
           <TextField
             margin="normal"
@@ -104,9 +104,8 @@ const Login = () => {
             </Grid>
             <Grid item>
               <Typography variant="body2">
-                {`Don't have an account? `}
                 <Link component={RouterLink} to="/register">
-                  Register
+                  Need an account?
                 </Link>
               </Typography>
             </Grid>

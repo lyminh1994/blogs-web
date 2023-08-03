@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import AuthHeader from 'components/layouts/AuthHeader';
+import AnonymousHeader from './AnonymousHeader';
 
 const Header = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -12,14 +13,14 @@ const Header = styled(AppBar)(({ theme }) => ({
 const AppHeader = ({
   sections,
   title,
-  isAuthenticator,
+  isAuthenticated,
 }: {
   sections: ReadonlyArray<{
     title: string;
     url: string;
   }>;
   title: string;
-  isAuthenticator: boolean;
+  isAuthenticated: boolean;
 }) => (
   <Header>
     <Container maxWidth="lg">
@@ -50,31 +51,11 @@ const AppHeader = ({
             {section.title}
           </Typography>
         ))}
-        {isAuthenticator ? (
-          <AuthHeader />
-        ) : (
-          <>
-            <Typography
-              component={RouterLink}
-              to="/login"
-              variant="body2"
-              sx={{ p: 1, textDecoration: 'none' }}
-            >
-              Login
-            </Typography>
-            <Typography
-              component={RouterLink}
-              to="/register"
-              variant="body2"
-              sx={{ p: 1, textDecoration: 'none' }}
-            >
-              Register
-            </Typography>
-          </>
-        )}
+        {isAuthenticated ? <AuthHeader /> : <AnonymousHeader />}
       </Toolbar>
     </Container>
   </Header>
 );
+
 
 export default AppHeader;

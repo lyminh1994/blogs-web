@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 import { useForm } from 'react-hook-form';
@@ -16,9 +15,11 @@ import {
   TextField,
 } from '@mui/material';
 
-import { useUpdatePasswordMutation } from 'redux/services/user';
-import { useLogoutMutation } from 'redux/services/api';
+import { logout } from 'redux/features/authSlice';
 import type { UpdatePasswordRequest } from 'types/app';
+import { useAppDispatch } from 'hooks/redux';
+import { useAuth } from 'hooks/useAuth';
+import { useSaveMutation } from 'redux/services/api';
 
 const schema = yup
   .object({
@@ -31,39 +32,38 @@ const schema = yup
   })
   .required();
 
-const AccountSecurity = () => {
-  const navigate = useNavigate();
+const ProfileSecurity = () => {
+  const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [updatePasswordMutation, { isLoading: isUpdateLoading }] = useUpdatePasswordMutation();
-  const [logoutMutation, { isLoading: isLogoutLoading }] = useLogoutMutation();
+  const {
+    auth: { user },
+  } = useAuth();
+  const [updateInfo, { isLoading: isUpdating }] = useSaveMutation();
 
   const {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<UpdatePasswordRequest>({
-    defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
     resolver: yupResolver(schema),
   });
 
-  const handleUpdatePassword = async (params: UpdatePasswordRequest) => {
+  const onSubmit = handleSubmit(async (params) => {
     try {
-      await updatePasswordMutation(params).unwrap();
-      await logoutMutation().unwrap();
-
-      if (!isLogoutLoading) {
-        navigate('/login');
-        enqueueSnackbar('Update password success!', { variant: 'success' });
+      if (user) {
+        await updateInfo({ ...user, password: params.newPassword });
       }
+      enqueueSnackbar('Update password success!', { variant: 'success' });
+      dispatch(logout());
     } catch (error) {
       enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
       });
     }
-  };
+  });
 
   return (
-    <Box component="form" onSubmit={handleSubmit(handleUpdatePassword)} noValidate>
+    <Box component="form" onSubmit={onSubmit} noValidate>
       <Card>
         <CardHeader
           subheader="Changing your password will invalidate all of your browser sessions and require you to Login again."
@@ -117,7 +117,7 @@ const AccountSecurity = () => {
             type="submit"
             color="primary"
             variant="contained"
-            disabled={isSubmitting && isUpdateLoading}
+            disabled={isSubmitting && isUpdating}
           >
             Change password
           </Button>
@@ -127,4 +127,4 @@ const AccountSecurity = () => {
   );
 };
 
-export default AccountSecurity;
+export default ProfileSecurity;

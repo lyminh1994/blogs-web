@@ -4,8 +4,8 @@ import SettingsEmail from 'components/settings/SettingsEmail';
 import SettingsNotifications from 'components/settings/SettingsNotifications';
 import SettingsPhone from 'components/settings/SettingsPhone';
 
-const AccountSettings = () => (
-  <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
+const ProfileSettings = () => (
+  <Box component="main" sx={{ flexGrow: 1, py: 2 }}>
     <Container maxWidth="lg">
       <Stack spacing={3}>
         <Typography variant="h4">Settings</Typography>
@@ -20,4 +20,4 @@ const AccountSettings = () => (
   </Box>
 );
 
-export default AccountSettings;
+export default ProfileSettings;

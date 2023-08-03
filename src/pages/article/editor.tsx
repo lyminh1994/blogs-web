@@ -15,6 +15,14 @@ import {
   TextField,
 } from '@mui/material';
 import type { CreateArticleRequest } from 'types/app';
+import {
+  useCreateArticleMutation,
+  useGetArticleQuery,
+  useUpdateArticleMutation,
+} from 'redux/services/article';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { faker } from '@faker-js/faker';
 
 const schema = yup
   .object({
@@ -24,23 +32,47 @@ const schema = yup
   })
   .required();
 
-const CreateArticle = () => {
+const ArticleEditor = () => {
+  const { slug } = useParams();
+  const { data, isSuccess: isGetSuccess, refetch } = useGetArticleQuery(slug || '');
+
+  const navigate = useNavigate();
   const {
     control,
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<CreateArticleRequest>({
-    defaultValues: { tagNames: [] },
+    defaultValues: {
+      title: isGetSuccess ? data?.article.title : faker.location.country(),
+      description: isGetSuccess ? data?.article.description : faker.lorem.lines(),
+      body: isGetSuccess ? data?.article.body : faker.lorem.paragraphs(),
+      tagList: isGetSuccess
+        ? data?.article.tagList
+        : faker.helpers.arrayElements(['cat', 'dog', 'mouse'], { min: 1, max: 3 }),
+    },
     resolver: yupResolver(schema),
   });
+  const [createMutation, { isLoading, isSuccess }] = useCreateArticleMutation();
+  const [updateMutation, { isSuccess: isUpdateSuccess }] = useUpdateArticleMutation();
 
-  const handleCreateArticle = async (data: CreateArticleRequest) => {
-    console.log(data);
+  const handleCreateArticle = async (body: CreateArticleRequest) => {
+    if (!slug) {
+      const response1 = await createMutation(body).unwrap();
+      if (response1 && isSuccess) {
+        navigate(`/article/${response1.slug}`);
+      }
+    } else {
+      await updateMutation({ slug, ...body });
+      if (isUpdateSuccess) {
+        refetch();
+        navigate(`/article/${slug}`);
+      }
+    }
   };
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
+    <Box component="main" sx={{ flexGrow: 1, py: 2 }}>
       <Container maxWidth="lg">
         <form onSubmit={handleSubmit(handleCreateArticle)} noValidate>
           <Card>
@@ -79,7 +111,7 @@ const CreateArticle = () => {
                 {...register('body')}
               />
               <Controller
-                name="tagNames"
+                name="tagList"
                 control={control}
                 render={({ field: { onChange, ref, ...field } }) => (
                   <Autocomplete
@@ -109,8 +141,13 @@ const CreateArticle = () => {
             </CardContent>
             <Divider />
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-              <Button type="submit" color="primary" variant="contained" disabled={isSubmitting}>
-                Create
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                disabled={isSubmitting && isLoading}
+              >
+                Publish Article
               </Button>
             </Box>
           </Card>
@@ -119,4 +156,4 @@ const CreateArticle = () => {
     </Box>
   );
 };
-export default CreateArticle;
+export default ArticleEditor;

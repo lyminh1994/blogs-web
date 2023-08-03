@@ -2,7 +2,7 @@ export interface CreateArticleRequest {
   title: string;
   description: string;
   body: string;
-  tagNames?: string[];
+  tagList?: string[];
 }
 
 export interface UpdateArticleRequest {
@@ -10,21 +10,33 @@ export interface UpdateArticleRequest {
   title: string;
   body: string;
   description: string;
+  tagList?: string[];
 }
 
 export interface ArticleResponse {
-  id: number;
-  author: Profile;
+  articles: Article[];
+  articlesCount: number;
+}
+
+export type Article = {
   slug: string;
   title: string;
   description: string;
   body: string;
-  createdAt: Date;
-  updatedAt: Date;
-  favorite: boolean;
+  tagList: string[];
+  createdAt: string;
+  updatedAt: string;
+  favorited: boolean;
   favoritesCount: number;
-  tagNames: Array<string>;
-}
+  author: Author;
+};
+
+export type Author = {
+  username: string;
+  bio: string;
+  image: string;
+  following: boolean;
+};
 
 export interface RegisterRequest {
   username: string;
@@ -34,15 +46,21 @@ export interface RegisterRequest {
 }
 
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface AuthResponse {
-  user: AccountResponse;
-  type: string;
-  accessToken: string;
+  user: UserResponse;
 }
+
+export type UserResponse = {
+  email: string;
+  username: string;
+  bio: string;
+  image: string;
+  token: string;
+};
 
 export interface CreateCommentRequest {
   body: string;
@@ -57,18 +75,15 @@ export interface CommentResponse {
 }
 
 export interface TagResponse {
-  id: number;
-  name: string;
+  tags: string[];
 }
 
 export interface UpdateUserRequest {
-  firstName: string;
-  lastName: string;
   email: string;
-  phone: string;
-  birthday: string;
-  gender: string;
-  profileImage?: string;
+  username: string;
+  password?: string;
+  image: string;
+  bio: string;
 }
 
 export interface UpdatePasswordRequest {
@@ -77,7 +92,7 @@ export interface UpdatePasswordRequest {
   confirmPassword: string;
 }
 
-export interface UserResponse {
+export interface ProfileResponse {
   publicId: string;
   email: string;
   firstName: string;
@@ -90,8 +105,10 @@ export interface UserResponse {
 }
 
 export interface UserProfileResponse {
-  username: string;
-  bio: string;
-  image: string;
-  following: boolean;
+  profile: {
+    username: string;
+    bio: string;
+    image: string;
+    following: boolean;
+  };
 }

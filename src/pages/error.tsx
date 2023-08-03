@@ -8,6 +8,7 @@ const Error = () => {
     <div id="error-page">
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
+      <p>{JSON.stringify(error, null, 2)}</p>
     </div>
   );
 };

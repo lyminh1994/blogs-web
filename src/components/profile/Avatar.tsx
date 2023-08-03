@@ -1,8 +1,13 @@
 import { Avatar, Button, Card, CardActions, CardContent, Divider, Typography } from '@mui/material';
 
 import { faker } from '@faker-js/faker';
+import { useAuth } from 'hooks/useAuth';
 
-const AccountAvatar = () => {
+const ProfileAvatar = () => {
+  const {
+    auth: { user },
+  } = useAuth();
+
   const data = {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
@@ -10,7 +15,7 @@ const AccountAvatar = () => {
     country: faker.location.country(),
     jobTitle: faker.person.jobTitle(),
     timezone: faker.location.timeZone(),
-    profileImage: 'https://i.pravatar.cc/300',
+    profileImage: user?.image,
   };
 
   return (
@@ -56,4 +61,4 @@ const AccountAvatar = () => {
   );
 };
 
-export default AccountAvatar;
+export default ProfileAvatar;

@@ -1,48 +1,69 @@
 import { api } from './api';
-import type { CreateArticleRequest, UpdateArticleRequest } from 'types/app';
+import type {
+  Article,
+  ArticleResponse,
+  CreateArticleRequest,
+  UpdateArticleRequest,
+} from 'types/app';
 
 export const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getFeeds: builder.query<void, void>({
-      query: () => ({
-        url: `/articles/feeds`,
+    getArticles: builder.query<
+      ArticleResponse,
+      { limit: number; offset: number; author?: string; tag?: string; favorited?: string }
+    >({
+      query: (params) => ({
+        url: '/articles',
         method: 'GET',
+        params,
       }),
     }),
-    getArticles: builder.query<void, void>({
-      query: () => ({
-        url: `/articles`,
+    getFeed: builder.query<ArticleResponse, number>({
+      query: (page) => ({
+        url: '/articles/feed',
         method: 'GET',
+        params: { limit: 10, offset: page },
       }),
     }),
-    getBySlug: builder.query<void, string>({
+    favoriteArticle: builder.mutation<void, string>({
+      query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'POST' }),
+    }),
+    unfavoriteArticle: builder.mutation<void, string>({
+      query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'DELETE' }),
+    }),
+    createArticle: builder.mutation<Article, CreateArticleRequest>({
+      query: (body) => ({ url: '/articles', method: 'POST', body: { article: body } }),
+    }),
+    getArticle: builder.query<{ article: Article }, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'GET' }),
     }),
-    createArticle: builder.query<void, CreateArticleRequest>({
-      query: (body) => ({ url: '/articles', method: 'POST', body }),
+    updateArticle: builder.mutation<Article, UpdateArticleRequest>({
+      query: (body) => ({
+        url: `/articles/${body.slug}`,
+        method: 'PUT',
+        body: {
+          article: {
+            title: body.title,
+            description: body.description,
+            body: body.body,
+            tagList: body.tagList,
+          },
+        },
+      }),
     }),
-    updateArticleBySlug: builder.query<void, { slug: string; body: UpdateArticleRequest }>({
-      query: ({ slug, body }) => ({ url: `/articles/${slug}`, method: 'PUT', body }),
-    }),
-    removeArticleBySlug: builder.query<void, string>({
+    removeArticle: builder.mutation<void, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'DELETE' }),
-    }),
-    favoriteBySlug: builder.query<void, string>({
-      query: (slug) => ({ url: `/articles/favorite/${slug}`, method: 'POST' }),
-    }),
-    unfavoriteBySlug: builder.query<void, string>({
-      query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'DELETE' }),
     }),
   }),
 });
 
 export const {
-  useGetFeedsQuery,
   useGetArticlesQuery,
-  useGetBySlugQuery,
-  useCreateArticleQuery,
-  useUpdateArticleBySlugQuery,
-  useRemoveArticleBySlugQuery,
-  useFavoriteBySlugQuery,
-  useUnfavoriteBySlugQuery,
+  useGetFeedQuery,
+  useFavoriteArticleMutation,
+  useUnfavoriteArticleMutation,
+  useCreateArticleMutation,
+  useGetArticleQuery,
+  useUpdateArticleMutation,
+  useRemoveArticleMutation,
 } = articleApi;

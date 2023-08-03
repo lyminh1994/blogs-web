@@ -1,57 +1,50 @@
 import { useSnackbar } from 'notistack';
 
-import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 import {
+  Box,
+  Button,
   Card,
-  CardHeader,
+  CardActions,
   CardContent,
+  CardHeader,
   Grid,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  CardActions,
-  Button,
-  Box,
-  FormHelperText,
 } from '@mui/material';
 
-import { useGetUserQuery, useUpdateUserInfoMutation } from 'redux/services/user';
+import { useAuth } from 'hooks/useAuth';
+import { useSaveMutation } from 'redux/services/api';
 import type { UpdateUserRequest } from 'types/app';
 
 const schema = yup
   .object({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
     email: yup.string().required(),
-    phone: yup.string().required(),
-    birthday: yup.string().required(),
-    gender: yup.string().required(),
+    username: yup.string().required(),
+    image: yup.string().required(),
+    bio: yup.string().required(),
   })
   .required();
 
-const AccountGeneral = () => {
-  const { data: user } = useGetUserQuery();
-  const [updateInfo, { isLoading: isUpdating }] = useUpdateUserInfoMutation();
+const ProfileGeneral = () => {
+  const {
+    auth: { user },
+  } = useAuth();
+  const [updateInfo, { isLoading: isUpdating }] = useSaveMutation();
   const { enqueueSnackbar } = useSnackbar();
 
   const {
-    control,
     register,
     handleSubmit,
-    formState: { touchedFields, errors, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<UpdateUserRequest>({
     defaultValues: {
-      firstName: user?.firstName,
-      lastName: user?.lastName,
       email: user?.email,
-      phone: user?.phone,
-      birthday: user?.birthday,
-      gender: user?.gender,
+      username: user?.username,
+      image: user?.image,
+      bio: user?.bio,
     },
     resolver: yupResolver(schema),
   });
@@ -59,8 +52,8 @@ const AccountGeneral = () => {
   const onSubmit = async (data: UpdateUserRequest) => {
     console.log(data);
     updateInfo(data)
-      .then((result) => {
-        enqueueSnackbar(JSON.stringify(result, null, 2), {
+      .then(() => {
+        enqueueSnackbar('Update profile successful!', {
           variant: 'success',
         });
       })
@@ -80,59 +73,48 @@ const AccountGeneral = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="First name"
+                label="Email"
                 required
                 variant="outlined"
-                error={Boolean(touchedFields.firstName && errors.firstName)}
-                helperText={touchedFields.firstName && errors.firstName?.message}
-                {...register('firstName')}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Last name"
-                required
-                variant="outlined"
-                error={Boolean(touchedFields.lastName && errors.lastName)}
-                helperText={touchedFields.lastName && errors.lastName?.message}
-                {...register('lastName')}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Email Address"
-                required
-                variant="outlined"
-                error={Boolean(touchedFields.email && errors.email)}
-                helperText={touchedFields.email && errors.email?.message}
+                error={!!errors.email}
+                helperText={errors.email?.message}
                 {...register('email')}
               />
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Phone"
+                label="Username"
                 required
                 variant="outlined"
-                error={Boolean(touchedFields.phone && errors.phone)}
-                helperText={touchedFields.phone && errors.phone?.message}
-                {...register('phone')}
+                error={!!errors.username}
+                helperText={errors.username?.message}
+                {...register('username')}
               />
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Birthday"
+                label="Image"
                 required
                 variant="outlined"
-                error={Boolean(touchedFields.birthday && errors.birthday)}
-                helperText={touchedFields.birthday && errors.birthday?.message}
-                {...register('birthday')}
+                error={!!errors.image}
+                helperText={errors.image?.message}
+                {...register('image')}
               />
             </Grid>
             <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="Bio"
+                required
+                variant="outlined"
+                error={!!errors.bio}
+                helperText={errors.bio?.message}
+                {...register('bio')}
+              />
+            </Grid>
+            {/* <Grid item md={6} xs={12}>
               <FormControl fullWidth>
                 <InputLabel id="gender-label" required>
                   Gender
@@ -157,7 +139,7 @@ const AccountGeneral = () => {
                 />
                 {errors.gender && <FormHelperText error>{errors.gender?.message}</FormHelperText>}
               </FormControl>
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <CardActions
@@ -181,4 +163,4 @@ const AccountGeneral = () => {
   );
 };
 
-export default AccountGeneral;
+export default ProfileGeneral;

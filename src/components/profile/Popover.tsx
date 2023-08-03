@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
-
 import { useSnackbar } from 'notistack';
+
+import { Link, useNavigate } from 'react-router-dom';
 
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -16,8 +16,9 @@ import {
 } from '@mui/material';
 import type { PopoverVirtualElement } from '@mui/material';
 
-import { useGetUserQuery } from 'redux/services/user';
-import { useLogoutMutation } from 'redux/services/api';
+import { logout } from 'redux/features/authSlice';
+import { useAppDispatch } from 'hooks/redux';
+import { useAuth } from 'hooks/useAuth';
 
 interface AccountPopoverProps {
   anchorEl?:
@@ -25,28 +26,27 @@ interface AccountPopoverProps {
     | (() => Element)
     | PopoverVirtualElement
     | (() => PopoverVirtualElement)
-    | null
-    | undefined;
+    | null;
   open: boolean;
-  onClose?:
-    | ((event?: Record<string, never>, reason?: 'backdropClick' | 'escapeKeyDown') => void)
-    | undefined;
+  onClose?: (event?: Record<string, never>, reason?: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
-  const { data } = useGetUserQuery();
+const ProfilePopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
+  const dispatch = useAppDispatch();
+  const {
+    auth: { user },
+  } = useAuth();
   const navigate = useNavigate();
-  const [logout, { isLoading }] = useLogoutMutation();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleLogout = async () => {
     onClose?.();
 
     try {
-      await logout().unwrap();
+      dispatch(logout());
       navigate('/');
-    } catch (err) {
-      enqueueSnackbar('Oh no, there was an error!', {
+    } catch (error) {
+      enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
       });
     }
@@ -71,28 +71,30 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
         }}
       >
         <Box>
-          <Typography variant="body1">{`${data?.firstName || 'unknown'} ${
-            data?.lastName || ''
-          }`}</Typography>
-          <Typography variant="body2">{data?.email}</Typography>
+          <Typography variant="body1">{user?.username}</Typography>
+          <Typography variant="body2">{user?.email}</Typography>
         </Box>
       </Box>
       <Divider />
       <Box sx={{ my: 1 }}>
-        <MenuItem component={Link} to={`${data?.publicId}`} onClick={() => onClose?.()}>
+        <MenuItem component={Link} to={`/account/${user?.username}`} onClick={() => onClose?.()}>
           <ListItemIcon>
             <UserCircleIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Account</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to={`${data?.publicId}/settings`} onClick={() => onClose?.()}>
+        <MenuItem
+          component={Link}
+          to={`/account/${user?.username}/settings`}
+          onClick={() => onClose?.()}
+        >
           <ListItemIcon>
             <SettingsIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Settings</ListItemText>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleLogout} disabled={isLoading}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
           </ListItemIcon>
@@ -103,4 +105,4 @@ const AccountPopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
   );
 };
 
-export default AccountPopover;
+export default ProfilePopover;

@@ -3,13 +3,15 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Backdrop, CircularProgress } from '@mui/material';
 
 import { useAuth } from 'hooks/useAuth';
-import { useGetUserQuery } from 'redux/services/user';
+import { useCurrentQuery } from 'redux/services/api';
 
 const PrivateOutlet = () => {
-  const { isAuthenticator } = useAuth();
+  const {
+    auth: { isAuthenticated },
+  } = useAuth();
   const location = useLocation();
 
-  const { isLoading, isFetching } = useGetUserQuery();
+  const { isLoading, isFetching } = useCurrentQuery();
 
   const loading = isLoading || isFetching;
   if (loading) {
@@ -20,7 +22,7 @@ const PrivateOutlet = () => {
     );
   }
 
-  return isAuthenticator ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
 };
 
 export default PrivateOutlet;

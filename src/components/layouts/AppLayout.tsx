@@ -1,4 +1,3 @@
-import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -19,18 +18,20 @@ const publicSections = [{ title: 'Home', url: '/' }];
 
 const privateSections = [
   { title: 'Home', url: '/' },
-  { title: 'New Article', url: '/article' },
+  { title: 'New Post', url: '/editor' },
   { title: 'Your Articles', url: '/articles' },
 ];
 
 const AppLayout = () => {
-  const { isAuthenticator } = useAuth();
+  const {
+    auth: { isAuthenticated },
+  } = useAuth();
   return (
-    <React.Fragment>
+    <>
       <AppHeader
         title="A Little Code"
-        sections={isAuthenticator ? privateSections : publicSections}
-        isAuthenticator={isAuthenticator}
+        sections={isAuthenticated ? privateSections : publicSections}
+        isAuthenticated={isAuthenticated}
       />
 
       <Layout>
@@ -48,7 +49,7 @@ const AppLayout = () => {
       </Layout>
 
       <AppFooter />
-    </React.Fragment>
+    </>
   );
 };
 

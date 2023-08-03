@@ -1,31 +1,27 @@
 import { ChangeEvent, useState } from 'react';
 
-import { Divider, Typography } from '@mui/material';
+import { useAuth } from 'hooks/useAuth';
 
 import { useGetArticlesQuery } from 'redux/services/article';
-
 import Articles from './Articles';
 
-const RecentArticles = () => {
+const FavoriteArticles = () => {
+  const {
+    auth: { user },
+  } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading } = useGetArticlesQuery({
+    limit: 10,
+    offset: currentPage - 1,
+    favorited: user?.username,
+  });
 
   const handleChangePage = (_: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
-  const { data, isLoading } = useGetArticlesQuery({
-    limit: 10,
-    offset: currentPage - 1,
-  });
-
   return (
     <>
-      <Typography variant="h6" gutterBottom>
-        Recent Articles
-      </Typography>
-
-      <Divider />
-
       {isLoading && !data ? (
         <p>No articles are here... yet.</p>
       ) : (
@@ -40,4 +36,4 @@ const RecentArticles = () => {
   );
 };
 
-export default RecentArticles;
+export default FavoriteArticles;

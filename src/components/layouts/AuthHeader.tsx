@@ -2,12 +2,13 @@ import { useRef, useState } from 'react';
 import { Avatar } from '@mui/material';
 import UserCircleIcon from 'icons/UserCircle';
 
-import { useGetUserQuery } from 'redux/services/user';
-
-import UserPopover from 'components/account/AccountPopover';
+import UserPopover from 'components/profile/Popover';
+import { useAuth } from 'hooks/useAuth';
 
 const AuthHeader = () => {
-  const { data } = useGetUserQuery();
+  const {
+    auth: { user },
+  } = useAuth();
   const popoverRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -22,8 +23,8 @@ const AuthHeader = () => {
           width: 40,
           ml: 2,
         }}
-        src={data?.profileImage}
-        alt={data?.profileImage}
+        src={user?.image}
+        alt={user?.image}
       >
         <UserCircleIcon fontSize="small" />
       </Avatar>

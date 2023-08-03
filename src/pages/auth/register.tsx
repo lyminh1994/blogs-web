@@ -43,7 +43,7 @@ const Register = () => {
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<RegisterRequest>({
     defaultValues: {
-      username: '',
+      username: faker.person.fullName(),
       email: faker.internet.email().toLowerCase(),
       password: 'd!Y!MrYmVAama26',
       isAllowEmails: false,
@@ -54,7 +54,7 @@ const Register = () => {
   const handleRegister = async (data: RegisterRequest) => {
     try {
       await registerMutation(data);
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
@@ -121,7 +121,7 @@ const Register = () => {
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Typography variant="body2">
-                {`Already have an account? `}
+                {`Have an account? `}
                 <Link component={RouterLink} to="/login" variant="body2">
                   Login
                 </Link>
