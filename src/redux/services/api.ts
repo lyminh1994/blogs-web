@@ -1,17 +1,17 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/dist/query/react';
 import type { RootState } from 'redux/store';
-import type { AuthResponse, RegisterRequest, LoginRequest, UpdateUserRequest } from 'types/app';
+import type { RegisterRequest, LoginRequest, AuthResponse } from 'types/app';
 
-const baseUrl = 'https://conduit.productionready.io/api';
+const baseUrl = 'http://localhost:8080';
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
     // By default, if we have a token in the store, let's use that for authenticated requests
-    const { accessToken } = (getState() as RootState).auth;
+    const { accessToken, tokenType } = (getState() as RootState).auth;
     if (accessToken) {
-      headers.set('authorization', `Token ${accessToken}`);
+      headers.set('Authorization', `${tokenType} ${accessToken}`);
     }
 
     return headers;
@@ -50,38 +50,40 @@ export const api = createApi({
    * If you want all endpoints defined in the same file, they could be included here instead
    */
   endpoints: (builder) => ({
-    current: builder.query<AuthResponse, void>({
-      query: () => ({
-        url: '/user',
-        method: 'GET',
-      }),
-    }),
-    register: builder.mutation<AuthResponse, RegisterRequest>({
+    register: builder.mutation<void, RegisterRequest>({
       query: (body) => ({
-        url: '/users',
+        url: '/auth/register',
         method: 'POST',
-        body: { user: body },
+        body,
       }),
     }),
     login: builder.mutation<AuthResponse, Required<LoginRequest>>({
       query: (body) => ({
-        url: '/users/login',
+        url: '/auth/login',
         method: 'POST',
-        body: { user: body },
+        body,
       }),
     }),
-    save: builder.mutation<AuthResponse, UpdateUserRequest>({
-      query: (body) => ({
-        url: '/user',
-        method: 'PUT',
-        body: { user: body },
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: '/auth/logout',
+        method: 'DELETE',
+        credentials: 'include',
+      }),
+    }),
+    refreshToken: builder.mutation<AuthResponse, void>({
+      query: () => ({
+        url: '/auth/refresh-token',
+        method: 'GET',
+        credentials: 'include',
       }),
     }),
   }),
 });
 
-export const { useCurrentQuery, useRegisterMutation, useLoginMutation, useSaveMutation } = api;
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useRefreshTokenMutation } =
+  api;
 
 export const {
-  endpoints: { register, login, save },
+  endpoints: { register, login, logout, refreshToken },
 } = api;

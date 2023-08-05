@@ -1,7 +1,7 @@
 import { api } from './api';
 import type {
-  Article,
   ArticleResponse,
+  ArticlesResponse,
   CreateArticleRequest,
   UpdateArticleRequest,
 } from 'types/app';
@@ -9,8 +9,8 @@ import type {
 export const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getArticles: builder.query<
-      ArticleResponse,
-      { limit: number; offset: number; author?: string; tag?: string; favorited?: string }
+      ArticlesResponse,
+      { author?: string; tag?: string; favoriteBy?: string; page: number; size: number }
     >({
       query: (params) => ({
         url: '/articles',
@@ -18,37 +18,30 @@ export const articleApi = api.injectEndpoints({
         params,
       }),
     }),
-    getFeed: builder.query<ArticleResponse, number>({
-      query: (page) => ({
-        url: '/articles/feed',
+    getFeed: builder.query<ArticlesResponse, { page: number; size: number }>({
+      query: (params) => ({
+        url: '/articles/feeds',
         method: 'GET',
-        params: { limit: 10, offset: page },
+        params,
       }),
     }),
-    favoriteArticle: builder.mutation<void, string>({
-      query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'POST' }),
-    }),
-    unfavoriteArticle: builder.mutation<void, string>({
-      query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'DELETE' }),
-    }),
-    createArticle: builder.mutation<Article, CreateArticleRequest>({
-      query: (body) => ({ url: '/articles', method: 'POST', body: { article: body } }),
-    }),
-    getArticle: builder.query<{ article: Article }, string>({
+    getArticle: builder.query<ArticleResponse, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'GET' }),
     }),
-    updateArticle: builder.mutation<Article, UpdateArticleRequest>({
-      query: (body) => ({
-        url: `/articles/${body.slug}`,
+    favorite: builder.mutation<ArticleResponse, string>({
+      query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'PUT' }),
+    }),
+    unfavorite: builder.mutation<ArticleResponse, string>({
+      query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'DELETE' }),
+    }),
+    createArticle: builder.mutation<ArticleResponse, CreateArticleRequest>({
+      query: (body) => ({ url: '/articles', method: 'POST', body }),
+    }),
+    updateArticle: builder.mutation<ArticleResponse, { slug: string; body: UpdateArticleRequest }>({
+      query: ({ slug, body }) => ({
+        url: `/articles/${slug}`,
         method: 'PUT',
-        body: {
-          article: {
-            title: body.title,
-            description: body.description,
-            body: body.body,
-            tagList: body.tagList,
-          },
-        },
+        body,
       }),
     }),
     removeArticle: builder.mutation<void, string>({
@@ -60,10 +53,10 @@ export const articleApi = api.injectEndpoints({
 export const {
   useGetArticlesQuery,
   useGetFeedQuery,
-  useFavoriteArticleMutation,
-  useUnfavoriteArticleMutation,
-  useCreateArticleMutation,
   useGetArticleQuery,
+  useFavoriteMutation,
+  useUnfavoriteMutation,
+  useCreateArticleMutation,
   useUpdateArticleMutation,
   useRemoveArticleMutation,
 } = articleApi;
