@@ -1,23 +1,22 @@
 import { ChangeEvent, useState } from 'react';
 
-import { Divider, Typography } from '@mui/material';
-
-import { useGetFeedQuery } from 'redux/services/article';
+import { Divider, Grid, Typography } from '@mui/material';
 
 import Articles from './Articles';
 
+import { useGetFeedQuery } from 'redux/services/article';
+
 const FeedArticles = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading } = useGetFeedQuery({ page: currentPage - 1, size: 10 });
 
   const handleChangePage = (e: ChangeEvent<unknown>, page: number) => {
     e.preventDefault();
     setCurrentPage(page);
   };
 
-  const { data, isLoading } = useGetFeedQuery(currentPage - 1);
-
   return (
-    <>
+    <Grid item>
       <Typography variant="h6" gutterBottom>
         Feed Articles
       </Typography>
@@ -25,16 +24,18 @@ const FeedArticles = () => {
       <Divider />
 
       {isLoading && !data ? (
-        <p>No articles are here... yet.</p>
+        <Typography variant="body1" alignItems="center">
+          No articles are here... yet.
+        </Typography>
       ) : (
         <Articles
-          articles={data?.articles}
-          total={data?.articlesCount}
+          articles={data?.contents}
+          total={data?.totalElements}
           currentPage={currentPage}
           onChange={handleChangePage}
         />
       )}
-    </>
+    </Grid>
   );
 };
 

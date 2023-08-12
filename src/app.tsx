@@ -5,15 +5,16 @@ import PrivateOutlet from 'components/layouts/PrivateOutlet';
 
 import Preview from 'pages/article';
 import ArticleList from 'pages/article/articles';
-import ArticleEditor from 'pages/article/editor';
+import ArticleCreate from 'pages/article/create';
+import ArticleEdit from 'pages/article/edit';
 import ForgotPassword from 'pages/auth/forgot-password';
 import Login from 'pages/auth/login';
 import Register from 'pages/auth/register';
 import Error from 'pages/error';
 import Home from 'pages/home';
+import Account from 'pages/account';
 import Profile from 'pages/profile';
-import ProfileFavorites from 'pages/profile/favorite';
-import ProfileSettings from 'pages/profile/settings';
+import AccountSettings from 'pages/account/settings';
 
 const router = createBrowserRouter([
   {
@@ -25,20 +26,20 @@ const router = createBrowserRouter([
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
       { path: '/forgot-password', element: <ForgotPassword /> },
-      { path: '/editor/:slug', element: <ArticleEditor /> },
-      { path: '/editor', element: <ArticleEditor /> },
+      { path: '/editor/:slug', element: <ArticleEdit /> },
+      { path: '/editor', element: <ArticleCreate /> },
       {
         path: '/article/:slug',
         element: <Preview />,
       },
       { path: '/articles', element: <ArticleList /> },
-      { path: '/profile/:username', element: <ProfileFavorites /> },
+      { path: '/profile/:publicId', element: <Profile /> },
       {
-        path: '/account/:username',
+        path: '/account',
         element: <PrivateOutlet />,
         children: [
-          { index: true, element: <Profile /> },
-          { path: '/account/:username/settings', element: <ProfileSettings /> },
+          { index: true, element: <Account /> },
+          { path: '/account/settings', element: <AccountSettings /> },
         ],
       },
     ],

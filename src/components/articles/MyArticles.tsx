@@ -1,39 +1,38 @@
 import { ChangeEvent, useState } from 'react';
 
-import { useAuth } from 'hooks/useAuth';
-
-import { useGetArticlesQuery } from 'redux/services/article';
+import { Box, Typography } from '@mui/material';
 
 import Articles from './Articles';
 
+import { useAuth } from 'hooks/useAuth';
+import { useGetArticlesQuery } from 'redux/services/article';
+
 const MyArticles = () => {
-  const {
-    auth: { user },
-  } = useAuth();
+  const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading } = useGetArticlesQuery({
-    limit: 10,
-    offset: currentPage - 1,
-    author: user?.username,
+    page: currentPage - 1,
+    size: 10,
+    author: user?.publicId,
   });
 
   const handleChangePage = (_: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
-  return (
-    <>
-      {isLoading && !data ? (
-        <p>No articles are here... yet.</p>
-      ) : (
-        <Articles
-          articles={data?.articles}
-          total={data?.articlesCount}
-          currentPage={currentPage}
-          onChange={handleChangePage}
-        />
-      )}
-    </>
+  return isLoading ? (
+    <Box>
+      <Typography variant="body1" alignItems="center">
+        No articles are here... yet.
+      </Typography>
+    </Box>
+  ) : (
+    <Articles
+      articles={data?.contents}
+      total={data?.totalElements}
+      currentPage={currentPage}
+      onChange={handleChangePage}
+    />
   );
 };
 

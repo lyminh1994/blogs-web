@@ -3,7 +3,8 @@ import { Box, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import AppFooter from 'components/layouts/AppFooter';
-import AppHeader from 'components/layouts/AppHeader';
+import AppHeader from 'components/layouts/AuthenticateHeader';
+
 import { useAuth } from 'hooks/useAuth';
 
 const Layout = styled('div')(() => ({
@@ -23,13 +24,11 @@ const privateSections = [
 ];
 
 const AppLayout = () => {
-  const {
-    auth: { isAuthenticated },
-  } = useAuth();
+  const { isAuthenticated } = useAuth();
   return (
     <>
       <AppHeader
-        title="A Little Code"
+        appName="A Little Code"
         sections={isAuthenticated ? privateSections : publicSections}
         isAuthenticated={isAuthenticated}
       />

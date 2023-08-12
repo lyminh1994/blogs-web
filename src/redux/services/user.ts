@@ -1,37 +1,32 @@
 import { api } from './api';
 
-import type {
-  ProfileResponse,
-  UpdatePasswordRequest,
-  UpdateUserRequest,
-  UserResponse,
-} from 'types/app';
+import type { ProfileResponse } from 'types/app';
 
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    currentUser: builder.query<UserResponse, void>({
-      query: () => ({ url: '/user', method: 'GET' }),
-    }),
-    updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
-      query: (body) => ({ url: '/user', method: 'PUT', body }),
-    }),
-    updatePassword: builder.mutation<void, UpdatePasswordRequest>({
-      query: (body) => ({ url: '/user/password', method: 'PUT', body }),
-    }),
     getProfile: builder.query<ProfileResponse, string>({
-      query: (username) => ({ url: `/user/${username}`, method: 'GET' }),
+      query: (publicId) => ({ url: `/user/${publicId}`, method: 'GET' }),
+      providesTags: (result) =>
+        result ? [{ type: 'Profile', id: result.publicId }] : [{ type: 'Profile', id: 'PROFILE' }],
     }),
     follow: builder.mutation<ProfileResponse, string>({
-      query: (username) => ({ url: `/user/${username}/following`, method: 'PUT' }),
+      query: (publicId) => ({ url: `/user/${publicId}/following`, method: 'PUT' }),
+      invalidatesTags: (result, error, publicId) => [
+        { type: 'Profile', id: publicId },
+        { type: 'Articles', id: 'LIST' },
+      ],
     }),
     unFollow: builder.mutation<ProfileResponse, string>({
-      query: (username) => ({ url: `/user/${username}/following`, method: 'DELETE' }),
+      query: (publicId) => ({ url: `/user/${publicId}/following`, method: 'DELETE' }),
+      invalidatesTags: (result, error, publicId) => [
+        { type: 'Profile', id: publicId },
+        { type: 'Articles', id: 'LIST' },
+      ],
     }),
   }),
 });
 
 export const {
-  useCurrentUserQuery,
   useUpdateUserMutation,
   useUpdatePasswordMutation,
   useGetProfileQuery,

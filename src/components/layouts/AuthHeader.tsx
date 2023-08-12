@@ -2,15 +2,15 @@ import { useRef, useState } from 'react';
 import { Avatar } from '@mui/material';
 import UserCircleIcon from 'icons/UserCircle';
 
-import UserPopover from 'components/profile/Popover';
+import HeaderPopover from 'components/layouts/HeaderPopover';
+
 import { useAuth } from 'hooks/useAuth';
 
 const AuthHeader = () => {
-  const {
-    auth: { user },
-  } = useAuth();
   const popoverRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
+
+  const { user } = useAuth();
 
   return (
     <>
@@ -23,12 +23,12 @@ const AuthHeader = () => {
           width: 40,
           ml: 2,
         }}
-        src={user?.image}
-        alt={user?.image}
+        src={user?.profileImage}
+        alt={user?.profileImage}
       >
         <UserCircleIcon fontSize="small" />
       </Avatar>
-      <UserPopover
+      <HeaderPopover
         anchorEl={popoverRef.current}
         open={openPopover}
         onClose={() => setOpenPopover(false)}

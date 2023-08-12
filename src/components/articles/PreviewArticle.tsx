@@ -1,4 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+
+import { Favorite as FavoriteIcon } from '@mui/icons-material';
 import {
   Avatar,
   Button,
@@ -12,53 +15,67 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { Favorite as FavoriteIcon } from '@mui/icons-material';
 
+import { red } from '@mui/material/colors';
+
+import { useAuth } from 'hooks/useAuth';
 import {
-  useFavoriteArticleMutation,
+  useFavoriteMutation,
   useGetArticleQuery,
   useRemoveArticleMutation,
-  useUnfavoriteArticleMutation,
+  useUnfavoriteMutation,
 } from 'redux/services/article';
-import { red } from '@mui/material/colors';
-import { useAuth } from 'hooks/useAuth';
 
 const PreviewArticle = () => {
-  const { auth } = useAuth();
   const { slug } = useParams();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { data, refetch, isLoading, isFetching } = useGetArticleQuery(slug || '');
+  const { data, isLoading } = useGetArticleQuery(slug || '');
 
-  const [favoriteMutation, { isLoading: isFavoriteLoading }] = useFavoriteArticleMutation();
-  const [unfavoriteMutation, { isLoading: isUnfavoriteLoading }] = useUnfavoriteArticleMutation();
-  const [removeMutation] = useRemoveArticleMutation();
+  const [favorite, { isLoading: isFavoriteLoading }] = useFavoriteMutation();
+  const [unfavorite, { isLoading: isUnFavoriteLoading }] = useUnfavoriteMutation();
+  const [remove, { isLoading: isRemoveLoading }] = useRemoveArticleMutation();
 
   const handleFavorites = async () => {
-    if (!auth.isAuthenticated) {
+    if (!isAuthenticated) {
       navigate('/login');
     } else {
-      if (data?.article.favorited) {
-        await unfavoriteMutation(slug || '').unwrap();
-      } else {
-        await favoriteMutation(slug || '').unwrap();
+      try {
+        if (data?.favorite) {
+          await unfavorite(slug || '').unwrap();
+        } else {
+          await favorite(slug || '').unwrap();
+        }
+      } catch (err) {
+        enqueueSnackbar(JSON.stringify(err, null, 2), {
+          variant: 'error',
+        });
       }
-      refetch();
     }
   };
 
-  const handleDelete = async () => {
-    await removeMutation(slug || '').unwrap();
-    navigate(-1);
+  const handleRemove = async () => {
+    try {
+      await remove(slug || '').unwrap();
+      navigate('/articles');
+    } catch (err) {
+      enqueueSnackbar(JSON.stringify(err, null, 2), {
+        variant: 'error',
+      });
+    }
   };
 
   return isLoading && !data ? (
-    <p>Loading....</p>
+    <Typography variant="body1" alignItems="center">
+      Loading....
+    </Typography>
   ) : (
     <Card>
       <CardHeader
         avatar={
-          <Avatar src={data?.article.author.image} aria-label="recipe">
+          <Avatar src={data?.author.profileImage} aria-label="recipe">
             R
           </Avatar>
         }
@@ -66,47 +83,47 @@ const PreviewArticle = () => {
           <IconButton
             aria-label="add to favorites"
             onClick={handleFavorites}
-            disabled={isFavoriteLoading || isUnfavoriteLoading}
+            disabled={isFavoriteLoading || isUnFavoriteLoading}
           >
-            {isFetching ? (
+            {isLoading ? (
               <CircularProgress size={24} />
             ) : (
               <FavoriteIcon
-                fontSize="large"
-                style={{ color: data?.article.favorited ? red[600] : red[100] }}
+                fontSize="medium"
+                style={{ color: data?.favorite ? red[600] : red[100] }}
               />
             )}
           </IconButton>
         }
-        title={data?.article.author.username}
-        subheader={data?.article.createdAt}
+        title={data?.author.fullName}
+        subheader={data?.createdAt}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {data?.article.title}
+          {data?.title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {data?.article.body}
+          {data?.body}
         </Typography>
-      </CardContent>
-      <CardActions
-        sx={{
-          alignSelf: 'stretch',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'flex-start',
-        }}
-        disableSpacing
-      >
-        <Stack direction="row" spacing={1} paddingBottom={2}>
-          {data?.article.tagList.map((tag) => <Chip label={tag} key={tag} variant="outlined" />)}
+        <Stack
+          sx={{
+            alignSelf: 'stretch',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'flex-start',
+          }}
+          direction="row"
+          spacing={1}
+          paddingBottom={2}
+        >
+          {data?.tagNames.map((tag) => <Chip label={tag} key={tag} variant="outlined" />)}
         </Stack>
-        {data?.article.author.username === auth.user?.username && (
-          <>
-            <Button onClick={handleDelete}>Delete</Button>
-            <Button onClick={() => navigate(`/editor/${data?.article.slug}`)}>Edit</Button>
-          </>
-        )}
+      </CardContent>
+      <CardActions>
+        <Button onClick={handleRemove} disabled={isRemoveLoading}>
+          Delete
+        </Button>
+        <Button onClick={() => navigate(`/editor/${data?.slug}`)}>Edit</Button>
       </CardActions>
     </Card>
   );

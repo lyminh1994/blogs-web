@@ -10,7 +10,13 @@ export const tagApi = api.injectEndpoints({
         method: 'GET',
         params,
       }),
-      providesTags: () => ['Tags'],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.contents.map(({ id }) => ({ type: 'Tags' as const, id })),
+              { type: 'Tags', id: 'LIST' },
+            ]
+          : [{ type: 'Tags', id: 'LIST' }],
     }),
   }),
 });

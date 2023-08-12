@@ -1,7 +1,7 @@
 import { Grid, Link, Paper, Typography } from '@mui/material';
 import Tags from 'components/Tags';
 
-interface SidebarProps {
+interface AppSidebarProps {
   archives: ReadonlyArray<{
     url: string;
     title: string;
@@ -10,7 +10,7 @@ interface SidebarProps {
   title: string;
 }
 
-const Sidebar = ({ archives, description, title }: SidebarProps) => (
+const AppSidebar = ({ archives, description, title }: AppSidebarProps) => (
   <Grid item xs={12} md={4}>
     <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.200' }}>
       <Typography variant="h6" gutterBottom>
@@ -30,4 +30,4 @@ const Sidebar = ({ archives, description, title }: SidebarProps) => (
   </Grid>
 );
 
-export default Sidebar;
+export default AppSidebar;

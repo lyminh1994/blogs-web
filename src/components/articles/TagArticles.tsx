@@ -7,28 +7,25 @@ import Articles from './Articles';
 const TagArticles = ({ tag }: { tag: string }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading } = useGetArticlesQuery({
-    limit: 10,
-    offset: currentPage - 1,
     tag: tag,
+    page: currentPage - 1,
+    size: 10,
   });
 
-  const handleChangePage = (_: ChangeEvent<unknown>, page: number) => {
+  const handleChangePage = (event: ChangeEvent<unknown>, page: number) => {
+    event.preventDefault();
     setCurrentPage(page);
   };
 
-  return (
-    <>
-      {isLoading && !data ? (
-        <p>No articles are here... yet.</p>
-      ) : (
-        <Articles
-          articles={data?.articles}
-          total={data?.articlesCount}
-          currentPage={currentPage}
-          onChange={handleChangePage}
-        />
-      )}
-    </>
+  return isLoading && !data ? (
+    <p>No articles are here... yet.</p>
+  ) : (
+    <Articles
+      articles={data?.contents}
+      total={data?.totalElements}
+      currentPage={currentPage}
+      onChange={handleChangePage}
+    />
   );
 };
 

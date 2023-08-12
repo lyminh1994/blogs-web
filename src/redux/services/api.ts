@@ -1,6 +1,13 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/dist/query/react';
 import type { RootState } from 'redux/store';
-import type { RegisterRequest, LoginRequest, AuthResponse } from 'types/app';
+import type {
+  RegisterRequest,
+  LoginRequest,
+  AuthResponse,
+  UserResponse,
+  UpdateUserRequest,
+  UpdatePasswordRequest,
+} from 'types/app';
 
 const baseUrl = 'http://localhost:8080';
 
@@ -9,16 +16,16 @@ const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
     // By default, if we have a token in the store, let's use that for authenticated requests
-    const { accessToken, tokenType } = (getState() as RootState).auth;
+    const { tokenType, accessToken } = (getState() as RootState).auth;
     if (accessToken) {
-      headers.set('Authorization', `${tokenType} ${accessToken}`);
+      headers.set('Authorization', `${tokenType || 'Bearer'} ${accessToken}`);
     }
 
     return headers;
   },
 });
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 0 });
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 1 });
 
 /**
  * Create a base API to inject endpoints into elsewhere.
@@ -43,7 +50,7 @@ export const api = createApi({
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints
    */
-  tagTypes: ['Articles', 'Comments', 'Tags', 'User'],
+  tagTypes: ['Articles', 'Comments', 'Tags', 'Profile'],
   /**
    * This api has endpoints injected in adjacent files,
    * which is why no endpoints are shown below.
@@ -78,12 +85,24 @@ export const api = createApi({
         credentials: 'include',
       }),
     }),
+    updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
+      query: (body) => ({ url: '/user', method: 'PUT', body }),
+    }),
+    updatePassword: builder.mutation<void, UpdatePasswordRequest>({
+      query: (body) => ({ url: '/user/password', method: 'PUT', body }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useRefreshTokenMutation } =
-  api;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useRefreshTokenMutation,
+  useUpdateUserMutation,
+  useUpdatePasswordMutation,
+} = api;
 
 export const {
-  endpoints: { register, login, logout, refreshToken },
+  endpoints: { register, login, logout, refreshToken, updateUser, updatePassword },
 } = api;

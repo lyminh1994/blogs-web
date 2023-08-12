@@ -1,38 +1,37 @@
 import { ChangeEvent, useState } from 'react';
 
-import { useAuth } from 'hooks/useAuth';
+import { Typography } from '@mui/material';
 
-import { useGetArticlesQuery } from 'redux/services/article';
 import Articles from './Articles';
 
+import { useAuth } from 'hooks/useAuth';
+import { useGetArticlesQuery } from 'redux/services/article';
+
 const FavoriteArticles = () => {
-  const {
-    auth: { user },
-  } = useAuth();
+  const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading } = useGetArticlesQuery({
-    limit: 10,
-    offset: currentPage - 1,
-    favorited: user?.username,
+    page: currentPage - 1,
+    size: 10,
+    favoriteBy: user?.publicId,
   });
 
-  const handleChangePage = (_: ChangeEvent<unknown>, page: number) => {
+  const handleChangePage = (event: ChangeEvent<unknown>, page: number) => {
+    event.preventDefault();
     setCurrentPage(page);
   };
 
-  return (
-    <>
-      {isLoading && !data ? (
-        <p>No articles are here... yet.</p>
-      ) : (
-        <Articles
-          articles={data?.articles}
-          total={data?.articlesCount}
-          currentPage={currentPage}
-          onChange={handleChangePage}
-        />
-      )}
-    </>
+  return isLoading && !data ? (
+    <Typography variant="body1" alignItems="center">
+      No articles are here... yet.
+    </Typography>
+  ) : (
+    <Articles
+      articles={data?.contents}
+      total={data?.totalElements}
+      currentPage={currentPage}
+      onChange={handleChangePage}
+    />
   );
 };
 

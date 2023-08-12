@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import UserCircleIcon from 'icons/UserCircle';
+import type { PopoverVirtualElement } from '@mui/material';
 import {
   Box,
   Divider,
@@ -14,13 +15,11 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
-import type { PopoverVirtualElement } from '@mui/material';
 
-import { logout } from 'redux/features/authSlice';
-import { useAppDispatch } from 'hooks/redux';
 import { useAuth } from 'hooks/useAuth';
+import { useLogoutMutation } from 'redux/services/api';
 
-interface AccountPopoverProps {
+interface HeaderPopoverProps {
   anchorEl?:
     | Element
     | (() => Element)
@@ -31,21 +30,22 @@ interface AccountPopoverProps {
   onClose?: (event?: Record<string, never>, reason?: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-const ProfilePopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
-  const dispatch = useAppDispatch();
-  const {
-    auth: { user },
-  } = useAuth();
+const HeaderPopover = ({ anchorEl, open, onClose }: HeaderPopoverProps) => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+
+  const [logoutMutation, { isSuccess, isError, error }] = useLogoutMutation();
 
   const handleLogout = async () => {
     onClose?.();
 
-    try {
-      dispatch(logout());
+    await logoutMutation().unwrap();
+    if (isSuccess) {
       navigate('/');
-    } catch (error) {
+    }
+
+    if (isError) {
       enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
       });
@@ -71,23 +71,19 @@ const ProfilePopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
         }}
       >
         <Box>
-          <Typography variant="body1">{user?.username}</Typography>
+          <Typography variant="body1">{`${user?.firstName} ${user?.lastName}`}</Typography>
           <Typography variant="body2">{user?.email}</Typography>
         </Box>
       </Box>
       <Divider />
       <Box sx={{ my: 1 }}>
-        <MenuItem component={Link} to={`/account/${user?.username}`} onClick={() => onClose?.()}>
+        <MenuItem component={Link} to="/account" onClick={() => onClose?.()}>
           <ListItemIcon>
             <UserCircleIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Account</ListItemText>
         </MenuItem>
-        <MenuItem
-          component={Link}
-          to={`/account/${user?.username}/settings`}
-          onClick={() => onClose?.()}
-        >
+        <MenuItem component={Link} to="/account/settings" onClick={() => onClose?.()}>
           <ListItemIcon>
             <SettingsIcon fontSize="small" />
           </ListItemIcon>
@@ -105,4 +101,4 @@ const ProfilePopover = ({ anchorEl, open, onClose }: AccountPopoverProps) => {
   );
 };
 
-export default ProfilePopover;
+export default HeaderPopover;

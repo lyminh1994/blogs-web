@@ -23,7 +23,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 import { faker } from '@faker-js/faker';
 
-import type { Article } from 'types/app';
+import type { ArticleResponse } from 'types/app';
 
 const Articles = ({
   articles,
@@ -31,7 +31,7 @@ const Articles = ({
   currentPage,
   onChange,
 }: {
-  articles?: Article[];
+  articles?: Array<ArticleResponse>;
   total?: number;
   currentPage: number;
   onChange?: (event: ChangeEvent<unknown>, page: number) => void;
@@ -39,8 +39,8 @@ const Articles = ({
   return (
     <>
       <Grid container sx={{ py: 4 }} spacing={4}>
-        {articles?.map((article, index) => (
-          <Grid item md={6} key={index}>
+        {articles?.map((article) => (
+          <Grid item md={6} key={article.id}>
             <Card>
               <CardMedia
                 component="a"
@@ -64,7 +64,7 @@ const Articles = ({
                     to={`/article/${article.slug}`}
                     sx={{ textDecoration: 'none' }}
                   >
-                    {article.title}
+                    {article.title.length > 30 ? `${article.title.slice(0, 30)}...` : article.title}
                   </Link>
                 </Typography>
                 <Box
@@ -74,27 +74,29 @@ const Articles = ({
                     flexDirection: 'row',
                   }}
                 >
-                  <Avatar alt={article.author.image} src={article.author.image} />
+                  <Avatar alt={article.author.profileImage} src={article.author.profileImage} />
                   <Box sx={{ ml: 2 }}>
                     <Typography variant="subtitle2">
                       <Link
                         component={RouterLink}
-                        to={`/profile/${article.author.username}`}
+                        to={`/profile/${article.author?.publicId || ''}`}
                         sx={{ textDecoration: 'none' }}
                       >
-                        {article.author.username}
+                        {article.author?.fullName}
                       </Link>
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
-                      {article.createdAt}
+                      {article?.createdAt}
                     </Typography>
                   </Box>
                 </Box>
                 <Typography variant="body1" paragraph color="textSecondary">
-                  {article.description}
+                  {article.description.length > 100
+                    ? `${article.description.slice(0, 100)}...`
+                    : article.description}
                 </Typography>
                 <Stack direction="row" spacing={1} paddingBottom={2}>
-                  {article.tagList.map((tag) => (
+                  {article?.tagNames.map((tag) => (
                     <Chip label={tag} key={tag} variant="outlined" />
                   ))}
                 </Stack>
@@ -116,7 +118,7 @@ const Articles = ({
       </Grid>
       <Grid container justifyContent="flex-end">
         <Pagination
-          count={total ? Math.round(total / 10) : 0}
+          count={total ? Math.round(total / 10) : 1}
           page={currentPage}
           onChange={onChange}
           renderItem={(item) => (

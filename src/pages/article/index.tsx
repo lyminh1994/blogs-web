@@ -1,58 +1,24 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Container,
-  Typography,
-} from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 import PreviewArticle from 'components/articles/PreviewArticle';
+import Comments from 'components/comment/Comments';
 
 const Article = () => {
   return (
-    <Box
+    <Container
       component="main"
       sx={{
         flexGrow: 1,
         py: 2,
       }}
+      maxWidth="lg"
     >
-      <Container maxWidth="lg">
-        <PreviewArticle />
+      <PreviewArticle />
 
-        <Box sx={{ pt: 1 }} />
+      <Box sx={{ mt: 3 }} />
 
-        <Card>
-          <CardHeader
-            avatar={<Avatar aria-label="recipe">R</Avatar>}
-            title="Shrimp and Chorizo Paella"
-            subheader="September 14, 2016"
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              This impressive paella is a perfect party dish and a fun meal to cook together with
-              your guests. Add 1 cup of frozen peas along with the mussels, if you like. if you
-              like.
-            </Typography>
-          </CardContent>
-          <CardActions
-            sx={{
-              alignSelf: 'stretch',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-start',
-            }}
-            disableSpacing
-          >
-            <Button size="small">READ MORE</Button>
-          </CardActions>
-        </Card>
-      </Container>
-    </Box>
+      <Comments />
+    </Container>
   );
 };
 

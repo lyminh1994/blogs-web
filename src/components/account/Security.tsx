@@ -1,8 +1,8 @@
 import { useSnackbar } from 'notistack';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   Box,
@@ -15,11 +15,8 @@ import {
   TextField,
 } from '@mui/material';
 
-import { logout } from 'redux/features/authSlice';
+import { useUpdatePasswordMutation } from 'redux/services/user';
 import type { UpdatePasswordRequest } from 'types/app';
-import { useAppDispatch } from 'hooks/redux';
-import { useAuth } from 'hooks/useAuth';
-import { useSaveMutation } from 'redux/services/api';
 
 const schema = yup
   .object({
@@ -33,28 +30,26 @@ const schema = yup
   .required();
 
 const ProfileSecurity = () => {
-  const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const {
-    auth: { user },
-  } = useAuth();
-  const [updateInfo, { isLoading: isUpdating }] = useSaveMutation();
+
+  const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
 
   const {
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<UpdatePasswordRequest>({
+    defaultValues: {
+      currentPassword: 'd!Y!MrYmVAama26',
+      newPassword: 'd!Y!MrYmVAama26',
+      confirmPassword: 'd!Y!MrYmVAama26',
+    },
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = handleSubmit(async (params) => {
+  const handleUpdatePassword = handleSubmit(async (body) => {
     try {
-      if (user) {
-        await updateInfo({ ...user, password: params.newPassword });
-      }
-      enqueueSnackbar('Update password success!', { variant: 'success' });
-      dispatch(logout());
+      await updatePassword(body).unwrap();
     } catch (error) {
       enqueueSnackbar(JSON.stringify(error, null, 2), {
         variant: 'error',
@@ -63,7 +58,7 @@ const ProfileSecurity = () => {
   });
 
   return (
-    <Box component="form" onSubmit={onSubmit} noValidate>
+    <Box component="form" onSubmit={handleUpdatePassword} noValidate>
       <Card>
         <CardHeader
           subheader="Changing your password will invalidate all of your browser sessions and require you to Login again."
@@ -117,7 +112,7 @@ const ProfileSecurity = () => {
             type="submit"
             color="primary"
             variant="contained"
-            disabled={isSubmitting && isUpdating}
+            disabled={isSubmitting && isLoading}
           >
             Change password
           </Button>

@@ -15,16 +15,6 @@ const BannerAds = () => (
       backgroundImage: `url(${faker.image.url()})`,
     }}
   >
-    {<img style={{ display: 'none' }} src={faker.image.url()} alt={faker.image.url()} />}
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
-      }}
-    />
     <Grid container>
       <Grid item md={8}>
         <Box

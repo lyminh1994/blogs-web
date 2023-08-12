@@ -1,37 +1,52 @@
-import { SyntheticEvent, useState } from 'react';
-import { Box, Container, Grid, Divider, Tab, Tabs } from '@mui/material';
+import { ChangeEvent, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import ProfileAvatar from 'components/profile/Avatar';
-import ProfileGeneral from 'components/profile/General';
-import ProfileSecurity from 'components/profile/Security';
+import { Box, Container } from '@mui/material';
 
-const Profile = () => {
-  const [tab, setTab] = useState('general');
+import { useGetArticlesQuery } from 'redux/services/article';
 
-  const handleTabChange = (_: SyntheticEvent<Element, Event>, value: string) => {
-    setTab(value);
+import ProfileBanner from 'components/profile/Banner';
+import Articles from 'components/articles/Articles';
+
+const ProfileFavorites = () => {
+  const { publicId } = useParams();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data } = useGetArticlesQuery({
+    author: publicId,
+    page: currentPage - 1,
+    size: 10,
+  });
+
+  const handleChangePage = (event: ChangeEvent<unknown>, page: number) => {
+    event.preventDefault();
+    setCurrentPage(page);
   };
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, py: 2 }}>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 2,
+      }}
+    >
       <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item lg={4} md={4} xs={12}>
-            <ProfileAvatar />
-          </Grid>
-          <Grid item lg={8} md={8} xs={12}>
-            <Tabs onChange={handleTabChange} value={tab}>
-              <Tab label="General" value="general" />
-              <Tab label="Security" value="security" />
-            </Tabs>
-            <Divider sx={{ mb: 3 }} />
-            {tab === 'general' && <ProfileGeneral />}
-            {tab === 'security' && <ProfileSecurity />}
-          </Grid>
-        </Grid>
+        <ProfileBanner publicId={publicId || ''} />
+
+        <Box sx={{ pt: 3 }}>
+          <Box sx={{ width: '100%' }}>
+            <Articles
+              articles={data?.contents}
+              total={data?.totalElements}
+              currentPage={currentPage}
+              onChange={handleChangePage}
+            />
+          </Box>
+        </Box>
       </Container>
     </Box>
   );
 };
 
-export default Profile;
+export default ProfileFavorites;

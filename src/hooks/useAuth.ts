@@ -3,7 +3,7 @@ import { useTypedSelector } from './redux';
 import { selectIsAuthenticated } from 'redux/features/authSlice';
 
 export const useAuth = () => {
-  const auth = useTypedSelector(selectIsAuthenticated);
+  const { user, isAuthenticated } = useTypedSelector(selectIsAuthenticated);
 
-  return useMemo(() => ({ auth }), [auth]);
+  return useMemo(() => ({ user, isAuthenticated }), [user, isAuthenticated]);
 };

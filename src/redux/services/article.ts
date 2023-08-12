@@ -17,6 +17,13 @@ export const articleApi = api.injectEndpoints({
         method: 'GET',
         params,
       }),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.contents.map(({ slug }) => ({ type: 'Articles' as const, id: slug })),
+              { type: 'Articles', id: 'LIST' },
+            ]
+          : [{ type: 'Articles', id: 'LIST' }],
     }),
     getFeed: builder.query<ArticlesResponse, { page: number; size: number }>({
       query: (params) => ({
@@ -24,18 +31,29 @@ export const articleApi = api.injectEndpoints({
         method: 'GET',
         params,
       }),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.contents.map(({ slug }) => ({ type: 'Articles' as const, id: slug })),
+              { type: 'Articles', id: 'LIST' },
+            ]
+          : [{ type: 'Articles', id: 'LIST' }],
     }),
     getArticle: builder.query<ArticleResponse, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'GET' }),
+      providesTags: (result, error, slug) => [{ type: 'Articles', id: slug }],
     }),
     favorite: builder.mutation<ArticleResponse, string>({
       query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'PUT' }),
+      invalidatesTags: (result, error, slug) => [{ type: 'Articles', id: slug }],
     }),
     unfavorite: builder.mutation<ArticleResponse, string>({
       query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'DELETE' }),
+      invalidatesTags: (result, error, slug) => [{ type: 'Articles', id: slug }],
     }),
     createArticle: builder.mutation<ArticleResponse, CreateArticleRequest>({
       query: (body) => ({ url: '/articles', method: 'POST', body }),
+      invalidatesTags: [{ type: 'Articles', id: 'LIST' }],
     }),
     updateArticle: builder.mutation<ArticleResponse, { slug: string; body: UpdateArticleRequest }>({
       query: ({ slug, body }) => ({
@@ -43,9 +61,11 @@ export const articleApi = api.injectEndpoints({
         method: 'PUT',
         body,
       }),
+      invalidatesTags: (result, error, { slug }) => [{ type: 'Articles', id: slug }],
     }),
     removeArticle: builder.mutation<void, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'DELETE' }),
+      invalidatesTags: (result, error, slug) => [{ type: 'Articles', id: slug }],
     }),
   }),
 });

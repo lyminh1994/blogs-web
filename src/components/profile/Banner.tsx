@@ -1,4 +1,6 @@
+import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+
 import {
   Avatar,
   Box,
@@ -9,31 +11,36 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+
 import { useAuth } from 'hooks/useAuth';
-import {
-  useFollowByUsernameMutation,
-  useGetProfileQuery,
-  useUnFollowByUsernameMutation,
-} from 'redux/services/user';
+import { useFollowMutation, useGetProfileQuery, useUnFollowMutation } from 'redux/services/user';
 
-const ProfileBanner = ({ username }: { username: string }) => {
+type ProfileBannerProps = { publicId: string };
+
+const ProfileBanner = ({ publicId }: ProfileBannerProps) => {
+  const { isAuthenticated } = useAuth();
   const navigator = useNavigate();
-  const { auth } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { data, refetch, isFetching } = useGetProfileQuery(username);
-  const [followMutation, { isLoading: isFollowLoading }] = useFollowByUsernameMutation();
-  const [unFollowMutation, { isLoading: isUnFollowLoading }] = useUnFollowByUsernameMutation();
+  const { data, isLoading } = useGetProfileQuery(publicId);
+  const [followMutation] = useFollowMutation();
+  const [unFollowMutation] = useUnFollowMutation();
 
   const handleFollow = async () => {
-    if (!auth.isAuthenticated) {
+    if (!isAuthenticated) {
       navigator('/login');
     } else {
-      if (data?.profile.following) {
-        await unFollowMutation(username).unwrap();
-      } else {
-        await followMutation(username).unwrap();
+      try {
+        if (data && data.following) {
+          await unFollowMutation(publicId).unwrap();
+        } else {
+          await followMutation(publicId).unwrap();
+        }
+      } catch (err) {
+        enqueueSnackbar(JSON.stringify(err, null, 2), {
+          variant: 'error',
+        });
       }
-      refetch();
     }
   };
 
@@ -62,13 +69,13 @@ const ProfileBanner = ({ username }: { username: string }) => {
             justifyContent: 'center',
           }}
         >
-          <Avatar sx={{ width: 80, height: 80 }} alt="Product" src={data?.profile.image} />
+          <Avatar sx={{ width: 80, height: 80 }} alt="Product" src={data?.profileImage} />
         </Box>
         <Typography align="center" variant="h5" color="inherit" gutterBottom>
-          {data?.profile.username}
+          {data?.fullName}
         </Typography>
         <Typography align="center" color="inherit" paragraph variant="body1">
-          {data?.profile.bio}
+          {data?.profileImage}
         </Typography>
       </CardContent>
       <Box sx={{ p: 2 }}>
@@ -80,19 +87,17 @@ const ProfileBanner = ({ username }: { username: string }) => {
               display: 'flex',
             }}
           >
-            <Button
-              color="inherit"
-              variant="outlined"
-              disabled={isFollowLoading || isUnFollowLoading}
-              onClick={handleFollow}
-            >
-              {isFollowLoading || isUnFollowLoading || isFetching ? (
-                <CircularProgress size={24} />
-              ) : (
-                `${data?.profile.following ? '-' : '+'}1 Follow`
-              )}
-            </Button>
+            {isAuthenticated ?? (
+              <Button color="inherit" variant="outlined" onClick={handleFollow}>
+                {isLoading ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  `${data?.following ? 'Follow' : 'Unfollow'}`
+                )}
+              </Button>
+            )}
           </Grid>
+
           <Grid
             item
             sx={{

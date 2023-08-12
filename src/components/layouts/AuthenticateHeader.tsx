@@ -2,7 +2,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import AuthHeader from 'components/layouts/AuthHeader';
+import AuthHeader from './AuthHeader';
 import AnonymousHeader from './AnonymousHeader';
 
 const Header = styled(AppBar)(({ theme }) => ({
@@ -10,16 +10,16 @@ const Header = styled(AppBar)(({ theme }) => ({
   boxShadow: theme.shadows[3],
 }));
 
-const AppHeader = ({
+const AuthenticateHeader = ({
   sections,
-  title,
+  appName,
   isAuthenticated,
 }: {
   sections: ReadonlyArray<{
     title: string;
     url: string;
   }>;
-  title: string;
+  appName: string;
   isAuthenticated: boolean;
 }) => (
   <Header>
@@ -38,7 +38,7 @@ const AppHeader = ({
           noWrap
           sx={{ flex: 1, textDecoration: 'none' }}
         >
-          {title}
+          {appName}
         </Typography>
         {sections.map((section) => (
           <Typography
@@ -57,5 +57,4 @@ const AppHeader = ({
   </Header>
 );
 
-
-export default AppHeader;
+export default AuthenticateHeader;

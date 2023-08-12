@@ -11,6 +11,7 @@ export interface LoginRequest {
 }
 
 export interface AuthResponse {
+  user: UserResponse;
   accessToken: string;
   tokenType: string;
   expiresIn: number;
@@ -24,7 +25,7 @@ export interface UserResponse {
   firstName: string;
   lastName: string;
   phone: string;
-  birthday: Date;
+  birthday: string;
   gender: Gender;
   profileImage: string;
 }
@@ -34,9 +35,9 @@ export interface UpdateUserRequest {
   firstName: string;
   lastName: string;
   phone: string;
-  birthday: Date;
-  gender: Gender;
-  profileImage: string;
+  birthday: string;
+  gender?: Gender;
+  profileImage?: string;
 }
 
 export interface UpdatePasswordRequest {
@@ -49,14 +50,14 @@ export interface ProfileResponse {
   publicId: string;
   fullName: string;
   phone: string;
-  birthday: Date;
+  birthday: string;
   gender: Gender;
   profileImage: string;
   following: boolean;
 }
 
 export interface ArticlesResponse {
-  contents: Array<Article>;
+  contents: ArticleResponse[];
   totalElements: number;
 }
 
@@ -67,8 +68,8 @@ export type ArticleResponse = {
   title: string;
   description: string;
   body: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   favorite: boolean;
   favoritesCount: number;
   tagNames: Array<string>;
@@ -78,7 +79,7 @@ export type Author = {
   publicId: string;
   fullName: string;
   phone: string;
-  birthday: Date;
+  birthday: string;
   gender: Gender;
   profileImage: string;
   following: boolean;
@@ -93,8 +94,8 @@ export interface CreateArticleRequest {
 
 export interface UpdateArticleRequest {
   title: string;
-  body: string;
   description: string;
+  body: string;
   tagNames?: Array<string>;
 }
 
@@ -120,7 +121,7 @@ export interface CommentsResponse {
 export type CommentResponse = {
   id: string;
   body: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   user: ProfileResponse;
 };

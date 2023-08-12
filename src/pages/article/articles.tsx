@@ -1,74 +1,32 @@
-import { ReactNode, SyntheticEvent, useState } from 'react';
-import { Box, Card, Container, Tab, Tabs, Typography } from '@mui/material';
+import { SyntheticEvent, useState } from 'react';
+import { Container, Divider, Grid, Tab, Tabs } from '@mui/material';
 
 import MyArticles from 'components/articles/MyArticles';
 import FavoriteArticles from 'components/articles/FavoriteArticles';
 
-const TabPanel = ({
-  children,
-  value,
-  index,
-  ...other
-}: {
-  children?: ReactNode;
-  index: number;
-  value: number;
-}) => (
-  <div
-    role="tabpanel"
-    hidden={value !== index}
-    id={`simple-tabpanel-${index}`}
-    aria-labelledby={`simple-tab-${index}`}
-    {...other}
-  >
-    {value === index && (
-      <Box sx={{ p: 3 }}>
-        <Typography>{children}</Typography>
-      </Box>
-    )}
-  </div>
-);
-
-const a11yProps = (index: number) => ({
-  id: `simple-tab-${index}`,
-  'aria-controls': `simple-tabpanel-${index}`,
-});
-
 const ArticleList = () => {
-  const [value, setValue] = useState(0);
+  const [tab, setTab] = useState('my-articles');
 
-  const handleChange = (e: SyntheticEvent, newValue: number) => {
-    e.preventDefault();
-    setValue(newValue);
+  const handleTabChange = (_: SyntheticEvent, value: string) => {
+    setTab(value);
   };
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 2,
-      }}
-    >
-      <Container maxWidth="lg">
-        <Card>
-          <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                <Tab label="My Articles" {...a11yProps(0)} />
-                <Tab label="Favorite Articles" {...a11yProps(1)} />
-              </Tabs>
-            </Box>
-            <TabPanel value={value} index={0}>
-              <MyArticles />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <FavoriteArticles />
-            </TabPanel>
-          </Box>
-        </Card>
-      </Container>
-    </Box>
+    <Container component="main" sx={{ flexGrow: 1, py: 2 }} maxWidth="lg">
+      <Grid container spacing={3}>
+        <Grid item>
+          <Tabs onChange={handleTabChange} value={tab}>
+            <Tab label="My Articles" value="my-articles" />
+            <Tab label="Favorite Articles" value="favorite-articles" />
+          </Tabs>
+
+          <Divider sx={{ mb: 2 }} />
+
+          {tab === 'my-articles' && <MyArticles />}
+          {tab === 'favorite-articles' && <FavoriteArticles />}
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 
