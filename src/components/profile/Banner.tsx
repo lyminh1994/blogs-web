@@ -87,15 +87,13 @@ const ProfileBanner = ({ publicId }: ProfileBannerProps) => {
               display: 'flex',
             }}
           >
-            {isAuthenticated ?? (
-              <Button color="inherit" variant="outlined" onClick={handleFollow}>
-                {isLoading ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  `${data?.following ? 'Follow' : 'Unfollow'}`
-                )}
-              </Button>
-            )}
+            <Button color="inherit" variant="outlined" onClick={handleFollow}>
+              {isLoading ? (
+                <CircularProgress size={24} />
+              ) : (
+                `${data && !data.following ? 'Follow' : 'Unfollow'}`
+              )}
+            </Button>
           </Grid>
 
           <Grid

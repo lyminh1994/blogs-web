@@ -14,7 +14,7 @@ const Home = () => {
 
       <Tags />
 
-      {isAuthenticated ?? <FeedArticles />}
+      {isAuthenticated && <FeedArticles />}
 
       <RecentArticles />
     </>

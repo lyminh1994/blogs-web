@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 
+import { Typography } from '@mui/material';
+
 import { useGetArticlesQuery } from 'redux/services/article';
 
 import Articles from './Articles';
@@ -18,7 +20,9 @@ const TagArticles = ({ tag }: { tag: string }) => {
   };
 
   return isLoading && !data ? (
-    <p>No articles are here... yet.</p>
+    <Typography variant="body1" alignItems="center">
+      Loading....
+    </Typography>
   ) : (
     <Articles
       articles={data?.contents}

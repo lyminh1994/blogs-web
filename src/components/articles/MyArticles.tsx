@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import Articles from './Articles';
 
@@ -21,11 +21,9 @@ const MyArticles = () => {
   };
 
   return isLoading ? (
-    <Box>
-      <Typography variant="body1" alignItems="center">
-        No articles are here... yet.
-      </Typography>
-    </Box>
+    <Typography variant="body1" alignItems="center">
+      No articles are here... yet.
+    </Typography>
   ) : (
     <Articles
       articles={data?.contents}

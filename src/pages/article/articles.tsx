@@ -14,13 +14,13 @@ const ArticleList = () => {
   return (
     <Container component="main" sx={{ flexGrow: 1, py: 2 }} maxWidth="lg">
       <Grid container spacing={3}>
-        <Grid item>
+        <Grid item md={12}>
           <Tabs onChange={handleTabChange} value={tab}>
             <Tab label="My Articles" value="my-articles" />
             <Tab label="Favorite Articles" value="favorite-articles" />
           </Tabs>
 
-          <Divider sx={{ mb: 2 }} />
+          <Divider />
 
           {tab === 'my-articles' && <MyArticles />}
           {tab === 'favorite-articles' && <FavoriteArticles />}

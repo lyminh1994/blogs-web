@@ -27,7 +27,9 @@ const RecentArticles = () => {
       <Divider />
 
       {isLoading && !data ? (
-        <p>No articles are here... yet.</p>
+        <Typography variant="body1" alignItems="center">
+          Loading....
+        </Typography>
       ) : (
         <Articles
           articles={data?.contents}
