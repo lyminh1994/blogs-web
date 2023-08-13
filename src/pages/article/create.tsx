@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import { useSnackbar } from 'notistack';
@@ -37,15 +37,17 @@ const ArticleCreate = () => {
   const [create] = useCreateArticleMutation();
 
   const {
-    control,
+    setValue,
     register,
     handleSubmit,
     formState: { touchedFields, errors, isSubmitting },
   } = useForm<CreateArticleRequest>({
+    defaultValues: { tagNames: [] },
     resolver: yupResolver(schema),
   });
 
   const handleCreate = handleSubmit(async (values) => {
+    console.log(JSON.stringify(values, null, 2));
     try {
       await create(values).unwrap();
       navigate('/articles');
@@ -91,32 +93,20 @@ const ArticleCreate = () => {
             helperText={touchedFields.body && errors.body?.message}
             {...register('body')}
           />
-          <Controller
-            name="tagNames"
-            control={control}
-            render={({ field: { onChange, ref, ...field } }) => (
-              <Autocomplete
-                {...field}
-                ref={ref}
-                multiple
-                freeSolo
-                options={[]}
-                onChange={(_, value) => onChange(value)}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                  ))
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    fullWidth
-                    label="Tags"
-                    margin="normal"
-                    variant="outlined"
-                  />
-                )}
-              />
+
+          <Autocomplete
+            {...register('tagNames')}
+            multiple
+            freeSolo
+            options={[]}
+            onChange={(_, value) => setValue('tagNames', value)}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField {...params} fullWidth label="Tags" margin="normal" variant="outlined" />
             )}
           />
         </CardContent>
