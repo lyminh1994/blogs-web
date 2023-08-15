@@ -45,11 +45,17 @@ export const articleApi = api.injectEndpoints({
     }),
     favorite: builder.mutation<ArticleResponse, string>({
       query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'PUT' }),
-      invalidatesTags: (result, error, slug) => [{ type: 'Articles', id: slug }],
+      invalidatesTags: (result, error, slug) => [
+        { type: 'Articles', id: slug },
+        { type: 'Articles', id: 'LIST' },
+      ],
     }),
     unfavorite: builder.mutation<ArticleResponse, string>({
       query: (slug) => ({ url: `/articles/${slug}/favorite`, method: 'DELETE' }),
-      invalidatesTags: (result, error, slug) => [{ type: 'Articles', id: slug }],
+      invalidatesTags: (result, error, slug) => [
+        { type: 'Articles', id: slug },
+        { type: 'Articles', id: 'LIST' },
+      ],
     }),
     createArticle: builder.mutation<ArticleResponse, CreateArticleRequest>({
       query: (body) => ({ url: '/articles', method: 'POST', body }),
@@ -65,7 +71,6 @@ export const articleApi = api.injectEndpoints({
     }),
     removeArticle: builder.mutation<void, string>({
       query: (slug) => ({ url: `/articles/${slug}`, method: 'DELETE' }),
-      invalidatesTags: (result, error, slug) => [{ type: 'Articles', id: slug }],
     }),
   }),
 });

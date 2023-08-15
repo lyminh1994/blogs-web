@@ -19,6 +19,7 @@ const Account = () => {
         <Grid item md={4}>
           <AccountAvatar />
         </Grid>
+
         <Grid item md={8}>
           <Tabs onChange={handleTabChange} value={tab}>
             <Tab label="General" value="general" />

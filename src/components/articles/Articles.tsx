@@ -118,7 +118,7 @@ const Articles = ({
       </Grid>
       <Grid container justifyContent="flex-end">
         <Pagination
-          count={total ? Math.round(total / 10) : 1}
+          count={total ? Math.ceil(total / 10) : 1}
           page={currentPage}
           onChange={onChange}
           renderItem={(item) => (

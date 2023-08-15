@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   Avatar,
@@ -15,14 +15,13 @@ import {
 import { useAuth } from 'hooks/useAuth';
 import { useFollowMutation, useGetProfileQuery, useUnFollowMutation } from 'redux/services/user';
 
-type ProfileBannerProps = { publicId: string };
-
-const ProfileBanner = ({ publicId }: ProfileBannerProps) => {
+const ProfileBanner = () => {
   const { isAuthenticated } = useAuth();
+  const { publicId } = useParams();
   const navigator = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { data, isLoading } = useGetProfileQuery(publicId);
+  const { data, isLoading } = useGetProfileQuery(publicId || '');
   const [followMutation] = useFollowMutation();
   const [unFollowMutation] = useUnFollowMutation();
 
@@ -32,9 +31,9 @@ const ProfileBanner = ({ publicId }: ProfileBannerProps) => {
     } else {
       try {
         if (data && data.following) {
-          await unFollowMutation(publicId).unwrap();
+          await unFollowMutation(publicId || '').unwrap();
         } else {
-          await followMutation(publicId).unwrap();
+          await followMutation(publicId || '').unwrap();
         }
       } catch (err) {
         enqueueSnackbar(JSON.stringify(err, null, 2), {

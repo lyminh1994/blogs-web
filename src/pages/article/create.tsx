@@ -47,7 +47,6 @@ const ArticleCreate = () => {
   });
 
   const handleCreate = handleSubmit(async (values) => {
-    console.log(JSON.stringify(values, null, 2));
     try {
       await create(values).unwrap();
       navigate('/articles');
